@@ -50,13 +50,14 @@ class Set(db.Model):
     dim_y = db.Column(db.Float())
     dim_z = db.Column(db.Float())
     year_released = db.Column(db.String(4))
-    is_obsolete = db.Column(db.String(5))
+    is_obsolete = db.Column(db.Boolean())
+    is_complete = db.Column(db.Boolean())
     children = db.relationship("Part")
     __table_args__ = (
         db.UniqueConstraint("no"),
     )
 
-    def __init__(self, no, name, type, category_id, image_url, thumbnail_url, weight, dim_x, dim_y, dim_z, year_released, is_obsolete):
+    def __init__(self, no, name, type, category_id, image_url, thumbnail_url, weight, dim_x, dim_y, dim_z, year_released, is_obsolete, is_complete):
         self.no = no
         self.name = name
         self.type = type
@@ -69,6 +70,7 @@ class Set(db.Model):
         self.dim_z = dim_z
         self.year_released = year_released
         self.is_obsolete = is_obsolete
+        self.is_complete = is_complete
 
     def __repr__(self):
         return '<Set %r>' % self.no

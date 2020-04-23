@@ -11,7 +11,6 @@ from flask import render_template, request, redirect, url_for, flash
 from app.forms import SearchSetForm
 from app.models import Set, Part
 
-
 # import sqlite3
 
 ###
@@ -116,14 +115,14 @@ def add_set(no):
                   set_data['dim_y'],
                   set_data['dim_z'],
                   set_data['year_released'],
-                  set_data['is_obsolete'])
-        db.session.add(set)
+                  set_data['is_obsolete'],
+                  True)
+        db.session.merge(set)
 
         part_data_list = bricklinkApi.getCatalogSubsets("SET", set_no)
         for part_data_entry in part_data_list:
             part_data = part_data_entry['entries'][0]
             # Create an instance of the part model for every part entry in the parts list
-            # print(bricklinkApi.getCatalogItemImage(part['part_type'], part['part_no'], part['part_colour_id'])['thumbnail_url'].replace("//img.", "http://www."))
             part = Part(part_data['item']['no'],
                         set_no,
                         part_data['item']['name'],
@@ -135,7 +134,7 @@ def add_set(no):
                         part_data['is_alternate'],
                         part_data['is_counterpart'],
                         bricklinkApi.getImageURL(part_data['item']['type'], part_data['item']['no'], part_data['color_id']))
-            db.session.add(part)
+            db.session.merge(part)
         db.session.commit()
         flash('Set added to collection', 'info')
     return redirect(url_for('home'))
@@ -149,7 +148,7 @@ def remove_set(no):
         db.session.delete(part)
     db.session.delete(set)
     db.session.commit()
-    flash('Set removed from collection', 'danger')
+    flash('Set removed from collection', 'info')
     return redirect(url_for('home'))
 
 
