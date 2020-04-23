@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<div class="container">
+  <h1 class="page-header">My LEGO Collection</h1>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="alert alert-success">
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  {% endwith %}
+
+<!--<div class="container">-->
+      <div class="row">
+        <div class="col-12">
+            <table class="table table-image table-condensed table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">No</th>
+                  <th scope="col">Image</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Category ID</th>
+                  <th scope="col">Color ID</th>
+                  <th scope="col">Qty.</th>
+                  <th scope="col">Extra Qty.</th>
+                  <th scope="col">Is alternate</th>
+                  <th scope="col">Is counterpart</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for part in parts_list %}
+                <tr>
+                  <th scope="row">{{ part.no }}</th>
+                  <td class="w-25">
+                      <img src={{ part.thumbnail_url }} class="img-fluid img-thumbnail" alt="sheep">
+                  </td>
+                  <td>{{ part.name }}</td>
+                  <td>{{ part.category_id }}</td>
+                  <td>{{ part.color_id }}</td>
+                  <td>{{ part.quantity }}</td>
+                  <td>{{ part.extra_quantity }}</td>
+                  <td>{{ part.is_alternate }}</td>
+                  <td>{{ part.is_counterpart }}</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+        </div>
+      </div>
+<!--</div>-->
+</div>
+
+{% endblock %}

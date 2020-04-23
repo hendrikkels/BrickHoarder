@@ -1,0 +1,14 @@
+{% extends 'search.html' %}
+
+{% block result %}
+
+  <form method="POST" action="/add_set/{{ set_no }}">
+    <h1>{{ set_no }}</h1>
+    <h3>{{ set_name }}</h3>
+    <img src={{set_img}} class="img-thumbnail"><img>
+    <br>
+    <button type="submit" class="btn btn-primary">Add to collection</button>
+    <button type="submit" class="btn btn-secondary" formaction="/search/set={{ set_no }}/parts">Show parts in this set</button>
+  </form>
+
+{% endblock %}
