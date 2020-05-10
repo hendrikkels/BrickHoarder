@@ -11,6 +11,7 @@ from flask import render_template, request, redirect, url_for, flash
 from app.forms import SearchSetForm
 from app.models import Set, Part
 
+
 # import sqlite3
 
 ###
@@ -60,17 +61,68 @@ def search_set(no):
         return render_template('search.html', form=search_form)
 
 
-@app.route('/search/set=<no>/parts', methods=['POST', 'GET'])
+@app.route('/add_set/<no>/parts', methods=['POST', 'GET'])
 def search_set_parts(no):
     search_form = SearchSetForm()
     # Use REST API to get set details
     set_data = bricklinkApi.getCatalogItem("SET", no)
     if set_data != {}:
         # Get parts
-        part_data_list = bricklinkApi.getCatalogSubsets("SET", no)
+        print('bt')
+    else:
+        flash('No results found', 'error')
+        return render_template('search.html', form=search_form)
+
+
+
+@app.route('/add_set/<no>', methods=['POST', 'GET'])
+def add_set(no):
+    set_data = bricklinkApi.getCatalogItem("SET", no)
+    part_data_list = bricklinkApi.getCatalogSubsets("SET", no)
+    if request.method == 'POST':
+        include_parts = request.form.getlist('checkbox')
+        is_complete = True
+        for part_data_entry in part_data_list:
+            part_data = part_data_entry['entries'][0]
+
+            owned_quantity = include_parts.count(part_data['item']['no'])
+            if (owned_quantity < part_data['quantity'] + part_data['extra_quantity']):
+                is_complete = False
+
+            part = Part(part_data['item']['no'],
+                        no,
+                        part_data['item']['name'],
+                        part_data['item']['type'],
+                        part_data['item']['category_id'],
+                        part_data['color_id'],
+                        owned_quantity,
+                        part_data['quantity'],
+                        part_data['extra_quantity'],
+                        part_data['is_alternate'],
+                        part_data['is_counterpart'],
+                        bricklinkApi.getImageURL(part_data['item']['type'], part_data['item']['no'],
+                                                 part_data['color_id']))
+            db.session.merge(part)
+        set = Set(no,
+                  set_data['name'],
+                  set_data['type'],
+                  set_data['category_id'],
+                  set_data['image_url'].replace("//img.", "http://www."),
+                  set_data['thumbnail_url'].replace("//img.", "http://www."),
+                  set_data['weight'],
+                  set_data['dim_x'],
+                  set_data['dim_y'],
+                  set_data['dim_z'],
+                  set_data['year_released'],
+                  set_data['is_obsolete'],
+                  is_complete)
+        db.session.merge(set)
+        db.session.commit()
+        return redirect(url_for('home'))
+    else:
         parts_list = []
         keys = ['no', 'name', 'type', 'category_id', 'category_id', 'color_id',
-                'quantity', 'extra_quantity', 'is_alternate', 'is_counterpart', 'thumbnail_url']
+                'quantity', 'extra_quantity', 'thumbnail_url']
         for part_data_entry in part_data_list:
             part = dict.fromkeys(keys, None)
             part_data = part_data_entry['entries'][0]
@@ -83,61 +135,10 @@ def search_set_parts(no):
             part['color_id'] = part_data['color_id']
             part['quantity'] = part_data['quantity']
             part['extra_quantity'] = part_data['extra_quantity']
-            part['is_alternate'] = part_data['is_alternate']
-            part['is_counterpart'] = part_data['is_counterpart']
             part['thumbnail_url'] = bricklinkApi.getImageURL(part['type'], part['no'], part['color_id'])
-            # print(part)
-            parts_list.append(part)
-        # for part_item in parts_list:
-        #     print(part_item)
-        return render_template('parts_list.html', parts_list=parts_list)
-    else:
-        flash('No results found', 'error')
-        return render_template('search.html', form=search_form)
-
-
-
-@app.route('/add_set/<no>', methods=['POST', 'GET'])
-def add_set(no):
-    set_data = bricklinkApi.getCatalogItem("SET", no)
-    if set_data != {}:
-        print(set_data)
-        # Create an instance of the set model
-        set_no = set_data['no']
-        set = Set(set_no,
-                  set_data['name'],
-                  set_data['type'],
-                  set_data['category_id'],
-                  set_data['image_url'].replace("//img.", "http://www."),
-                  set_data['thumbnail_url'].replace("//img.", "http://www."),
-                  set_data['weight'],
-                  set_data['dim_x'],
-                  set_data['dim_y'],
-                  set_data['dim_z'],
-                  set_data['year_released'],
-                  set_data['is_obsolete'],
-                  True)
-        db.session.merge(set)
-
-        part_data_list = bricklinkApi.getCatalogSubsets("SET", set_no)
-        for part_data_entry in part_data_list:
-            part_data = part_data_entry['entries'][0]
-            # Create an instance of the part model for every part entry in the parts list
-            part = Part(part_data['item']['no'],
-                        set_no,
-                        part_data['item']['name'],
-                        part_data['item']['type'],
-                        part_data['item']['category_id'],
-                        part_data['color_id'],
-                        part_data['quantity'],
-                        part_data['extra_quantity'],
-                        part_data['is_alternate'],
-                        part_data['is_counterpart'],
-                        bricklinkApi.getImageURL(part_data['item']['type'], part_data['item']['no'], part_data['color_id']))
-            db.session.merge(part)
-        db.session.commit()
-        flash('Set added to collection', 'info')
-    return redirect(url_for('home'))
+            for i in range(0, (part_data['quantity'] + part_data['extra_quantity'])):
+                parts_list.append(part)
+        return render_template('parts_check.html', set_no=no, parts_list=parts_list)
 
 
 @app.route('/remove_set/<no>', methods=['POST', 'GET'])
@@ -148,7 +149,7 @@ def remove_set(no):
         db.session.delete(part)
     db.session.delete(set)
     db.session.commit()
-    flash('Set removed from collection', 'info')
+    flash('Set removed from collection', 'danger')
     return redirect(url_for('home'))
 
 

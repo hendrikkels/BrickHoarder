@@ -10,6 +10,7 @@ class Part(db.Model):
     name = db.Column(db.Text(150), nullable=False)
     type = db.Column(db.String(255), nullable=False)
     category_id = db.Column(db.String(255), nullable=False)
+    owned_quantity = db.Column(db.Integer())
     quantity = db.Column(db.Integer())
     extra_quantity = db.Column(db.Integer())
     is_alternate = db.Column(db.Boolean())
@@ -19,13 +20,14 @@ class Part(db.Model):
         db.UniqueConstraint("no", "set_no", "color_id"),
     )
 
-    def __init__(self, no, set_no, name, type, category_id, color_id, quantity, extra_quantity, is_alternate, is_counterpart, thumbnail_url):
+    def __init__(self, no, set_no, name, type, category_id, color_id, owned_quantity, quantity, extra_quantity, is_alternate, is_counterpart, thumbnail_url):
         self.no = no
         self.set_no = set_no
         self.name = name
         self.type = type
         self.category_id = category_id
         self.color_id = color_id
+        self.owned_quantity = owned_quantity
         self.quantity = quantity
         self.extra_quantity = extra_quantity
         self.is_alternate = is_alternate
@@ -51,7 +53,7 @@ class Set(db.Model):
     dim_z = db.Column(db.Float())
     year_released = db.Column(db.String(4))
     is_obsolete = db.Column(db.Boolean())
-    is_complete = db.Column(db.Boolean())
+    is_complete = db.Column(db.Boolean(), nullable=False)
     children = db.relationship("Part")
     __table_args__ = (
         db.UniqueConstraint("no"),
