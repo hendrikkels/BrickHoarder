@@ -1,2 +1,2 @@
-# BrickBinge
+# Brickster
 Doeng doeng

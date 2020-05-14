@@ -12,8 +12,6 @@ from app.forms import SearchSetForm
 from app.models import Set, Part
 
 
-# import sqlite3
-
 ###
 # Routing for your application.
 ###

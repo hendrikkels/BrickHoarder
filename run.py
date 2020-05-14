@@ -1,9 +1,6 @@
-from flaskwebgui import FlaskUI
+import socket
+socket.gethostbyname(socket.gethostname())
 
 from app import app
 
-# Feed it the flask app instance
-# ui = FlaskUI(app, maximized=True)
-# ui.run()
-ui = FlaskUI(app, maximized=True)
-ui.run()
+app.run(host=socket.gethostbyname(socket.gethostname()), port='8080')
