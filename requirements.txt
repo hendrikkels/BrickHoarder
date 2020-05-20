@@ -1,0 +1,4 @@
+Flask_Bootstrap4
+Flask_SQLAlchemy
+Requests
+requests_oauthlib

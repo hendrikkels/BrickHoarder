@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+    <div class="jumbotron">
+        <div class="container">
+            <h1>Inventory</h1>
+            Personal LEGO collection
+        </div>
+    </div>
+
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert" role="alert">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="col-md-12">
+            <nav>
+                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Sets</a>
+                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Parts</a>
+                </div>
+            </nav>
+            <div class="tab-content table-bordered table-striped" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <table class="table" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th scope="col">No</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Year</th>
+                            <th scope="col">Category ID</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for set in set_list %}
+                            <tr onclick="window.location.href = '/set/{{ set.no }}';">
+                                <th scope="row">{{ set.no }}</th>
+                                <td class="" style="width: 50px">
+                                    <img src="{{set.thumbnail_url}}" class="img-fluid img-thumbnail" alt="sheep">
+                                </td>
+                                <td>{{ set.name }}</td>
+                                <td>{{set.year_released}}</td>
+                                <td>{{set.category_id}}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                    <table class="table" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th scope="col">No</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Category ID</th>
+                            <th scope="col">Color ID</th>
+                            <th scope="col">Quantity.</th>
+{#                            <th scope="col">Alternate</th>#}
+{#                            <th scope="col">Counterpart</th>#}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for part in parts_list %}
+                            {% if part.owned_quantity > 0 %}
+                                <tr>
+                                    <th scope="row">{{ part.no }}</th>
+                                    <td class="" style="width: 25px">
+                                        <img src="{{ part.thumbnail_url }}" class="img-fluid img-thumbnail" alt="sheep">
+                                    </td>
+                                    <td>{{ part.name }}</td>
+                                    <td>{{ part.category_id }}</td>
+                                    <td>{{ part.color_id }}</td>
+                                    <td>{{ part.owned_quantity }}</td>
+{#                                    <td>{{ part.is_alternate }}</td>#}
+{#                                    <td>{{ part.is_counterpart }}</td>#}
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

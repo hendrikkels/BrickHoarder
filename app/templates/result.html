@@ -1,0 +1,38 @@
+{% extends 'search.html' %}
+
+{% block result %}
+
+    <form action="/add_set/{{ set_no }}">
+        {#    <h1>{{ set_no }}</h1>#}
+        {#    <h3>{{ set_name }}</h3>#}
+        {#    <img src={{set_img}} class="img-thumbnail"><img>#}
+        {#    <br>#}
+        {#    <button type="submit" class="btn btn-primary">Add to collection</button>#}
+        <!--    <button type="submit" class="btn btn-secondary" formaction="/search/set={{ set_no }}/parts">Show parts in this set</button>-->
+
+        <div class="card">
+            <div class="row no-gutters">
+                <div class="col-lg-8 col-6">
+{#                    <div class="card-block">#}
+                        <div class="card-header bg-transparent border-light">
+                            <h4 class="card-title">{{ set_name }}</h4>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <p class="card-text">Item no: {{ set_no }}<br>
+                                Category id: {{ set_category_id }}<br>
+                                Year: {{ set_year_released }}
+                            </p>
+                            <button type="submit" class="align-self-baseline btn btn-primary mt-auto">Add to collection</button>
+                        </div>
+
+{#                    </div>#}
+                </div>
+                    <div class="col-lg-4 col-6">
+                        <img src="{{set_image_url}}" class="img-thumbnail" alt="sheep">
+                    </div>
+                </div>
+            </div>
+
+    </form>
+
+{% endblock %}

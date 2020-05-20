@@ -1,0 +1,13 @@
+{% extends "bootstrap/base.html" %}
+
+{% block content %}
+    <header>
+        {% include "header.html" %}
+    </header>
+    <main>
+            {% block main %}{% endblock %}
+    </main>
+    <footer>
+            {% include "footer.html" %}
+    </footer>
+{% endblock content %}
