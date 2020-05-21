@@ -10,6 +10,7 @@ from flask import render_template, request, redirect, url_for, flash
 import flask
 from app.models import Set, Part
 
+
 ###
 # Routing for your application.
 ###
@@ -40,6 +41,7 @@ def search():
             flash('No results found', 'error')
             return render_template('search.html', search_str=no)
     return "get rekt"
+
 
 # Display a result from a set search
 @app.route('/search/set=<no>', methods=['POST', 'GET'])
@@ -135,3 +137,48 @@ def add_set(no):
             part['thumbnail_url'] = bricklinkApi.getImageURL(part['type'], part['no'], part['color_id'])
             parts_list.append(part)
         return render_template('parts_check.html', set_no=no, parts_list=parts_list)
+
+
+@app.route('/set/<set_no>')
+def show_set(set_no):
+    set_data = Set.query.filter_by(no=set_no).first()
+    return render_template('set.html', set_data=set_data)
+
+
+@app.route('/remove_set/<no>', methods=['POST', 'GET'])
+def remove_set(no):
+    set = Set.query.filter_by(no=no).first()
+    parts_list = Part.query.filter_by(set_no=no).all()
+    for part in parts_list:
+        db.session.delete(part)
+    db.session.delete(set)
+    db.session.commit()
+    flash('Set removed from collection', 'danger')
+    return redirect(url_for('home'))
+
+
+###
+# The functions below should be applicable to all Flask apps.
+###
+@app.route('/<file_name>.txt')
+def send_text_file(file_name):
+    """Send your static text file."""
+    file_dot_text = file_name + '.txt'
+    return app.send_static_file(file_dot_text)
+
+
+@app.after_request
+def add_header(response):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
+    response.headers['Cache-Control'] = 'public, max-age=600'
+    return response
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    """Custom 404 page."""
+    return render_template('404.html'), 404
