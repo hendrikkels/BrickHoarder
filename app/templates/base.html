@@ -1,6 +1,11 @@
 {% extends "bootstrap/base.html" %}
 
 {% block title %}BrickHoarder{% endblock %}
+{% block styles %}
+{{super()}}
+{#  <link rel="stylesheet" href="{{url_for('.static', filename='simplex.css')}}">#}
+{#     <link rel="stylesheet" href="./static/simplex.css">#}
+{% endblock %}
 
 {% block content %}
     <header>
