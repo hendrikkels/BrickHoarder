@@ -1,0 +1,9 @@
+.jumbotron {
+    margin-top: 86px;
+}
+
+@media (max-width: 992px) {
+   .container {
+      width: 100%;
+   }
+}

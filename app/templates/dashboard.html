@@ -2,24 +2,21 @@
 
 {% block main %}
 
-    <div class="jumbotron">
-        <div class="container">
-            <h1>Dashboard</h1>
-            Overview and insight information
-        </div>
-    </div>
+<div class="jumbotron">
+    <h1>Dashboard</h1>
+    Overview and insight information
+</div>
 
-    <div class="container">
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="alert alert-danger" role="alert">
-                    {% for message in messages %}
-                        {{ message }}
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-    </div>
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="alert alert-danger" role="alert">
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
 
 
 {% endblock main %}
