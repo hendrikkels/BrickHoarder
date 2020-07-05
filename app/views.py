@@ -11,6 +11,7 @@ import flask
 from app.models import Set, Part
 
 
+
 ###
 # Routing for your application.
 ###
@@ -49,18 +50,15 @@ def search_set(no):
     # Use REST API to get set details
     set_data = bricklinkApi.getCatalogItem("SET", no)
     print(set_data)
+
     if set_data != {}:
         # Set variables to be displayed as result
         set_no = set_data['no']
         set_name = set_data["name"]
         set_category_id = set_data['category_id']
         set_image_url = set_data['image_url'].replace("//img.", "http://www.")
-        set_weight = set_data['weight']
-        set_dim_x = set_data['dim_x']
-        set_dim_y = set_data['dim_y']
-        set_dim_z = set_data['dim_z']
         set_year_released = set_data['year_released']
-        return render_template('result.html', search_str=no, set_no=set_no, set_name=set_name,
+        return render_template('set_result.html', search_str=no, set_no=set_no, set_name=set_name,
                                set_category_id=set_category_id, set_image_url=set_image_url,
                                set_year_released=set_year_released)
     else:
@@ -68,10 +66,31 @@ def search_set(no):
         return render_template('search.html', search_str=no)
 
 
+# Display a result from a part search
+@app.route('/search/part=<no>', methods=['POST', 'GET'])
+def search_part(no, ):
+    part_data = bricklinkApi.getCatalogItem("PART", no)
+    print(part_data)
+
+    if part_data != {}:
+        part_no = part_data['no']
+        part_name = part_data['name']
+        part_category_id = part_data['category_id']
+        part_image_url = part_data['image_url'].replace("//img.", "http://www.")
+        part_thumbnail_url = part_data['thumbnail_url'].replace("//img.", "http://www.")
+        part_year_released = part_data['year_released']
+        part_description = part_data['description']
+        return render_template('part_result.html', search_str=no, part_no=part_no, part_name=part_name,
+                               part_category_id=part_category_id, part_image_url=part_image_url, part_thumbnail_url=part_thumbnail_url,
+                               part_year_released=part_year_released, part_description=part_description)
+    else:
+        flash('No results found', 'error')
+        return render_template('search.html', search_str=no)
+
 @app.route('/add_set/<no>', methods=['POST', 'GET'])
 def add_set(no):
     set_data = bricklinkApi.getCatalogItem("SET", no)
-    part_data_list = bricklinkApi.getCatalogSubsets("SET", no)
+    part_data_list = bricklinkApi.getCatalogSubsets("SET", no, break_minifigs=True)
     if request.method == 'POST':
         parts_check = request.form.getlist('owned_quantity')
         print(parts_check)
@@ -142,7 +161,9 @@ def add_set(no):
 @app.route('/set/<set_no>')
 def show_set(set_no):
     set_data = Set.query.filter_by(no=set_no).first()
-    return render_template('set.html', set_data=set_data)
+    category = bricklinkApi.getCategory(set_data.category_id)
+    print(set_data)
+    return render_template('set_info.html', set_data=set_data, category=category)
 
 
 @app.route('/remove_set/<no>', methods=['POST', 'GET'])

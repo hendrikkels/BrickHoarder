@@ -1,7 +1,11 @@
 {% extends 'search.html' %}
 
-{% block result %}
+{% block filter %}
+    Displaying results for <a href="/search/set={{ search_str }}" class="text-decoration-none">sets</a>, rather search for <a href="/search/part={{ search_str }}" class="text-decoration-none">parts</a>?
+{% endblock %}
 
+
+{% block result %}
 <form action="/add_set/{{ set_no }}">
     {#    <h1>{{ set_no }}</h1>#}
     {#    <h3>{{ set_name }}</h3>#}
@@ -12,23 +16,22 @@
 
     <div class="card">
         <div class="row no-gutters">
-            <div class="col-lg-8 col-6">
-                {#                    <div class="card-block">#}
+            <div class="col-xs-6 col-sm-9 col-md-9 col-lg-10">
+                {# <div class="card-block"> #}
                 <div class="card-header bg-transparent border-light">
                     <h4 class="card-title">{{ set_name }}</h4>
                 </div>
                 <div class="card-body d-flex flex-column">
-                    <p class="card-text">Item no: {{ set_no }}<br>
-                        Category id: {{ set_category_id }}<br>
-                        Year: {{ set_year_released }}
+                    <p class="card-text">
+                        Item no: {{ set_no }}<br>
                     </p>
-                    <button type="submit" class="align-self-baseline btn btn-primary mt-auto">Add to collection</button>
+                    <button type="submit" class="align-self-baseline btn btn-primary float-right">Add to collection</button>
                 </div>
 
-                {#                    </div>#}
+                {#</div>#}
             </div>
-            <div class="col-lg-4 col-6">
-                <img src="{{set_image_url}}" class="img-thumbnail" alt="sheep">
+            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+                <img src="{{set_image_url}}" class="img-thumbnail crop float-right" style="max-height: inherit" alt="sheep">
             </div>
         </div>
     </div>

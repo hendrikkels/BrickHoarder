@@ -2,7 +2,7 @@ import json
 import os
 
 from flask import Flask
-from flask_bootstrap import Bootstrap, BOOTSTRAP_VERSION
+from flask_bs4 import Bootstrap, BOOTSTRAP_VERSION
 from flask_sqlalchemy import SQLAlchemy
 
 from bricklink import bricklink

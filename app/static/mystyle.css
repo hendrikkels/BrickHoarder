@@ -1,5 +1,29 @@
+body {
+    padding-top: 86px   ;
+}
+
+.card {
+    margin-bottom: 32px;
+}
+
 .jumbotron {
-    margin-top: 86px;
+    padding: 2rem;
+}
+
+.crop {
+    object-fit: scale-down; /* Do not scale the image */
+    object-position: center; /* Center the image within the element */
+    max-height: 150px;
+    max-width: 200px;
+}
+
+@media only screen and (max-width: 480px) {
+   .crop {
+        object-fit: scale-down; /* Do not scale the image */
+        object-position: center; /* Center the image within the element */
+        max-height: 75px;
+        max-width: 100px;
+    }
 }
 
 @media (max-width: 992px) {

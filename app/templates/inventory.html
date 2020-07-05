@@ -20,13 +20,13 @@
 {% endif %}
 {% endwith %}
 
-<div class="col-md-12">
-    <nav>
-        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-            <a class="nav-item nav-link active" id="sets-tab" data-toggle="tab" href="#sets" role="tab" aria-controls="sets" aria-selected="true">Sets</a>
-            <a class="nav-item nav-link" id="parts-tab" data-toggle="tab" href="#parts" role="tab" aria-controls="parts" aria-selected="false">Parts</a>
-        </div>
-    </nav>
+{#<div class="col-md-12">#}
+{#    <nav>#}
+{#        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">#}
+{#            <a class="nav-item nav-link active" id="sets-tab" data-toggle="tab" href="#sets" role="tab" aria-controls="sets" aria-selected="true">Sets</a>#}
+{#            <a class="nav-item nav-link" id="parts-tab" data-toggle="tab" href="#parts" role="tab" aria-controls="parts" aria-selected="false">Parts</a>#}
+{#        </div>#}
+{#    </nav>#}
     <div class="tab-content table-bordered table-striped" id="nav-tabContent">
         <div class="tab-pane fade show active" id="sets" role="tabpanel" aria-labelledby="sets-tab">
             <table class="table" cellspacing="0">
@@ -42,6 +42,7 @@
                 </thead>
                 <tbody>
                 {% for set in set_list %}
+                {# onclick="window.location.href = '/set/{{ set.no }}';"#}
                 <tr class="d-flex" onclick="window.location.href = '/set/{{ set.no }}';">
                     <th scope="row" class="col-sm-3 col-md-1">{{ set.no }}</th>
                     <td class="col-sm-0 col-md-2 d-none d-md-block" style="width: 50px">
@@ -57,8 +58,6 @@
             </table>
         </div>
     </div>
-</div>
-
-
+{#</div>#}
 
 {% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+    <div class="jumbotron">
+        <h1>Inventory</h1>
+        Set overview and information
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h6 class="mb-0">{{ set_data.no }}: {{ set_data.name }}</h6>
+        </div>
+        <div class="media">
+            <img src="{{set_data.image_url}}" class="img-thumbnail crop mr-3"  alt="sheep">
+            <div class="media-body">
+                Category ID: {{ set_data.category_id }} - <br>
+                Year Released: {{ set_data.year_released }}
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card">
+        <div class="row no-gutters">
+            <div class="card-img">
+                <img src="{{set_data.image_url}}" class="img-thumbnail crop"  alt="sheep">
+            </div>
+            <div class="card-header">
+                <h4>{{ set_data.name }}</h4>
+            </div>
+            <div class="card-body">
+                Item no: {{ set_data.no }}<br>
+                Category id: {{ set_data.category_id }}<br>
+                Year: {{ set_data.year_released }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
