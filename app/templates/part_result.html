@@ -2,30 +2,18 @@
 
 {% block result %}
 
-<form action="/add_part/{{ part_no }}">
-
-    <div class="card">
-        <div class="row no-gutters">
-            <div class="col-xs-6 col-sm-9 col-md-9 col-lg-10">
-                {# <div class="card-block"> #}
-                <div class="card-header bg-transparent border-light">
-                    <h4 class="card-title">{{ part_name }}</h4>
+    {% for result in results %}
+    <form action="/add_part/{{ result['part_no'] }}">
+        <div class="card">
+            <div class="media">
+                <div class="media-body">
+                    <h6>{{ result['no'] }} - {{ result['name'] }}</h6>
+                    <button type="submit" class="align-self-baseline btn btn-primary float-left media-button">Add to collection</button>
                 </div>
-                <div class="card-body d-flex flex-column">
-                    <p class="card-text">
-                        Item no: {{ part_no }}<br>
-                    </p>
-                    <button type="submit" class="align-self-baseline btn btn-primary float-right">Add to collection</button>
-                </div>
-
-                {#</div>#}
-            </div>
-            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-                <img src="{{part_image_url}}" class="img-thumbnail crop float-right" style="max-height: inherit" alt="sheep">
+                <img src="{{ result['image_url'] }}" class="img-thumbnail crop ml-3"  alt="sheep">
             </div>
         </div>
-    </div>
-
-</form>
+    </form>
+    {% endfor %}
 
 {% endblock %}

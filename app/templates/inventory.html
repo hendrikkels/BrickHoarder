@@ -27,37 +27,33 @@
 {#            <a class="nav-item nav-link" id="parts-tab" data-toggle="tab" href="#parts" role="tab" aria-controls="parts" aria-selected="false">Parts</a>#}
 {#        </div>#}
 {#    </nav>#}
-    <div class="tab-content table-bordered table-striped" id="nav-tabContent">
-        <div class="tab-pane fade show active" id="sets" role="tabpanel" aria-labelledby="sets-tab">
-            <table class="table" cellspacing="0">
+            <table class="table table-image table-condensed table-striped table-bordered">
                 <thead>
-                <tr class="d-flex">
-                    <th scope="row" class="col-sm-3 col-md-1">No</th>
-                    <th class="col-sm-0 col-md-2 d-none d-md-block">Image</th>
-                    <th class="col-sm-3 col-md-4">Name</th>
-                    <th class="col-sm-3 col-md-2 d-none d-md-block">Category ID</th>
-                    <th class="col-sm-0 col-md-1 d-none d-md-block">Year</th>
-                    <th class="col-sm-0 col-md-2">Complete</th>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Year</th>
+                    <th scope="col">Complete</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for set in set_list %}
                 {# onclick="window.location.href = '/set/{{ set.no }}';"#}
-                <tr class="d-flex" onclick="window.location.href = '/set/{{ set.no }}';">
-                    <th scope="row" class="col-sm-3 col-md-1">{{ set.no }}</th>
-                    <td class="col-sm-0 col-md-2 d-none d-md-block" style="width: 50px">
+                <tr onclick="window.location.href = '/set/{{ set.no }}';">
+                    <th scope="row" >{{ set.no }}</th>
+                    <td>
                         <img src="{{set.thumbnail_url}}" class="img-fluid img-thumbnail" alt="sheep">
                     </td>
-                    <td class="col-sm-3 col-md-4">{{ set.name }}</td>
-                    <td class="col-sm-3 col-md-2 d-none d-md-block">{{set.category_id}}</td>
-                    <td class="col-sm-0 col-md-1 d-none d-md-block">{{set.year_released}}</td>
-                    <td class="col-sm-0 col-md-2">{{set.is_complete}}</td>
+                    <td>{{ set.name }}</td>
+                    <td>{{set.category}}</td>
+                    <td>{{set.year_released}}</td>
+                    <td>{{set.is_complete}}</td>
                 </tr>
                 {% endfor %}
                 </tbody>
             </table>
-        </div>
-    </div>
 {#</div>#}
 
 {% endblock %}

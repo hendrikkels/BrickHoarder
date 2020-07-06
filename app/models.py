@@ -6,6 +6,9 @@ class Part(db.Model):
     no = db.Column(db.String(255), primary_key=True, nullable=False)
     set_no = db.Column(db.String(255), db.ForeignKey('sets.no'), primary_key=True, nullable=False)
     color_id = db.Column(db.String(255), primary_key=True, nullable=False)
+    color_name = db.Column(db.String(255), nullable=False)
+    color_code = db.Column(db.String(255), nullable=False)
+    color_type = db.Column(db.String(255), nullable=False)
     name = db.Column(db.Text(150), nullable=False)
     type = db.Column(db.String(255), nullable=False)
     category_id = db.Column(db.String(255), nullable=False)
@@ -19,13 +22,16 @@ class Part(db.Model):
         db.UniqueConstraint("no", "set_no", "color_id"),
     )
 
-    def __init__(self, no, set_no, name, type, category_id, color_id, owned_quantity, quantity, extra_quantity, is_alternate, is_counterpart, thumbnail_url):
+    def __init__(self, no, set_no, name, type, category_id, color_id, color_name, color_code, color_type, owned_quantity, quantity, extra_quantity, is_alternate, is_counterpart, thumbnail_url):
         self.no = no
         self.set_no = set_no
         self.name = name
         self.type = type
         self.category_id = category_id
         self.color_id = color_id
+        self.color_name = color_name
+        self.color_code = color_code
+        self.color_type = color_type
         self.owned_quantity = owned_quantity
         self.quantity = quantity
         self.extra_quantity = extra_quantity
@@ -44,6 +50,7 @@ class Set(db.Model):
     name = db.Column(db.Text(150), nullable=False)
     type = db.Column(db.String(255), nullable=False)
     category_id = db.Column(db.String(255), nullable=False)
+    category = db.Column(db.String(255), nullable=False)
     image_url = db.Column(db.String(255))
     thumbnail_url = db.Column(db.String(255))
     weight = db.Column(db.Float())
@@ -58,11 +65,12 @@ class Set(db.Model):
         db.UniqueConstraint("no"),
     )
 
-    def __init__(self, no, name, type, category_id, image_url, thumbnail_url, weight, dim_x, dim_y, dim_z, year_released, is_obsolete, is_complete):
+    def __init__(self, no, name, type, category_id, category, image_url, thumbnail_url, weight, dim_x, dim_y, dim_z, year_released, is_obsolete, is_complete):
         self.no = no
         self.name = name
         self.type = type
         self.category_id = category_id
+        self.category = category
         self.image_url = image_url
         self.thumbnail_url = thumbnail_url
         self.weight = weight

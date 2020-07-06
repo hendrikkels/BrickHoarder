@@ -2,6 +2,17 @@ body {
     padding-top: 86px   ;
 }
 
+.media-body {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 20px;
+}
+
+.media-button {
+    position: absolute;
+    bottom: 12px;
+}
+
 .card {
     margin-bottom: 32px;
 }
@@ -13,16 +24,17 @@ body {
 .crop {
     object-fit: scale-down; /* Do not scale the image */
     object-position: center; /* Center the image within the element */
-    max-height: 150px;
-    max-width: 200px;
+    max-height: 160px;
+    max-width: 240px;
 }
+
 
 @media only screen and (max-width: 480px) {
    .crop {
         object-fit: scale-down; /* Do not scale the image */
         object-position: center; /* Center the image within the element */
-        max-height: 75px;
-        max-width: 100px;
+        max-height: 120px;
+        max-width: 160px;
     }
 }
 

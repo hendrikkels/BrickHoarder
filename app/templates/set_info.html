@@ -9,33 +9,57 @@
 
     <div class="card">
         <div class="card-header">
-            <h6 class="mb-0">{{ set_data.no }}: {{ set_data.name }}</h6>
+            <h5 class="mb-0">{{ set_data.no }}: {{ set_data.name }}</h5>
         </div>
         <div class="media">
-            <img src="{{set_data.image_url}}" class="img-thumbnail crop mr-3"  alt="sheep">
             <div class="media-body">
-                Category ID: {{ set_data.category_id }} - <br>
-                Year Released: {{ set_data.year_released }}
-
+                <h6>Set info:</h6>
+                Category: {{ set_data.category }} - {{ set_data.category_id }}<br>
+                Year Released: {{ set_data.year_released }}<br>
+                Weight: {{ set_data.weight }}g<br>
+                Size: {{ set_data.dim_x }} x {{ set_data.dim_y }} x {{ set_data.dim_z }}cm<br>
             </div>
+            <img src="{{set_data.image_url}}" class="img-thumbnail crop ml-3"  alt="sheep">
         </div>
     </div>
 
-
-    <div class="card">
-        <div class="row no-gutters">
-            <div class="card-img">
-                <img src="{{set_data.image_url}}" class="img-thumbnail crop"  alt="sheep">
-            </div>
-            <div class="card-header">
-                <h4>{{ set_data.name }}</h4>
-            </div>
-            <div class="card-body">
-                Item no: {{ set_data.no }}<br>
-                Category id: {{ set_data.category_id }}<br>
-                Year: {{ set_data.year_released }}
-            </div>
-        </div>
-    </div>
-
+    <table class="table table-image table-condensed table-striped table-bordered">
+        <thead>
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">Image</th>
+            <th scope="col">Name</th>
+            <th scope="col">Category ID</th>
+            <th scope="col">Color "Code"</th>
+            <th scope="col">Qty</th>
+            <th scope="col">Alternate</th>
+            <th scope="col">Counterpart</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for part in parts_list %}
+            {% if part.owned_quantity > 0 %}
+                <tr>
+                    <th scope="row">{{ part.no }}</th>
+                    <td><img src={{ part.thumbnail_url }} alt="sheep" class="img-fluid img-thumbnail"></td>
+                    <td>{{ part.name }}</td>
+                    <td>{{ part.category_id }}</td>
+                    <td>{{ part.color_name }} "{{ part.color_code }}"</td>
+                    {% if part.owned_quantity < part.quantity %}
+                        <td class="text-danger">{{ part.owned_quantity }}</td>
+                    {% elif part.owned_quantity < part.quantity + part.extra_quantity %}
+                        <td class="text-warning">{{ part.owned_quantity }}</td>
+                    {% else %}
+                        <td>{{ part.owned_quantity }}</td>
+                    {% endif %}
+                    <td>{{ part.is_alternate }}</td>
+                    <td>{{ part.is_counterpart }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+    <form action="/remove_set/{{ set_data.no }}" method='POST'>
+        <button type="submit" class="btn btn-danger">Remove from collection</button>
+    </form>
 {% endblock %}
