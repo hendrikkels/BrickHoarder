@@ -4,18 +4,57 @@
 
     <div class="jumbotron">
         <h3 class="page-header">Showing results for: "{{ search_str }}"</h3>
-        {% block filter %}{% endblock %}
+        {% if search_set %}
+            Displaying results for Sets, rather search for <a href="/search/part={{ search_str }}" class="text-decoration-none">Parts</a>?
+        {% else %}
+            Displaying results for Parts, rather search for <a href="/search/set={{ search_str }}" class="text-decoration-none">Sets</a>?
+        {% endif %}
     </div>
 
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="alert alert-info" role="alert">
-                    {% for message in messages %}
-                        {{ message }}
-                    {% endfor %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-info" role="alert">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% for result in results %}
+        {% if result['result_type'] == 'set' %}
+
+            <form action="/add_set/{{ result['no'] }}">
+                <div class="card">
+                    <div class="media">
+                        <div class="media-body">
+                            <h6>{{ result['no'] }} - {{ result['name'] }}</h6>
+                            <button type="submit" class="align-self-baseline btn btn-primary float-left media-button">Add to collection</button>
+                        </div>
+                        <img src="{{ result['image_url'] }}" class="img-thumbnail crop ml-3"  alt="sheep">
+                    </div>
                 </div>
-            {% endif %}
-        {% endwith %}
-        {% block result %}{% endblock %}
+            </form>
+
+        {% elif result['result_type'] == 'part' %}
+
+            <form action="/add_part/{{ result['no'] }}">
+                <div class="card">
+                    <div class="media">
+                        <div class="media-body">
+                            <h6>{{ result['no'] }} - {{ result['name'] }}</h6>
+                            <button type="submit" class="align-self-baseline btn btn-primary float-left media-button">Add to collection</button>
+                        </div>
+                        <img src="{{ result['image_url'] }}" class="img-thumbnail crop ml-3"  alt="sheep">
+                    </div>
+                </div>
+            </form>
+
+        {% else %}
+
+            Unknown result_type
+
+        {% endif %}
+    {% endfor %}
 
 {% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'search.html' %}
+
+{% block result %}
+
+    {% for result in results %}
+
+    <form action="/add_set/{{ result['no'] }}">
+        <div class="card">
+            <div class="media">
+                <div class="media-body">
+                    <h6>{{ result['no'] }} - {{ result['name'] }}</h6>
+                    <button type="submit" class="align-self-baseline btn btn-primary float-left media-button">Add to collection</button>
+                </div>
+                <img src="{{ result['image_url'] }}" class="img-thumbnail crop ml-3"  alt="sheep">
+            </div>
+        </div>
+    </form>
+    {% endfor %}
+
+{% endblock %}

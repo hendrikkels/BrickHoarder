@@ -23,13 +23,12 @@
         </div>
     </div>
 
-    <table class="table table-image table-condensed table-striped table-bordered">
+    <table class="table table-image table-condensed table-sm table-striped table-bordered">
         <thead>
         <tr>
             <th scope="col">No</th>
             <th scope="col">Image</th>
             <th scope="col">Name</th>
-            <th scope="col">Category ID</th>
             <th scope="col">Color "Code"</th>
             <th scope="col">Qty</th>
             <th scope="col">Alternate</th>
@@ -43,7 +42,6 @@
                     <th scope="row">{{ part.no }}</th>
                     <td><img src={{ part.thumbnail_url }} alt="sheep" class="img-fluid img-thumbnail"></td>
                     <td>{{ part.name }}</td>
-                    <td>{{ part.category_id }}</td>
                     <td>{{ part.color_name }} "{{ part.color_code }}"</td>
                     {% if part.owned_quantity < part.quantity %}
                         <td class="text-danger">{{ part.owned_quantity }}</td>

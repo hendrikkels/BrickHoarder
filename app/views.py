@@ -10,7 +10,7 @@ from flask import render_template, request, redirect, url_for, flash
 import flask
 from app.models import Set, Part
 
-
+search_sets = True
 
 ###
 # Routing for your application.
@@ -47,6 +47,7 @@ def search():
 # Display a result from a set search
 @app.route('/search/set=<no>', methods=['POST', 'GET'])
 def search_set(no):
+    search_sets = True
     # Use REST API to get set details
     set_data = bricklinkApi.getCatalogItem("SET", no)
     print(set_data)
@@ -54,28 +55,29 @@ def search_set(no):
     if set_data != {}:
         # Set variables to be displayed as result
         results = []
-        result = {'no': set_data['no'], 'name': set_data['name'],
+        result = {'result_type': 'set', 'no': set_data['no'], 'name': set_data['name'],
                   'image_url': set_data['image_url'].replace("//img.", "http://www."),
                   'category_id': set_data['category_id'],
                   'category': bricklinkApi.getCategory(set_data['category_id'])['category_name'],
                   'year_released': set_data['year_released']}
         results.append(result)
-        return render_template('set_result.html', search_str=no, results=results)
+        return render_template('search.html', search_set=search_set, search_str=no, results=results)
     else:
         flash('No results found', 'error')
-        return render_template('search.html', search_str=no)
+        return render_template('search.html', search_set=search_set, search_str=no)
 
 
 # Display a result from a part search
 @app.route('/search/part=<no>', methods=['POST', 'GET'])
 def search_part(no):
+    search_set = False
     part_data = bricklinkApi.getCatalogItem("PART", no)
     print(part_data)
     if part_data != {}:
         results = []
         #  Search returned some results
         # Append the main result
-        result = {'no': part_data['no'], 'name': part_data['name'],
+        result = {'result_type': 'part', 'no': part_data['no'], 'name': part_data['name'],
                   'image_url': part_data['image_url'].replace("//img.", "http://www.")}
         results.append(result)
 
@@ -88,10 +90,10 @@ def search_part(no):
         #                   'image_url': part_data['image_url'].replace("//img.", "http://www.")}
         #         results.append(result)
 
-        return render_template('part_result.html', search_str=no, results=results)
+        return render_template('part_result.html', search_set=search_set, search_str=no, results=results)
     else:
         flash('No results found', 'error')
-        return render_template('search.html', search_str=no)
+        return render_template('search.html', search_set=search_set, search_str=no)
 
 
 @app.route('/add_set/<no>', methods=['POST', 'GET'])
@@ -100,6 +102,7 @@ def add_set(no):
     part_data_list = bricklinkApi.getCatalogSubsets("SET", no, break_minifigs=True)
     part_data_list = filter(lambda x: x['entries'][0]['item']['type'] != 'MINIFIG', part_data_list)
     color_list = bricklinkApi.getColorList()
+    print(color_list)
 
     if request.method == 'POST':
         parts_check = request.form.getlist('owned_quantity')
@@ -108,11 +111,13 @@ def add_set(no):
         i = 0
         for part_data_entry in part_data_list:
             part_data = part_data_entry['entries'][0]
-            color = next(color for color in color_list if color['color_id']==part_data['color_id'])
+            color = next((color for color in color_list if color['color_id']==part_data['color_id']), None)
+            if color is None:
+                color = {'color_id': 0, 'color_name': 'Misc.', 'color_code': 0, 'color_type': 'Misc'}
+            print(part_data)
             print(color)
-
             owned_quantity = int(parts_check[i])
-            if (owned_quantity < part_data['quantity'] + part_data['extra_quantity']):
+            if owned_quantity < part_data['quantity'] + part_data['extra_quantity']:
                 is_complete = False
             part = Part(part_data['item']['no'],
                         no,
@@ -168,6 +173,11 @@ def add_set(no):
             part['thumbnail_url'] = bricklinkApi.getImageURL(part['type'], part['no'], part['color_id'])
             parts_list.append(part)
         return render_template('parts_check.html', set_no=no, parts_list=parts_list)
+
+
+@app.route('/add_part/<no>')
+def add_part(no):
+    return no
 
 
 @app.route('/set/<no>')
