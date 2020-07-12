@@ -8,6 +8,7 @@ Python based server application that uses flask and bootstrap to render web page
 * Python 3.7
 * Pip
 * virtualenv
+* Bricklink registered seller credentials.
 
 ## Installation & Running
 ### Manual:
@@ -31,4 +32,4 @@ To be supported...
 * Flask
 * Bootstrap 4.5
 * SQL-Alchemy
-* Bricklink python API - 
+* Bricklink python API
