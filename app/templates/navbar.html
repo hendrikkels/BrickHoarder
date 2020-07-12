@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md fixed-top navbar-light bg-light">
+<nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="/home">BrickHoarder</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
@@ -11,15 +11,11 @@
                 </li>
             </ul>
             <form class="form-inline my-2 my-md-0 my-lg-0" method="POST" action="/search">
-                <input class="form-control mr-sm-2" type="search" name="no" placeholder="Set Number">
-                <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
+                <div class="form-group d-flex my-0">
+                    <input class="form-control mr-2 my-0" type="search" name="no" placeholder="Set Number">
+                    <button class="btn btn-primary my-0" type="submit">Search</button>
+                </div>
             </form>
         </div>
-        {#        <div id="navbar" class="collapse navbar-collapse">#}
-        {#          <ul class="nav navbar-nav">#}
-            {#            <li><a href="/inventory">My Inventory</a></li>#}
-            {#            <li><a href="/search">Add Set</a></li>#}
-            {#          </ul>#}
-        {#        </div><!--/.nav-collapse -->#}
     </div>
 </nav>

@@ -1,6 +1,7 @@
 import requests
 from requests_oauthlib import OAuth1
 
+
 class BricklinkException(Exception):
     def __init__(self, code, message, description):
         self.code = code
@@ -31,6 +32,7 @@ class BricklinkRequester(object):
 
     def __init__(self, oauth_consumer_key, oauth_consumer_secret,
                  oauth_access_token, oauth_access_token_secret):
+
         """
         Creates object which allows authenticated REST calls to Bricklink
         :param oauth_consumer_key: The Consumer key provided by Bricklink
@@ -38,6 +40,7 @@ class BricklinkRequester(object):
         :param oauth_access_token: The Access Token provided by Bricklink
         :param oauth_access_token_secret: The Access Token Secret provided by Bricklink
         """
+
         self._oauth = OAuth1(
             oauth_consumer_key,
             oauth_consumer_secret,
@@ -69,6 +72,7 @@ class BricklinkApi(object):
         :param requester: Helper object that performs the actual REST calls to the Bricklink API
         """
         self._requester = requester
+        self.color_list = self.getColorList()
 
     def getCatalogItem(self, type, no):
         """
@@ -318,7 +322,11 @@ class BricklinkApi(object):
                 'color_type': string
             }
         """
-        return self._requester.get("/colors/%s" % color_id)
+
+        color = next((color for color in self.color_list if color['color_id'] == color_id), None)
+        if color is None:
+            return {'color_id': 0, 'color_name': 'Misc.', 'color_code': 0, 'color_type': 'Misc'}
+        return color
 
     def getCategoryList(self):
         """

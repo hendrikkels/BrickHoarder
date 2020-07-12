@@ -28,6 +28,11 @@ body {
     max-width: 240px;
 }
 
+.navbar-form .form-group input {
+  width: calc(100% - 50px);
+  display: inline-block;
+  vertical-align: top;
+}
 
 @media only screen and (max-width: 480px) {
    .crop {
