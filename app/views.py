@@ -172,7 +172,7 @@ def add_set(no):
             part['extra_quantity'] = part_data['extra_quantity']
             part['thumbnail_url'] = bricklinkApi.getImageURL(part['type'], part['no'], part['color_id'])
             parts_list.append(part)
-        return render_template('parts_check.html', set_no=no, parts_list=parts_list)
+        return render_template('add_set.html', set_no=no, parts_list=parts_list)
 
 
 @app.route('/add_part/<no>')
