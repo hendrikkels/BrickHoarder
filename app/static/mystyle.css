@@ -9,6 +9,10 @@ body {
   vertical-align: top;
 }
 
+.selected {
+    background: #e2e6ea;
+}
+
 .media-body {
     padding-top: 1rem;
     padding-left: 1rem;
