@@ -19,45 +19,48 @@
                 Weight: {{ set_data.weight }}g<br>
                 Size: {{ set_data.dim_x }} x {{ set_data.dim_y }} x {{ set_data.dim_z }}cm<br>
             </div>
-            <img src="{{set_data.image_url}}" class="img-thumbnail crop ml-3"  alt="sheep">
+            <img src="{{set_data.image_url}}" class="align-self-center crop ml-3"  alt="sheep">
         </div>
     </div>
 
-    <table class="table table-image table-condensed table-sm table-striped table-bordered">
-        <thead>
-        <tr>
-            <th scope="col">No</th>
-            <th scope="col">Image</th>
-            <th scope="col">Name</th>
-            <th scope="col">Color "Code"</th>
-            <th scope="col">Qty</th>
-            <th scope="col">Alternate</th>
-            <th scope="col">Counterpart</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for part in parts_list %}
-            {% if part.owned_quantity > 0 %}
-                <tr>
-                    <th scope="row">{{ part.no }}</th>
-                    <td><img src={{ part.thumbnail_url }} alt="sheep" class="img-fluid img-thumbnail"></td>
-                    <td>{{ part.name }}</td>
-                    <td>{{ part.color_name }} "{{ part.color_code }}"</td>
-                    {% if part.owned_quantity < part.quantity %}
-                        <td class="text-danger">{{ part.owned_quantity }}</td>
-                    {% elif part.owned_quantity < part.quantity + part.extra_quantity %}
-                        <td class="text-warning">{{ part.owned_quantity }}</td>
-                    {% else %}
-                        <td>{{ part.owned_quantity }}</td>
-                    {% endif %}
-                    <td>{{ part.is_alternate }}</td>
-                    <td>{{ part.is_counterpart }}</td>
-                </tr>
-            {% endif %}
-        {% endfor %}
-        </tbody>
-    </table>
-    <form action="/remove_set/{{ set_data.no }}" method='POST'>
-        <button type="submit" class="btn btn-danger">Remove from collection</button>
-    </form>
+    <div class="col-12">
+        <table class="table table-image table-condensed table-sm table-striped table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">No</th>
+                <th scope="col">Image</th>
+                <th scope="col">Name</th>
+                <th scope="col">Color "Code"</th>
+                <th scope="col">Qty</th>
+                <th scope="col">Alternate</th>
+                <th scope="col">Counterpart</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for part in parts_list %}
+                {% if part.owned_quantity > 0 %}
+                    <tr>
+                        <th scope="row">{{ part.no }}</th>
+                        <td><img src={{ part.thumbnail_url }} alt="sheep" class="img-fluid img-thumbnail"></td>
+                        <td>{{ part.name }}</td>
+                        <td>{{ part.color_name }} "{{ part.color_code }}"</td>
+                        {% if part.owned_quantity < part.quantity %}
+                            <td class="text-danger">{{ part.owned_quantity }}</td>
+                        {% elif part.owned_quantity < part.quantity + part.extra_quantity %}
+                            <td class="text-warning">{{ part.owned_quantity }}</td>
+                        {% else %}
+                            <td>{{ part.owned_quantity }}</td>
+                        {% endif %}
+                        <td>{{ part.is_alternate }}</td>
+                        <td>{{ part.is_counterpart }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+        <form action="/remove_set/{{ set_data.no }}" method='POST'>
+            <button type="submit" class="btn btn-danger">Remove from collection</button>
+        </form>
+    </div>
+
 {% endblock %}

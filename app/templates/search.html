@@ -4,26 +4,26 @@
 
     <div class="jumbotron">
         <h3 class="page-header">Showing results for: "{{ search_str }}"</h3>
-{#            Displaying results for Sets, rather search for <a href="/search/part={{ search_str }}" class="text-decoration-none">Parts</a>?#}
-            <form method="POST" action="/search">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <select class="form-control" name="search_filter">
-                            {% if search_filter=="sets" %}
-                                <option value="sets" selected="selected">Sets</option>
-                                <option value="parts">Parts</option>
-                            {% elif search_filter=="parts" %}
-                                <option value="sets">Sets</option>
-                                <option value="parts" selected="selected">Parts</option>
-                            {% endif %}
-                        </select>
-                    </div>
-                    <input name="no" type="text" class="form-control" aria-label="Search input with dropdown button" value="{{ search_str }}">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="submit">Search</button>
-                    </div>
+        {#            Displaying results for Sets, rather search for <a href="/search/part={{ search_str }}" class="text-decoration-none">Parts</a>?#}
+        <form method="POST" action="/search">
+            <div class="input-group input-group-sm col-sm-10 col-md-6 col-lg-4 px-0">
+                <div class="input-group-prepend">
+                    <select class="btn btn-secondary dropdown-toggle" name="search_filter">
+                        {% if search_filter=="sets" %}
+                            <option value="sets" selected="selected">Sets</option>
+                            <option value="parts">Parts</option>
+                        {% elif search_filter=="parts" %}
+                            <option value="sets">Sets</option>
+                            <option value="parts" selected="selected">Parts</option>
+                        {% endif %}
+                    </select>
                 </div>
-            </form>
+                <input name="no" type="text" class="form-control h-auto" aria-label="Search input with dropdown button" value="{{ search_str }}">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
     </div>
 
     {% with messages = get_flashed_messages() %}
@@ -37,31 +37,33 @@
     {% endwith %}
 
     {% for result in results %}
-        {% if result['result_type'] == 'set' %}
+        {% if result.result_type == 'set' %}
 
-            <form action="/add_set/{{ result['no'] }}" method="GET">
+            <form action="/add_set/{{ result.no }}" method="GET">
                 <div class="card">
                     <div class="media">
                         <div class="media-body">
-                            <h6>{{ result['no'] }} - {{ result['name'] }}</h6>
+                            <h6>{{ result.no }} - {{ result.name }}</h6>
                             <button type="submit" class="align-self-baseline btn btn-primary float-left media-button">Add to collection</button>
                         </div>
-                        <img src="{{ result['image_url'] }}" class="img-thumbnail crop ml-3"  alt="sheep">
+                        <img src="{{ result.image_url }}" class="align-self-center crop ml-3"  alt="sheep">
                     </div>
                 </div>
             </form>
 
-        {% elif result['result_type'] == 'part' %}
+        {% elif result.result_type == 'part' %}
 
-            <form action="/add_part/{{ result['no'] }}" method="GET">
+            <form action="/add_part/{{ result.no }}" method="GET">
                 <div class="card">
+
                     <div class="media">
                         <div class="media-body">
-                            <h6>{{ result['no'] }} - {{ result['name'] }}</h6>
+                            <h6>{{ result.no }} - {{ result.name }}</h6>
                             <button type="submit" class="align-self-baseline btn btn-primary float-left media-button">Add to collection</button>
                         </div>
-                        <img src="{{ result['image_url'] }}" class="img-thumbnail crop ml-3"  alt="sheep">
+                        <img src="{{ result.image_url }}" class="align-self-center crop ml-3"  alt="sheep">
                     </div>
+
                 </div>
             </form>
 

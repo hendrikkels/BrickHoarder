@@ -1,31 +1,6 @@
 body {
     padding-top: 86px   ;
-}
-
-.media-body {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    padding-left: 20px;
-}
-
-.media-button {
-    position: absolute;
-    bottom: 12px;
-}
-
-.card {
-    margin-bottom: 32px;
-}
-
-.jumbotron {
-    padding: 2rem;
-}
-
-.crop {
-    object-fit: scale-down; /* Do not scale the image */
-    object-position: center; /* Center the image within the element */
-    max-height: 160px;
-    max-width: 240px;
+    font-family: 'Poppins', sans-serif;
 }
 
 .navbar-form .form-group input {
@@ -34,12 +9,48 @@ body {
   vertical-align: top;
 }
 
+.media-body {
+    padding-top: 1rem;
+    padding-left: 1rem;
+}
+
+.media-button {
+    position: absolute;
+    bottom: 1rem;
+}
+
+.card {
+    margin-bottom: 2rem;
+}
+
+.form-spinner {
+    max-width: 8rem;
+}
+
+.jumbotron {
+    padding: 2rem;
+}
+
+
+
+.crop {
+    margin: 1rem;
+    object-fit: scale-down; /* Do not scale the image */
+    object-position: center; /* Center the image within the element */
+    height: 120px;
+    width: 120px;
+}
+
+
+
+
 @media only screen and (max-width: 480px) {
    .crop {
+        margin: .5rem;
         object-fit: scale-down; /* Do not scale the image */
         object-position: center; /* Center the image within the element */
-        max-height: 120px;
-        max-width: 160px;
+        max-height: 80px;
+        max-width: 80px;
     }
 }
 

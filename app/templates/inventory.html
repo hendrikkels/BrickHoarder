@@ -2,58 +2,48 @@
 
 {% block main %}
 
-<div class="jumbotron">
-
-    <h1>Inventory</h1>
-    Personal LEGO collection
-
-</div>
+    <div class="jumbotron">
+        <h1>Inventory</h1>
+        Personal LEGO collection
+    </div>
 
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<div class="alert alert-info" role="alert">
-    {% for message in messages %}
-    {{ message }}
-    {% endfor %}
-</div>
-{% endif %}
-{% endwith %}
-
-{#<div class="col-md-12">#}
-{#    <nav>#}
-{#        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">#}
-{#            <a class="nav-item nav-link active" id="sets-tab" data-toggle="tab" href="#sets" role="tab" aria-controls="sets" aria-selected="true">Sets</a>#}
-{#            <a class="nav-item nav-link" id="parts-tab" data-toggle="tab" href="#parts" role="tab" aria-controls="parts" aria-selected="false">Parts</a>#}
-{#        </div>#}
-{#    </nav>#}
-            <table class="table table-image table-condensed table-hover table-bordered">
-                <thead>
-                <tr>
-                    <th scope="col">No</th>
-                    <th scope="col">Image</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Year</th>
-                    <th scope="col">Complete</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for set in set_list %}
-                {# onclick="window.location.href = '/set/{{ set.no }}';"#}
-                <tr onclick="window.location.href = '/set/{{ set.no }}';">
-                    <th scope="row" >{{ set.no }}</th>
-                    <td>
-                        <img src="{{set.thumbnail_url}}" class="img-fluid img-thumbnail" alt="sheep">
-                    </td>
-                    <td>{{ set.name }}</td>
-                    <td>{{set.category}}</td>
-                    <td>{{set.year_released}}</td>
-                    <td>{{set.is_complete}}</td>
-                </tr>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-info" role="alert">
+                {% for message in messages %}
+                    {{ message }}
                 {% endfor %}
-                </tbody>
-            </table>
-{#</div>#}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <table class="table table-image table-condensed table-hover table-bordered">
+        <thead>
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">Image</th>
+            <th scope="col">Name</th>
+            <th scope="col">Category</th>
+            <th scope="col">Year</th>
+            <th scope="col">Complete</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for set in set_list %}
+            {# onclick="window.location.href = '/set/{{ set.no }}';"#}
+            <tr onclick="window.location.href = '/set/{{ set.no }}';">
+                <th scope="row" >{{ set.no }}</th>
+                <td>
+                    <img src="{{set.thumbnail_url}}" class="img-fluid img-thumbnail" alt="sheep">
+                </td>
+                <td>{{ set.name }}</td>
+                <td>{{set.category}}</td>
+                <td>{{set.year_released}}</td>
+                <td>{{set.is_complete}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}
