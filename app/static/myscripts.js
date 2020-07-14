@@ -1,5 +1,4 @@
-var lastSelectedRow;
-var trs = document.getElementById('tableStudent').tBodies[0].getElementsByTagName('tr');
+var trs = document.getElementById('setTable').tBodies[0].getElementsByTagName('tr');
 
 // disable text selection
 document.onselectstart = function() {
@@ -13,14 +12,17 @@ function RowClick(currenttr, lock) {
 
 function toggleRow(row) {
     row.className = row.className == 'selected' ? '' : 'selected';
-    lastSelectedRow = row;
+    row.getElementsByTagName('th').item(0).getElementsByTagName('input').item(0).checked = true;
+    console.error(document.getElementById('submit_btn').disabled = false)
 }
 
 function clearAll() {
     for (var i = 0; i < trs.length; i++) {
         trs[i].className = '';
+        trs[i].getElementsByTagName('th').item(0).getElementsByTagName('input').item(0).checked = false;
     }
 }
+
 
 // Change image color on dropdown select
 function colorChange() {

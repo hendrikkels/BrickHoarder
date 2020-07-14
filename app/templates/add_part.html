@@ -3,7 +3,7 @@
 {% block main %}
 
     <div class="jumbotron">
-        <h3>Adding part "{{ set_no }}" to inventory</h3>
+        <h3>Adding part "{{ part_no }}" to inventory</h3>
         Please review criteria below for part specification
     </div>
 
@@ -20,7 +20,7 @@
         {% endif %}
     {% endwith %}
     <!--<div class="container">-->
-    <form action="/add_part/{{ set_no }}" method='POST'>
+    <form action="/add_part/{{ part_no }}" method='POST'>
         <div class="card">
             <div class="card-header">
                 Select part criteria
@@ -48,7 +48,7 @@
                         <input class="form-control form-control-sm form-spinner" type="number" id="quantity" name="quantity" value="1" min="0" step="1" required/>
                     </div>
                 </div>
-                <img id="color_image" src="{{ part_color_images[0].image }}" class="align-self-center crop"  alt="sheep">
+                <img id="color_image" src="{{ part_color_images[0].image }}" class="align-self-center crop-thumbnail"  alt="sheep">
             </div>
         </div>
 
@@ -56,9 +56,10 @@
             <div class="card-header">
                 Select which set to add to
             </div>
-            <table id="tableStudent" class="table table-image table-responsive-sm table-condensed table-hover table-bordered">
+            <table id="setTable" class="table table-image table-responsive-sm table-condensed table-hover table-bordered">
                 <thead>
                 <tr>
+                    <th></th>
                     <th scope="col" style="width: 25px">Image</th>
                     <th scope="col">No.</th>
                     <th scope="col">Name</th>
@@ -68,8 +69,10 @@
                 </thead>
                 <tbody>
                 {% for set in set_list %}
-
                     <tr onmousedown="RowClick(this,false);">
+                        <th>
+                            <input required type="radio" value="{{ set.no }}"/>
+                        </th>
                         <td>
                             <img src="{{ set.thumbnail_url }}" class="img-fluid img-thumbnail" alt="sheep">
                         </td>
@@ -78,11 +81,11 @@
                         <td>{{ set.category }}</td>
                         <td>{{ set.is_complete }}</td>
                     </tr>
-
                 {% endfor %}
                 </tbody>
             </table>
         </div>
+        <button class="btn btn-primary" type="submit" id="submit_btn" disabled>Add to set</button>
     </form>
 
 {% endblock %}

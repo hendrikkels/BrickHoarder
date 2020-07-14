@@ -176,12 +176,14 @@ def search_part(no):
         return render_template('search.html', search_str=no, search_filter=search_filter)
 
 
-@app.route('/add_part/<no>')
+@app.route('/add_part/<no>', methods=['POST', 'GET'])
 def add_part(no):
     part_data = bricklinkApi.getCatalogItem("PART", no)
     print(part_data)
     if request.method == 'POST':
         # Submit pressed
+        color = request.form.get('color_select')
+        print(color)
         return redirect(url_for('inventory'))
     else:
         part_color_images = []
@@ -201,7 +203,7 @@ def add_part(no):
 
         set_list = db.session.query(Set).all()
 
-        return render_template('add_part.html', set_no=no, part_color_images=part_color_images, set_list=set_list)
+        return render_template('add_part.html', set_no=no, part_no=no, part_color_images=part_color_images, set_list=set_list)
 
 
 @app.route('/set/<no>')
