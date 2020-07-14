@@ -182,12 +182,21 @@ def add_part(no):
     print(part_data)
     if request.method == 'POST':
         # Submit pressed
-        color = request.form.get('color_select')
-        print(color)
+        print('submitted')
+        color_data = eval(request.form.get('color_select'))
+        print(color_data)
+        quantity = request.form.get('quantity')
+        print(quantity)
+        set_option = request.form.get('set_option')
+        print(set_option)
+
+        set_data = Set.query.filter_by(no=no).first()
+        parts_list = Part.query.filter_by(set_no=no).all()
+
         return redirect(url_for('inventory'))
     else:
         part_color_images = []
-        keys = ['name', 'image']
+        keys = ['id', 'name', 'image']
 
         color_list = bricklinkApi.getCatalogKnownColors("PART", no)
         print(color_list)
@@ -195,6 +204,7 @@ def add_part(no):
             color_item = bricklinkApi.getColor(color['color_id'])
             print(color_item)
             part_color_image = dict.fromkeys(keys, None)
+            part_color_image['id'] = color_item['color_id']
             part_color_image['name'] = color_item['color_name']
             part_color_image['image'] = bricklinkApi.getImageURL(part_data['type'], part_data['no'],
                                                                  color_item['color_id'])

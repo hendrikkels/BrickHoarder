@@ -1,4 +1,4 @@
-var trs = document.getElementById('setTable').tBodies[0].getElementsByTagName('tr');
+
 
 // disable text selection
 document.onselectstart = function() {
@@ -6,17 +6,18 @@ document.onselectstart = function() {
 }
 
 function RowClick(currenttr, lock) {
-    clearAll();
+    var trs = document.getElementById('setTable').tBodies[0].getElementsByTagName('tr');
+    clearAll(trs);
     toggleRow(currenttr);
 }
 
 function toggleRow(row) {
     row.className = row.className == 'selected' ? '' : 'selected';
     row.getElementsByTagName('th').item(0).getElementsByTagName('input').item(0).checked = true;
-    console.error(document.getElementById('submit_btn').disabled = false)
+    document.getElementById('submit_btn').disabled = false
 }
 
-function clearAll() {
+function clearAll(trs) {
     for (var i = 0; i < trs.length; i++) {
         trs[i].className = '';
         trs[i].getElementsByTagName('th').item(0).getElementsByTagName('input').item(0).checked = false;
@@ -26,7 +27,7 @@ function clearAll() {
 
 // Change image color on dropdown select
 function colorChange() {
-    var img_url = document.getElementById("color_select").value;
+    var img_url = JSON.parse(document.getElementById("color_select").value.replace(/'/g, '"')).image;
     document.getElementById("color_image").src = img_url;
 }
 
