@@ -187,11 +187,11 @@ def add_part(no):
         print(color_data)
         quantity = request.form.get('quantity')
         print(quantity)
-        set_option = request.form.get('set_option')
-        print(set_option)
+        set_no = request.form.get('set_option')
+        print(set_no)
 
-        set_data = Set.query.filter_by(no=no).first()
-        parts_list = Part.query.filter_by(set_no=no).all()
+        parts_list = Part.query.filter_by(set_no=set_no).all()
+        print(parts_list)
 
         return redirect(url_for('inventory'))
     else:
