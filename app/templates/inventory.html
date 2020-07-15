@@ -18,11 +18,17 @@
         {% endif %}
     {% endwith %}
 
-    <table class="table table-image table-condensed table-hover table-responsive-sm table-bordered">
+    <div class="card">
+    <div class="card-header">
+        <div class="form-group input-group-sm d-flex mb-0">
+            <input class="form-control" type="search" id="table_search" name="table_search" onkeyup="searchTable()" placeholder="Search">
+        </div>
+    </div>
+    <table class="table table-image table-condensed table-hover table-responsive table-bordered mb-0" id="searchable_table">
         <thead>
         <tr>
-            <th scope="col">No</th>
             <th scope="col">Image</th>
+            <th scope="col">No</th>
             <th scope="col">Name</th>
             <th scope="col">Category</th>
             <th scope="col">Year</th>
@@ -33,10 +39,10 @@
         {% for set in set_list %}
             {# onclick="window.location.href = '/set/{{ set.no }}';"#}
             <tr onclick="window.location.href = '/set/{{ set.no }}';">
-                <th scope="row" >{{ set.no }}</th>
-                <td>
-                    <img src="{{set.thumbnail_url}}" class="img-fluid img-thumbnail" alt="sheep">
+                <td class="p-0 fit">
+                    <img src="{{set.thumbnail_url}}" class="img-fluid img-thumbnail crop-table" alt="sheep">
                 </td>
+                <td scope="row" >{{ set.no }}</td>
                 <td>{{ set.name }}</td>
                 <td>{{set.category}}</td>
                 <td>{{set.year_released}}</td>
@@ -45,5 +51,6 @@
         {% endfor %}
         </tbody>
     </table>
+    </div>
 
 {% endblock %}

@@ -1,20 +1,20 @@
 
-
 // disable text selection
 document.onselectstart = function() {
     return false;
 }
 
-function RowClick(currenttr, lock) {
-    var trs = document.getElementById('setTable').tBodies[0].getElementsByTagName('tr');
+// Allow rows to be selected in radio-table
+function RowClick(current_tr, lock) {
+    var trs = document.getElementById('radio-table').tBodies[0].getElementsByTagName('tr');
     clearAll(trs);
-    toggleRow(currenttr);
+    toggleRow(current_tr);
 }
 
 function toggleRow(row) {
     row.className = row.className == 'selected' ? '' : 'selected';
     row.getElementsByTagName('th').item(0).getElementsByTagName('input').item(0).checked = true;
-    document.getElementById('submit_btn').disabled = false
+    document.getElementById('submit_button').disabled = false
 }
 
 function clearAll(trs) {
@@ -31,3 +31,24 @@ function colorChange() {
     document.getElementById("color_image").src = img_url;
 }
 
+// Search (Filter) table entries
+function searchTable() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("table_search");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("searchable_table");
+    tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}

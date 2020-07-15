@@ -3,6 +3,10 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
+.jumbotron {
+    padding: 2rem;
+}
+
 .navbar-form .form-group input {
   width: calc(100% - 50px);
   display: inline-block;
@@ -32,8 +36,21 @@ body {
     max-width: 8rem;
 }
 
-.jumbotron {
-    padding: 2rem;
+.table td {
+    vertical-align: middle;
+}
+
+.table td.fit,
+.table th.fit {
+    white-space: nowrap;
+    width: 1%;
+}
+
+.crop-table{
+    margin: 0;
+    object-fit: scale-down; /* Do not scale the image */
+    object-position: center; /* Center the image within the element */
+    height: 4rem;
 }
 
 .crop-thumbnail{
