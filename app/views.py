@@ -12,7 +12,6 @@ from app.models import Set, Part
 
 search_filter = 'sets'
 
-
 ###
 # Routing for your application.
 ###
@@ -29,6 +28,9 @@ def inventory():
     parts_list = db.session.query(Part).all()
     return render_template('inventory.html', set_list=set_list, parts_list=parts_list)
 
+@app.route('/lego_crate')
+def lego_crate():
+    return 'lego_crate'
 
 @app.route('/search', methods=['POST', 'GET'])
 def search():
