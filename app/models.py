@@ -86,3 +86,10 @@ class Set(db.Model):
 
 
 db.create_all()
+
+lego_box = Set('Lego Box', 'Lego Box', 'SET', 'Misc.', 'Loose Parts',
+               'i',
+               'https://f0.pngfuel.com/png/188/53/lunchbox-lego-ninjago-box-png-clip-art.png',
+               0, 0, 0, 0, '1932', False, False)
+db.session.merge(lego_box)
+db.session.commit()

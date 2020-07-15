@@ -185,6 +185,7 @@ def add_part(no):
         print('submitted')
         color_data = eval(request.form.get('color_select'))
         print(color_data)
+        color = bricklinkApi.getColor(color_data['id'])
         quantity = request.form.get('quantity')
         print(quantity)
         set_no = request.form.get('set_option')
@@ -192,28 +193,52 @@ def add_part(no):
 
         parts_list = Part.query.filter_by(set_no=set_no).all()
         print(parts_list)
+        for part in parts_list:
+            if part.no == no and part.color_id == str(color['id']):
+                print('contains code')
+                # Increase quantity
+                print('contains code and col')
+                part.owned_quantity = Part.owned_quantity + quantity
+            else:
+                # Add to db as separate
+                part = Part(part_data['no'],
+                            set_no,
+                            part_data['name'],
+                            part_data['type'],
+                            part_data['category_id'],
+                            color['color_id'],
+                            color['color_name'],
+                            color['color_code'],
+                            color['color_type'],
+                            quantity,
+                            0,
+                            0,
+                            False,
+                            False,
+                            color_data['image'])
+                print('add as new part')
+            db.session.merge(part)
+            db.session.commit()
+            flash("Part " + no + " added to set " + set_no, 'success')
+            return redirect(url_for('inventory'))
+        else:
+            part_color_images = []
+            keys = ['id', 'name', 'image']
 
-        return redirect(url_for('inventory'))
-    else:
-        part_color_images = []
-        keys = ['id', 'name', 'image']
-
-        color_list = bricklinkApi.getCatalogKnownColors("PART", no)
-        print(color_list)
-        for color in color_list:
-            color_item = bricklinkApi.getColor(color['color_id'])
-            print(color_item)
-            part_color_image = dict.fromkeys(keys, None)
-            part_color_image['id'] = color_item['color_id']
-            part_color_image['name'] = color_item['color_name']
-            part_color_image['image'] = bricklinkApi.getImageURL(part_data['type'], part_data['no'],
+            color_list = bricklinkApi.getCatalogKnownColors("PART", no)
+            print(color_list)
+            for color in color_list:
+                color_item = bricklinkApi.getColor(color['color_id'])
+                print(color_item)
+                part_color_image = dict.fromkeys(keys, None)
+                part_color_image['id'] = color_item['color_id']
+                part_color_image['name'] = color_item['color_name']
+                part_color_image['image'] = bricklinkApi.getImageURL(part_data['type'], part_data['no'],
                                                                  color_item['color_id'])
-            part_color_images.append(part_color_image)
-        print(part_color_images)
-
-        set_list = db.session.query(Set).all()
-
-        return render_template('add_part.html', set_no=no, part_no=no, part_color_images=part_color_images, set_list=set_list)
+                part_color_images.append(part_color_image)
+            print(part_color_images)
+            set_list = db.session.query(Set).all()
+            return render_template('add_part.html', set_no=no, part_no=no, part_color_images=part_color_images, set_list=set_list)
 
 
 @app.route('/set/<no>')
