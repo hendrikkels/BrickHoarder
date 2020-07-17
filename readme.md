@@ -22,7 +22,7 @@ $ source venv/bin/activate
 ```
 If virtualenv is active:
 ```{bash}
-$ pip install requirements.txt
+$ pip install -r requirements.txt
 $ python run.py
 ```
 ### Docker:
