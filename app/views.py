@@ -12,6 +12,20 @@ from app.models import Set, Part
 
 search_filter = 'sets'
 
+
+###
+# Helpful functions
+###
+def checkSetCompleteness(set_no):
+    print(set_no)
+    parts_list = Part.query.filter_by(set_no=set_no).all()
+    for part in parts_list:
+        if part.owned_quantity < part.quantity + part.extra_quantity:
+            return False
+    return True
+
+
+
 ###
 # Routing for your application.
 ###
@@ -28,9 +42,14 @@ def inventory():
     parts_list = db.session.query(Part).all()
     return render_template('inventory.html', set_list=set_list, parts_list=parts_list)
 
+
 @app.route('/lego_crate')
 def lego_crate():
-    return 'lego_crate'
+    set_data = Set.query.filter_by(no='0000').first()
+    parts_list = Part.query.filter_by(set_no='0000').all()
+    print(set_data)
+    return render_template("lego_crate.html", set_data=set_data, parts_list=parts_list)
+
 
 @app.route('/search', methods=['POST', 'GET'])
 def search():
@@ -203,6 +222,11 @@ def add_part(no):
                 print('contains code and col')
                 part.owned_quantity = Part.owned_quantity + quantity
                 db.session.merge(part)
+
+                # set_completeness = checkSetCompleteness(set_no)
+                set_data = Set.query.filter_by(no=set_no).first()
+                set_data.is_complete = checkSetCompleteness(set_no)
+                db.session.merge(set_data)
                 db.session.commit()
                 flash("Part " + no + " added to set " + set_no, 'success')
                 return redirect(url_for('inventory'))
