@@ -411,3 +411,5 @@ class BricklinkApi(object):
         else:
             # Standard image placeholder
             return 'https://www.bricklink.com/P/1/3003.jpg'
+
+

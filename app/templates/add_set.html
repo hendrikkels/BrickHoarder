@@ -2,61 +2,66 @@
 
 {% block main %}
 
-<div class="jumbotron">
-    <h3>Adding set "{{ set_no }}" to inventory</h3>
-    Please review all parts to be included in set below
-</div>
+    <div class="jumbotron">
+        <h3>Adding set "{{ set_no }}" to inventory</h3>
+        Please review all parts to be included in set below
+    </div>
 
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<div class="alert alert-info">
-    <ul>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-</div>
-{% endif %}
-{% endwith %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-info">
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
 
-<!--<div class="container">-->
-        <form action="/add_set/{{ set_no }}" method='POST'>
-            <table class="table table-image table-condensed table-striped table-bordered">
-                <thead>
-                <tr>
-                    <th scope="col">Incl.</th>
-                    <th scope="col">No</th>
-                    <th scope="col" style="width: 25px">Image</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Category ID</th>
-                    <th scope="col">Color ID</th>
-                    <th scope="col">Qty.</th>
-                    <th scope="col">Extra Qty.</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for part in parts_list %}
+    <!--<div class="container">-->
+    <form action="/add_set/{{ set_no }}" method='POST'>
+        <div class="card">
 
-                <tr>
-                    <td>
-                        <input type="number" name="owned_quantity" value="{{ part.quantity }}" min="0" max="{{ part.quantity + part.extra_quantity }}" step="1" required/>
-                    </td>
-                    <th scope="row">{{ part.no }}</th>
-                    <td class="" >
-                        <img src="{{ part.thumbnail_url }}" class="img-fluid img-thumbnail" alt="sheep">
-                    </td>
-                    <td>{{ part.name }}</td>
-                    <td>{{ part.category_id }}</td>
-                    <td>{{ part.color_id }}</td>
-                    <td>{{ part.quantity }}</td>
-                    <td>{{ part.extra_quantity }}</td>
-                </tr>
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-bordered mb-0">
+                    <thead>
+                    <tr>
+                        <th scope="col" style="width: 4rem">Incl.</th>
+                        <th scope="col">No</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Qty.</th>
+                        <th scope="col">Extra.</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for part in parts_list %}
 
-                {% endfor %}
-                </tbody>
-            </table>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+                        <tr>
+                            <td>
+                                <div class="form-group mb-0">
+                                    <input type="number" class="form-control form-control-sm form-spinner" name="owned_quantity" value="{{ part.quantity }}" min="0" max="{{ part.quantity + part.extra_quantity }}" step="1" required/>
+                                </div>
+
+                            </td>
+                            <td scope="row">{{ part.no }}</td>
+                            <td class="fit" >
+                                <img src="{{ part.thumbnail_url }}" class="img-fluid img-thumbnail" alt="sheep">
+                            </td>
+                            <td>{{ part.name }}</td>
+                            <td>{{ part.quantity }}</td>
+                            <td>{{ part.extra_quantity }}</td>
+                        </tr>
+
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
 
 {% endblock %}

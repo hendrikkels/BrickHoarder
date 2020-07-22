@@ -14,10 +14,10 @@ search_filter = 'sets'
 
 
 ###
-# Helpful functions
+# Database functions
 ###
 def checkSetCompleteness(set_no):
-    if set_no is 'lego':
+    if set_no == 'lego':
         return False
     parts_list = Part.query.filter_by(set_no=set_no).all()
     for part in parts_list:
@@ -33,6 +33,13 @@ def checkSetCompleteness(set_no):
 @app.route('/')
 @app.route('/home')
 def home():
+    set_list = db.session.query(Set).all()
+    for set in (sets for sets in set_list if sets.no != 'lego'):
+        print(bricklinkApi.getCatalogPriceGuide(type='SET', no=set.no))
+
+    parts_list = db.session.query(Part).all()
+    for part in parts_list:
+        print(bricklinkApi.getCatalogPriceGuide(type='PART', no=part.no))
     return render_template("dashboard.html")
 
 
@@ -122,7 +129,6 @@ def search_set(no):
     # Use REST API to get set details
     set_data = bricklinkApi.getCatalogItem("SET", no)
     print(set_data)
-
     if set_data != {}:
         # Set variables to be displayed as result
         results = []
@@ -143,7 +149,6 @@ def add_set(no):
     set_data = bricklinkApi.getCatalogItem("SET", no)
     part_data_list = bricklinkApi.getCatalogSubsets("SET", no, break_minifigs=True)
     part_data_list = filter(lambda x: x['entries'][0]['item']['type'] != 'MINIFIG', part_data_list)
-    color_list = bricklinkApi.getColorList()
 
     if request.method == 'POST':
         # Submit pressed
@@ -221,20 +226,11 @@ def search_part(no):
     print(part_data)
     if part_data != {}:
         results = []
-        #  Search returned some results
+        # Search returned some results
         # Append the main result
         result = {'result_type': 'part', 'no': part_data['no'], 'name': part_data['name'],
                   'image_url': part_data['image_url'].replace("//img.", "http://www.")}
         results.append(result)
-
-        # if 'alternate_no' in part_data:
-        #     for alt_code in part_data['alternate_no'].split(', '):
-        #         print(alt_code)
-        #         part_data = bricklinkApi.getCatalogItem("PART", alt_code)
-        #         print(part_data)
-        #         result = {'no': part_data['no'], 'name': part_data['name'],
-        #                   'image_url': part_data['image_url'].replace("//img.", "http://www.")}
-        #         results.append(result)
         return render_template('search.html', search_str=no, search_filter=search_filter, results=results)
     else:
         flash('No results found', 'error')
@@ -250,9 +246,13 @@ def add_part(no):
         print('submitted')
         if request.form.get('color_select') is not None:
             color_data = eval(request.form.get('color_select'))
-        print(color_data)
-        color = bricklinkApi.getColor(color_data['id'])
+            print(color_data)
+            color = bricklinkApi.getColor(color_data['id'])
+        else:
+            # CHECK IF THIS WORKS
+            color = bricklinkApi.getColor(0)
         print(color)
+
         quantity = request.form.get('quantity')
         print(quantity)
         set_no = request.form.get('set_option')
