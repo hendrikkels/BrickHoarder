@@ -27,6 +27,7 @@
             </div>
             <div class="media">
                 <div class="media-body">
+                {% if part_color_images|length > 1 %}
                     <div class="form-group">
                         <label for="color_select">Color:</label>
                         <div class="dropdown">
@@ -47,8 +48,14 @@
                         <label for="quantity">Quantity:</label>
                         <input class="form-control form-control-sm form-spinner" type="number" id="quantity" name="quantity" value="1" min="1" step="1" required/>
                     </div>
+                {% else %}
+                    <div class="form-group">
+                        <label for="quantity">Quantity:</label>
+                        <input class="form-control form-control-sm form-spinner" type="number" id="quantity" name="quantity" value="1" min="1" step="1" required/>
+                    </div>
+                {% endif %}
                 </div>
-                <img id="color_image" src="{{ part_color_images[0].image }}" class="align-self-center crop-thumbnail"  alt="sheep">
+                <img id="color_image" src="{{ part_color_images[0].image }}" class="align-self-center img-thumbnail crop-thumbnail"  alt="sheep">
             </div>
         </div>
 
@@ -59,7 +66,6 @@
             <table id="radio-table" class="table table-image table-responsive-sm table-condensed table-hover table-bordered">
                 <thead>
                 <tr>
-                    <th></th>
                     <th scope="col" style="width: 25px">Image</th>
                     <th scope="col">No.</th>
                     <th scope="col">Name</th>
@@ -70,11 +76,11 @@
                 <tbody>
                 {% for set in set_list %}
                     <tr onmousedown="RowClick(this,false);">
-                        <th>
+                        <th hidden>
                             <input required type="radio" name="set_option"  id="{{ set_no }}" value="{{ set.no }}"/>
                         </th>
                         <td>
-                            <img src="{{ set.thumbnail_url }}" class="img-fluid img-thumbnail" alt="sheep">
+                            <img src="{{ set.thumbnail_url }}" class="img-fluid img-thumbnail" alt=" ">
                         </td>
                         <td>{{ set.no }}</td>
                         <td>{{ set.name }}</td>

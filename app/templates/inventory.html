@@ -38,20 +38,16 @@
                 </thead>
                 <tbody>
                 {% for set in set_list %}
-                    {% if set.no != '0000' %}
-                        <tr onclick="window.location.href = '/set/{{ set.no }}';">
-                            {% else %}
-                        <tr onclick="window.location.href = '/lego_crate';">
-                    {% endif %}
-                <td scope="row" >{{ set.no }}</td>
-                <td class="p-0 fit">
-                    <img src="{{set.thumbnail_url}}" class="img-fluid img-thumbnail crop-table" alt="sheep">
-                </td>
-                <td>{{ set.name }}</td>
-                <td>{{set.category}}</td>
-                <td>{{set.year_released}}</td>
-                <td>{{set.is_complete}}</td>
-                </tr>
+                    <tr onclick="window.location.href = '/set/{{ set.no }}';">
+                        <td scope="row" >{{ set.no }}</td>
+                        <td class="p-0 fit">
+                            <img src="{{set.thumbnail_url}}" class="img-fluid img-thumbnail crop-table" alt="sheep">
+                        </td>
+                        <td>{{ set.name }}</td>
+                        <td>{{set.category}}</td>
+                        <td>{{set.year_released}}</td>
+                        <td>{{set.is_complete}}</td>
+                    </tr>
                 {% endfor %}
                 </tbody>
             </table>

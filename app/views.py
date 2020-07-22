@@ -17,10 +17,11 @@ search_filter = 'sets'
 # Helpful functions
 ###
 def checkSetCompleteness(set_no):
-    print(set_no)
+    if set_no is 'lego':
+        return False
     parts_list = Part.query.filter_by(set_no=set_no).all()
     for part in parts_list:
-        if part.owned_quantity < part.quantity + part.extra_quantity:
+        if int(part.owned_quantity) < int(part.quantity) + int(part.extra_quantity):
             return False
     return True
 
@@ -43,12 +44,55 @@ def inventory():
     return render_template('inventory.html', set_list=set_list, parts_list=parts_list)
 
 
-@app.route('/lego_crate')
+@app.route('/set/<set_no>', methods=['GET', 'POST'])
+def show_set(set_no):
+    if request.method == 'POST':
+        new_quantity = request.form.get('quantity')
+        part_no = str(request.form.get('part_no'))
+        color_id = str(request.form.get('color_id'))
+        part = Part.query.filter_by(set_no=set_no, no=part_no, color_id=color_id).first()
+        print(part)
+        part.owned_quantity = new_quantity
+        db.session.merge(part)
+        set_data = Set.query.filter_by(no=set_no).first()
+        set_data.is_complete = checkSetCompleteness(set_no)
+        db.session.merge(set_data)
+        db.session.commit()
+    set_data = Set.query.filter_by(no=set_no).first()
+    parts_list = Part.query.filter_by(set_no=set_no).all()
+    if set_no == 'lego':
+        return redirect(url_for('lego_crate'))
+    return render_template('set_info.html', set_data=set_data, parts_list=parts_list)
+
+
+@app.route('/lego_crate', methods=['GET', 'POST'])
 def lego_crate():
-    set_data = Set.query.filter_by(no='0000').first()
-    parts_list = Part.query.filter_by(set_no='0000').all()
+    set_data = Set.query.filter_by(no='lego').first()
+    parts_list = Part.query.filter_by(set_no='lego').all()
     print(set_data)
     return render_template("lego_crate.html", set_data=set_data, parts_list=parts_list)
+
+
+@app.route('/remove_set/<no>', methods=['POST', 'GET'])
+def remove_set(no):
+    set = Set.query.filter_by(no=no).first()
+    parts_list = Part.query.filter_by(set_no=no).all()
+    for part in parts_list:
+        db.session.delete(part)
+    db.session.delete(set)
+    db.session.commit()
+    flash('Set removed from collection', 'danger')
+    return redirect(url_for('inventory'))
+
+
+@app.route('/remove_part/<no>', methods=['POST', 'GET'])
+def remove_part(no):
+    set_no = str(request.form.get('set_no'))
+    color_id = str(request.form.get('color_id'))
+    part = Part.query.filter_by(no=no, set_no=set_no, color_id=color_id).first()
+    db.session.delete(part)
+    db.session.commit()
+    return redirect("/set/" + set_no)
 
 
 @app.route('/search', methods=['POST', 'GET'])
@@ -204,7 +248,8 @@ def add_part(no):
     if request.method == 'POST':
         # Submit pressed
         print('submitted')
-        color_data = eval(request.form.get('color_select'))
+        if request.form.get('color_select') is not None:
+            color_data = eval(request.form.get('color_select'))
         print(color_data)
         color = bricklinkApi.getColor(color_data['id'])
         print(color)
@@ -252,37 +297,27 @@ def add_part(no):
         flash("Part " + no + " added to set " + set_no, 'success')
         return redirect(url_for('inventory'))
     else:
-        part_color_images = []
+        known_colors = bricklinkApi.getCatalogKnownColors("PART", no)
+        part_colors = []
         keys = ['id', 'name', 'image']
-        color_list = bricklinkApi.getCatalogKnownColors("PART", no)
-        for color in color_list:
-            color_item = bricklinkApi.getColor(color['color_id'])
-            part_color_image = dict.fromkeys(keys, None)
-            part_color_image['id'] = color_item['color_id']
-            part_color_image['name'] = color_item['color_name']
-            part_color_image['image'] = bricklinkApi.getImageURL(part_data['type'], part_data['no'], color_item['color_id'])
-            part_color_images.append(part_color_image)
+        if known_colors:
+            for color in known_colors:
+                color_item = bricklinkApi.getColor(color['color_id'])
+                part_color = dict.fromkeys(keys, None)
+                part_color['id'] = color_item['color_id']
+                part_color['name'] = color_item['color_name']
+                part_color['image'] = bricklinkApi.getImageURL(part_data['type'], part_data['no'], color_item['color_id'])
+                part_colors.append(part_color)
+        else:
+            part_color = dict.fromkeys(keys, None)
+            part_color['id'] = None
+            part_color['name'] = None
+            part_color['image'] = part_data['thumbnail_url'].replace("//img.", "http://www.")
+            part_colors.append(part_color)
         set_list = db.session.query(Set).all()
-        return render_template('add_part.html', set_no=no, part_no=no, part_color_images=part_color_images, set_list=set_list)
+        return render_template('add_part.html', part_no=no, part_color_images=part_colors, set_list=set_list)
 
 
-@app.route('/set/<no>')
-def show_set(no):
-    set_data = Set.query.filter_by(no=no).first()
-    parts_list = Part.query.filter_by(set_no=no).all()
-    return render_template('set_info.html', set_data=set_data, parts_list=parts_list)
-
-
-@app.route('/remove_set/<no>', methods=['POST', 'GET'])
-def remove_set(no):
-    set = Set.query.filter_by(no=no).first()
-    parts_list = Part.query.filter_by(set_no=no).all()
-    for part in parts_list:
-        db.session.delete(part)
-    db.session.delete(set)
-    db.session.commit()
-    flash('Set removed from collection', 'danger')
-    return redirect(url_for('inventory'))
 
 
 ###
