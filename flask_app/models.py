@@ -1,4 +1,4 @@
-from app import db
+from flask_app import db
 
 
 class Part(db.Model):
@@ -43,7 +43,6 @@ class Part(db.Model):
         return '<Part %r>' % self.no
 
 
-
 class Set(db.Model):
     __tablename__ = 'sets'
     no = db.Column(db.String(255), primary_key=True, nullable=False)
@@ -58,14 +57,15 @@ class Set(db.Model):
     dim_y = db.Column(db.Float())
     dim_z = db.Column(db.Float())
     year_released = db.Column(db.String(4))
-    is_obsolete = db.Column(db.Boolean())
-    is_complete = db.Column(db.Boolean(), nullable=False)
+    obsolete = db.Column(db.Boolean())
+    complete = db.Column(db.Boolean(), nullable=False)
+    extras = db.Column(db.Boolean(), nullable=False)
     children = db.relationship("Part")
     __table_args__ = (
         db.UniqueConstraint("no"),
     )
 
-    def __init__(self, no, name, type, category_id, category, image_url, thumbnail_url, weight, dim_x, dim_y, dim_z, year_released, is_obsolete, is_complete):
+    def __init__(self, no, name, type, category_id, category, image_url, thumbnail_url, weight, dim_x, dim_y, dim_z, year_released, obsolete, complete, extras):
         self.no = no
         self.name = name
         self.type = type
@@ -78,8 +78,9 @@ class Set(db.Model):
         self.dim_y = dim_y
         self.dim_z = dim_z
         self.year_released = year_released
-        self.is_obsolete = is_obsolete
-        self.is_complete = is_complete
+        self.obsolete = obsolete
+        self.complete = complete
+        self.extras = extras
 
     def __repr__(self):
         return '<Set %r>' % self.no
@@ -90,6 +91,6 @@ db.create_all()
 lego_box = Set('lego', 'Lego Crate', 'SET', 'Misc.', 'Misc.',
                'static/images/lego_pile.png',
                'static/images/lego_pile.png',
-               0, 0, 0, 0, '1932', False, False)
+               0, 0, 0, 0, '1932', False, False, False)
 db.session.merge(lego_box)
 db.session.commit()

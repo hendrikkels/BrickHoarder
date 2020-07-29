@@ -37,7 +37,7 @@
     {% endwith %}
 
     {% for result in results %}
-        {% if result.result_type == 'set' %}
+        {% if search_filter=="sets" %}
 
             <form action="/add_set/{{ result.no }}" method="GET">
                 <div class="card">
@@ -51,19 +51,17 @@
                 </div>
             </form>
 
-        {% elif result.result_type == 'part' %}
+        {% elif search_filter=="parts" %}
 
             <form action="/add_part/{{ result.no }}" method="GET">
                 <div class="card">
-
                     <div class="media">
                         <div class="media-body">
                             <h6>{{ result.no }} - {{ result.name }}</h6>
                             <button type="submit" class="align-self-baseline btn btn-primary float-left media-button">Add to collection</button>
                         </div>
-                        <img src="{{ result.image_url }}" class="align-self-center crop ml-3"  alt="sheep">
+                        <img src="{{ result.thumbnail_url }}" class="align-self-center crop ml-3"  alt="sheep">
                     </div>
-
                 </div>
             </form>
 
