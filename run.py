@@ -6,6 +6,6 @@ print(s.getsockname()[0])
 
 from flask_app import app
 
-app.run(host=s.getsockname()[0], port='8000', debug=True)
+app.run(host=s.getsockname()[0], port='8080', debug=True)
 
 s.close()

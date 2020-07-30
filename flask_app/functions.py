@@ -28,9 +28,9 @@ def check_set_extras(set_no):
 
 
 def gen_thumbnail_url(type, no, color_id):
-    if type == "Part":
+    if type == "PART":
         return 'https://www.bricklink.com/P/' + str(color_id) + '/' + str(no) + '.jpg'
-    elif type == "Minifig":
+    elif type == "MINIFIG":
         return 'https://www.bricklink.com/M/' + str(no) + '.jpg'
     else:
         # Standard image placeholder
@@ -148,7 +148,7 @@ def get_known_part_colors(part_no):
             part_color = dict.fromkeys(keys, None)
             part_color['id'] = color_item['color_id']
             part_color['name'] = color_item['color_name']
-            part_color['image'] = gen_thumbnail_url("Part", part_no, color_item['color_id'])
+            part_color['image'] = gen_thumbnail_url("PART", part_no, color_item['color_id'])
             part_colors.append(part_color)
     else:
         part_data = get_part(part_no)
