@@ -22,9 +22,9 @@ def check_set_extras(set_no):
         return False
     parts_list = get_inventory_set_parts(set_no)
     for part in parts_list:
-        if int(part.owned_quantity) > int(part.quantity):
-            return True
-    return False
+        if int(part.owned_quantity) < int(part.quantity) + int(part.extra_quantity):
+            return False
+    return True
 
 
 def gen_thumbnail_url(type, no, color_id):
@@ -42,6 +42,77 @@ def get_color_data(color_id):
     if color is None:
         return {'color_id': 0, 'color_name': 'Misc.', 'color_code': 0, 'color_type': 'Misc'}
     return color
+
+
+def get_complete_sets_price_guide():
+    set_list = get_inventory_complete_set_list()
+    price_guides = []
+    for set in set_list:
+        price_guide = get_new_set_price_guide(set)
+        if price_guide is not None:
+            price_guide['item'] = set
+            price_guide['min_price'] = round(float(price_guide['min_price']), 2)
+            price_guide['max_price'] = round(float(price_guide['max_price']), 2)
+            price_guide['avg_price'] = round(float(price_guide['avg_price']), 2)
+            price_guide['qty_avg_price'] = round(float(price_guide['qty_avg_price']), 2)
+            price_guides.append(price_guide)
+    price_guides = sorted(price_guides, key=lambda i: i['avg_price'], reverse=True)[:10]
+    return price_guides
+
+
+def get_incomplete_sets_price_guide():
+    set_list = get_inventory_incomplete_set_list()
+    price_guides = []
+    for set in set_list:
+        price_guide = get_used_set_price_guide(set)
+        if price_guide is not None:
+            price_guide['item'] = set
+            price_guide['min_price'] = round(float(price_guide['min_price']), 2)
+            price_guide['max_price'] = round(float(price_guide['max_price']), 2)
+            price_guide['avg_price'] = round(float(price_guide['avg_price']), 2)
+            price_guide['qty_avg_price'] = round(float(price_guide['qty_avg_price']), 2)
+            price_guides.append(price_guide)
+    price_guides = sorted(price_guides, key=lambda i: i['avg_price'], reverse=True)[:10]
+    return price_guides
+
+
+def get_loose_parts_price_guide():
+    parts_list = get_inventory_loose_parts()
+    price_guides = []
+    for part in parts_list:
+        price_guide = get_part_price_guide(part)
+        if price_guide is not None:
+            price_guide['item'] = part
+            price_guide['min_price'] = round(float(price_guide['min_price']), 2)
+            price_guide['max_price'] = round(float(price_guide['max_price']), 2)
+            price_guide['avg_price'] = round(float(price_guide['avg_price']), 2)
+            price_guide['qty_avg_price'] = round(float(price_guide['qty_avg_price']), 2)
+            price_guides.append(price_guide)
+    price_guides = sorted(price_guides, key=lambda i: i['avg_price'], reverse=True)[:10]
+    return price_guides
+
+
+def get_part_price_guide(part: Part):
+    response = bricklink_api.catalog_item.get_price_guide("Part", no=part.no, guide_type='stock', new_or_used="N", currency_code='ZAR')
+    if response['meta']['code'] != 400:
+        response_data = response['data']
+        return response_data
+    return None
+
+
+def get_new_set_price_guide(set: Set):
+    response = bricklink_api.catalog_item.get_price_guide("Set", no=set.no, guide_type='stock', new_or_used="N", currency_code='ZAR')
+    if response['meta']['code'] != 400:
+        response_data = response['data']
+        return response_data
+    return None
+
+def get_used_set_price_guide(set: Set):
+    response = bricklink_api.catalog_item.get_price_guide("Set", no=set.no, guide_type='stock', new_or_used="U", currency_code='ZAR')
+    if response['meta']['code'] != 400:
+        response_data = response['data']
+        return response_data
+    return None
 
 
 def get_set(no):
@@ -108,7 +179,7 @@ def get_set_parts(no):
     response_data = response['data']
     if response_data == {}:
         return None
-    response_data =  filter(lambda x: x['entries'][0]['item']['type'] != 'MINIFIG', response_data)
+    response_data = filter(lambda x: x['entries'][0]['item']['type'] != 'MINIFIG', response_data)
 
     parts_list = []
     for line in response_data:
@@ -168,8 +239,20 @@ def get_inventory_set_parts(set_no):
     return Part.query.filter_by(set_no=set_no).all()
 
 
+def get_inventory_loose_parts():
+    return Part.query.filter_by(set_no='lego').all()
+
+
 def get_inventory_set_list():
     return db.session.query(Set).all()
+
+
+def get_inventory_complete_set_list():
+    return Set.query.filter_by(complete=True).all()
+
+
+def get_inventory_incomplete_set_list():
+    return Set.query.filter_by(complete=False).all()
 
 
 def get_inventory_part(set_no, part_no, color_id):
@@ -196,8 +279,6 @@ def insert_inventory_part(part: Part):
 
 def increase_inventory_part_quantity(part: Part, quantity: int):
     part.owned_quantity += quantity
-
-
 
 
 def delete_inventory_set(set_no):

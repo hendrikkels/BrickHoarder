@@ -3,10 +3,14 @@ from flask_app import app, functions
 
 search_filter = "sets"
 
+
 @app.route('/')
 @app.route('/home')
 def home():
-    return render_template("dashboard.html")
+    complete_guides = functions.get_complete_sets_price_guide()
+    incomplete_guides = functions.get_incomplete_sets_price_guide()
+    loose_parts_guides = functions.get_loose_parts_price_guide()
+    return render_template("dashboard.html", complete_guides=complete_guides, incomplete_guides=incomplete_guides, loose_parts_guides=loose_parts_guides)
 
 
 @app.route('/inventory')

@@ -2,21 +2,114 @@
 
 {% block main %}
 
-<div class="jumbotron">
-    <h1>Dashboard</h1>
-    Overview and insight information
-</div>
+    <div class="jumbotron">
+        <h1>Dashboard</h1>
+        Overview and insight information
+    </div>
 
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<div class="alert alert-danger" role="alert">
-    {% for message in messages %}
-    {{ message }}
-    {% endfor %}
-</div>
-{% endif %}
-{% endwith %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-danger" role="alert">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
 
+    <div class="row">
+        <div class="col">
+
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            Most valuable complete sets in inventory
+        </div>
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover mb-0" id="searchable_table">
+                <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Average Sell Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for set in complete_guides %}
+                    <tr onclick="window.location.href = '/set/{{ set.item.no }}';">
+                        <td>{{ set.item.no }}</td>
+                        <td class="p-0 fit">
+                            <img src="{{ set.item.thumbnail_url }}" class="img-fluid img-thumbnail crop-table" alt="sheep">
+                        </td>
+                        <td>{{ set.item.name }}</td>
+                        <td>{{ set.currency_code }} {{ set.avg_price }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            Most valuable incomplete sets in inventory
+        </div>
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover mb-0" id="searchable_table">
+                <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Average Sell Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for set in incomplete_guides %}
+                    <tr onclick="window.location.href = '/set/{{ set.item.no }}';">
+                        <td>{{ set.item.no }}</td>
+                        <td class="p-0 fit">
+                            <img src="{{ set.item.thumbnail_url }}" class="img-fluid img-thumbnail crop-table" alt="sheep">
+                        </td>
+                        <td>{{ set.item.name }}</td>
+                        <td>{{ set.currency_code }} {{ set.avg_price }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Most valuable loose parts in 'LEGO Crate'
+        </div>
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover mb-0" id="searchable_table">
+                <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Average Sell Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for part in loose_parts_guides %}
+                    <tr onclick="window.location.href = '/set/{{ part.item.no }}';">
+                        <td>{{ part.item.no }}</td>
+                        <td class="p-0 fit">
+                            <img src="{{ part.item.thumbnail_url }}" class="img-fluid img-thumbnail crop-table" alt="sheep">
+                        </td>
+                        <td>{{ part.item.name }}</td>
+                        <td>{{ part.currency_code }} {{ part.avg_price }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 {% endblock main %}

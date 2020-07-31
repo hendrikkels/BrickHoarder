@@ -83,7 +83,8 @@ class Set(db.Model):
         self.extras = extras
 
     def __repr__(self):
-        return '<Set %r>' % self.no
+        return self.no + ", " + \
+               self.name + ", "
 
 
 db.create_all()

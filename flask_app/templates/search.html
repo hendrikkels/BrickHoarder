@@ -44,9 +44,11 @@
                     <div class="media">
                         <div class="media-body">
                             <h6>{{ result.no }} - {{ result.name }}</h6>
-                            <button type="submit" class="align-self-baseline btn btn-primary float-left media-button">Add to collection</button>
                         </div>
                         <img src="{{ result.image_url }}" class="align-self-center crop ml-3"  alt="sheep">
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-sm btn-primary">Add to collection</button>
                     </div>
                 </div>
             </form>
@@ -58,9 +60,11 @@
                     <div class="media">
                         <div class="media-body">
                             <h6>{{ result.no }} - {{ result.name }}</h6>
-                            <button type="submit" class="align-self-baseline btn btn-primary float-left media-button">Add to collection</button>
                         </div>
                         <img src="{{ result.thumbnail_url }}" class="align-self-center crop ml-3"  alt="sheep">
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-sm btn-primary">Add to collection</button>
                     </div>
                 </div>
             </form>

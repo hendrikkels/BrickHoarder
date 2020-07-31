@@ -20,6 +20,11 @@
             </div>
             <img src="{{set_data.image_url}}" class="align-self-center crop ml-3"  alt="sheep">
         </div>
+        <div class="card-footer">
+            <form action="/remove_set/{{ set_data.no }}" method='POST'>
+                <button type="submit" class="btn btn-sm btn-danger">Remove from collection</button>
+            </form>
+        </div>
     </div>
 
     <div class="card">
@@ -29,35 +34,35 @@
             </div>
         </div>
         <div class="table-responsive">
-            <table class="table table-sm table-striped table-hover" id="searchable_table">
+            <table class="table table-sm table-striped table-hover mb-0" id="searchable_table">
                 <thead>
                 <tr>
                     <th scope="col">No</th>
                     <th scope="col">Image</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Color "Code"</th>
-                    <th scope="col">Qty</th>
-                    <th scope="col">Alternate</th>
-                    <th scope="col">Counterpart</th>
+                    <th scope="col">Color</th>
+                    <th scope="col">Qty.</th>
+                    <th scope="col">Complete</th>
+                    <th scope="col">Extra</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for part in parts_list %}
-                    <tr data-toggle="modal" data-target="#modal{{ part.no }}_{{ part.color_id }}">
-                        <td scope="row">{{ part.no }}</td>
-                        <td class="fit"><img src="{{ part.thumbnail_url }}" alt=" " class="img-fluid img-thumbnail"></td>
-                        <td>{{ part.name }}</td>
-                        <td>{{ part.color_name }} "{{ part.color_code }}"</td>
-                        {% if part.owned_quantity < part.quantity %}
-                            <td class="text-danger">{{ part.owned_quantity }}</td>
-                        {% elif part.owned_quantity < part.quantity + part.extra_quantity %}
-                            <td class="text-warning">{{ part.owned_quantity }}</td>
-                        {% else %}
+                    {% if part.owned_quantity < part.quantity %}
+                        <tr data-toggle="modal" data-target="#modal{{ part.no }}_{{ part.color_id }}" class="table-danger">
+                    {% elif part.owned_quantity < part.quantity + part.extra_quantity %}
+                        <tr data-toggle="modal" data-target="#modal{{ part.no }}_{{ part.color_id }}" class="table-warning">
+                    {% else %}
+                        <tr data-toggle="modal" data-target="#modal{{ part.no }}_{{ part.color_id }}">
+                    {% endif %}
+                            <td scope="row">{{ part.no }}</td>
+                            <td class="fit"><img src="{{ part.thumbnail_url }}" alt=" " class="img-fluid img-thumbnail"></td>
+                            <td>{{ part.name }}</td>
+                            <td>{{ part.color_name }}</td>
                             <td>{{ part.owned_quantity }}</td>
-                        {% endif %}
-                        <td>{{ part.is_alternate }}</td>
-                        <td>{{ part.is_counterpart }}</td>
-                    </tr>
+                            <td>{{ part.quantity }}</td>
+                            <td>{{ part.extra_quantity }}</td>
+                        </tr>
 
                     <div class="modal fade" id="modal{{ part.no }}_{{ part.color_id }}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
@@ -84,13 +89,13 @@
                                         <img src="{{ part.thumbnail_url }}" class="img-fluid img-thumbnail align-self-center mx-2"  alt="sheep">
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                    <button type="submit" class="btn btn-sm btn-primary">Save changes</button>
                                     </form>
                                     <form action="/remove_part/{{ part.no }}" method='POST'>
                                         <input hidden name="part_no" id="part_no" value="{{ part.no }}">
                                         <input hidden name="set_no" id="set_no" value="{{ set_data.no }}">
                                         <input hidden name="color_id" id="color_id" value="{{ part.color_id }}">
-                                        <button type="submit" class="btn btn-danger">Remove</button>
+                                        <button type="submit" class="btn btn-sm btn-danger">Remove</button>
                                     </form>
                                 </div>
                             </div>
@@ -102,9 +107,5 @@
             </table>
         </div>
     </div>
-
-    <form action="/remove_set/{{ set_data.no }}" method='POST'>
-        <button type="submit" class="btn btn-danger">Remove from collection</button>
-    </form>
 
 {% endblock %}
