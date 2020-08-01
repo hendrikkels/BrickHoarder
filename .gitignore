@@ -1,4 +1,4 @@
-/app/data/inventory.db
+*.db
 .idea
 
 
