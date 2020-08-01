@@ -8,7 +8,8 @@ cached_parts_list = None
 
 
 def check_set_completeness(set_no):
-    if set_no == 'lego':
+    set_data = get_inventory_set(set_no)
+    if set_data.type == "GROUP":
         return False
     parts_list = get_inventory_set_parts(set_no)
     for part in parts_list:
@@ -18,7 +19,8 @@ def check_set_completeness(set_no):
 
 
 def check_set_extras(set_no):
-    if set_no == 'lego':
+    set_data = get_inventory_set(set_no)
+    if set_data.type == "GROUP":
         return False
     parts_list = get_inventory_set_parts(set_no)
     for part in parts_list:
@@ -149,7 +151,7 @@ def get_part(no):
         return None
     print(response_data)
     part = Part(response_data['no'],
-                'lego',
+                None,
                 response_data['name'],
                 response_data['type'],
                 response_data['category_id'],
@@ -240,7 +242,11 @@ def get_inventory_set_parts(set_no):
 
 
 def get_inventory_loose_parts():
-    return Part.query.filter_by(set_no='lego').all()
+    groups = Set.query.filter_by(type="GROUP")
+    loose_parts = []
+    for group in groups:
+        loose_parts += Part.query.filter_by(set_no=group.no).all()
+    return loose_parts
 
 
 def get_inventory_set_list():

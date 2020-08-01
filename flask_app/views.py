@@ -23,6 +23,7 @@ def inventory():
 
 @app.route('/set/<set_no>', methods=['GET', 'POST'])
 def show_set(set_no):
+    set_data = functions.get_inventory_set(set_no=set_no)
     if request.method == 'POST':
         new_quantity = request.form.get('quantity')
         part_no = str(request.form.get('part_no'))
@@ -31,19 +32,18 @@ def show_set(set_no):
         print(part)
         part.owned_quantity = new_quantity
         functions.insert_inventory_part(part)
-    if set_no == 'lego':
-        return redirect(url_for('lego_crate'))
-    set_data = functions.get_inventory_set(set_no=set_no)
+    if set_data.type == 'GROUP':
+        return redirect("/group/" + set_data.no)
     parts_list = functions.get_inventory_set_parts(set_no=set_no)
     return render_template('set_info.html', set_data=set_data, parts_list=parts_list)
 
 
-@app.route('/lego_crate', methods=['GET', 'POST'])
-def lego_crate():
-    set_data = functions.get_inventory_set(set_no='lego')
-    parts_list = functions.get_inventory_set_parts(set_no='lego')
+@app.route('/group/<group_no>', methods=['GET', 'POST'])
+def group(group_no):
+    set_data = functions.get_inventory_set(set_no=group_no)
+    parts_list = functions.get_inventory_set_parts(set_no=group_no)
     print(set_data)
-    return render_template("lego_crate.html", set_data=set_data, parts_list=parts_list)
+    return render_template("group_info.html", set_data=set_data, parts_list=parts_list)
 
 
 @app.route('/remove_set/<no>', methods=['POST', 'GET'])
@@ -79,7 +79,7 @@ def search():
         else:
             flash('No results found', 'error')
             return render_template('search.html', search_str=no, search_filter=search_filter)
-    return "get rekt"
+    return render_template('search.html', search_str="", search_filter=search_filter)
 
 
 # Display a result from a set search

@@ -18,11 +18,7 @@
         {% endif %}
     {% endwith %}
 
-    <div class="row">
-        <div class="col">
-
-        </div>
-    </div>
+    {% if complete_guides|length > 0 %}
     <div class="card">
         <div class="card-header">
             Most valuable complete sets in inventory
@@ -52,6 +48,9 @@
             </table>
         </div>
     </div>
+    {% endif %}
+
+    {% if incomplete_guides|length > 0 %}
     <div class="card">
         <div class="card-header">
             Most valuable incomplete sets in inventory
@@ -81,7 +80,9 @@
             </table>
         </div>
     </div>
+    {% endif %}
 
+    {% if loose_parts_guides|length > 0 %}
     <div class="card">
         <div class="card-header">
             Most valuable loose parts in 'LEGO Crate'
@@ -98,7 +99,7 @@
                 </thead>
                 <tbody>
                 {% for part in loose_parts_guides %}
-                    <tr onclick="window.location.href = '/set/{{ part.item.no }}';">
+                    <tr onclick="window.location.href = '/set/{{ part.item.set_no }}';">
                         <td>{{ part.item.no }}</td>
                         <td class="p-0 fit">
                             <img src="{{ part.item.thumbnail_url }}" class="img-fluid img-thumbnail crop-table" alt="sheep">
@@ -111,5 +112,6 @@
             </table>
         </div>
     </div>
+    {% endif %}
 
 {% endblock main %}
