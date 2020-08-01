@@ -1,6 +1,19 @@
+html {
+    font-size: 14px;
+}
+
 body {
-    padding-top: 6rem   ;
     font-family: 'Poppins', sans-serif;
+    padding-top: 6rem   ;
+}
+
+p {
+    max-width: fit-content;
+}
+
+.card-horizontal {
+  display: flex;
+  flex: 1 1 auto;
 }
 
 .jumbotron {
@@ -32,6 +45,10 @@ body {
 
 .card {
     margin-bottom: 2rem;
+}
+
+.card-body {
+    padding: 1rem;
 }
 
 .form-spinner {
@@ -73,16 +90,10 @@ body {
 
 @media only screen and (max-width: 786px) {
    .crop {
-        margin: .5rem;
+        margin-left: 0;
         object-fit: scale-down; /* Do not scale the image */
         object-position: center; /* Center the image within the element */
         max-height: 6rem;
-        max-width: 6rem;
     }
-}
 
-@media only screen and (max-width: 786px) {
-   .container {
-      width: 100%;
-   }
 }

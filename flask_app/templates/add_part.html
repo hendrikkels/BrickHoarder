@@ -21,42 +21,47 @@
     {% endwith %}
     <!--<div class="container">-->
     <form action="/add_part/{{ part_no }}" method='POST'>
+
         <div class="card">
             <div class="card-header">
                 Select part criteria
             </div>
-            <div class="media">
-                <div class="media-body">
-                {% if part_color_images|length > 0 %}
-                    <div class="form-group">
-                        <label for="color_select">Color:</label>
-                        <div class="dropdown">
-                            <select class="btn btn-sm btn-light dropdown-toggle" onchange="colorChange()" id="color_select" name="color_select">
-                                <div class="dropdown-menu">
-                                    {% for part_color_image in part_color_images %}
-                                        <option value="{{ part_color_image }}"
-                                                {% if loop.index == 1 %}
-                                                selected="selected"
-                                                {% endif %}
-                                        >{{ part_color_image.name }}</option>
-                                    {% endfor %}
+            <div class="card-horizontal">
+                <div class="card-body">
+                        {% if part_color_images|length > 0 %}
+
+                                <div class="form-group">
+                                    <label for="color_select">Color:</label>
+                                    <div class="dropdown">
+                                        <select class="btn btn-sm btn-light dropdown-toggle" onchange="colorChange()" id="color_select" name="color_select">
+                                            <div class="dropdown-menu">
+                                                {% for part_color_image in part_color_images %}
+                                                    <option value="{{ part_color_image }}"
+                                                            {% if loop.index == 1 %}
+                                                            selected="selected"
+                                                            {% endif %}
+                                                    >{{ part_color_image.name }}</option>
+                                                {% endfor %}
+                                            </div>
+                                        </select>
+                                    </div>
                                 </div>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="quantity">Quantity:</label>
-                        <input class="form-control form-control-sm form-spinner" type="number" id="quantity" name="quantity" value="1" min="1" step="1" required/>
-                    </div>
-                {% else %}
-                    <div class="form-group">
-                        <label for="quantity">Quantity:</label>
-                        <input class="form-control form-control-sm form-spinner" type="number" id="quantity" name="quantity" value="1" min="1" step="1" required/>
-                    </div>
-                {% endif %}
+
+                        {% endif %}
+
+
+                            <div class="form-group">
+                                <label for="quantity">Quantity:</label>
+                                <input class="form-control form-control-sm form-spinner" type="number" id="quantity" name="quantity" value="1" min="1" step="1" required/>
+                            </div>
+
+
                 </div>
-                <img id="color_image" src="{{ part_color_images[0].image }}" class="align-self-center img-thumbnail crop-thumbnail"  alt="sheep">
+                <div class="img-square-wrapper">
+                    <img id="color_image" src="{{ part_color_images[0].image }}" class="img-thumbnail crop-thumbnail" alt="sheep">
+                </div>
             </div>
+
         </div>
 
         <div class="card">
@@ -85,7 +90,7 @@
                         <td>{{ set.no }}</td>
                         <td>{{ set.name }}</td>
                         <td>{{ set.category }}</td>
-                        <td>{{ set.is_complete }}</td>
+                        <td>{{ set.complete }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

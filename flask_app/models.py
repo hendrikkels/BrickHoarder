@@ -89,7 +89,8 @@ class Set(db.Model):
 
 db.create_all()
 
-lego_box = Set('lego', 'Lego Crate', 'SET', 'Misc.', 'Misc.',
+
+lego_box = Set('GRP0', 'Lego Crate', 'GROUP', 'Misc.', 'Misc.',
                'static/images/lego_pile.png',
                'static/images/lego_pile.png',
                0, 0, 0, 0, '1932', False, False, False)

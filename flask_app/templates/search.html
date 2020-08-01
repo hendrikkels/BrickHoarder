@@ -41,32 +41,37 @@
 
             <form action="/add_set/{{ result.no }}" method="GET">
                 <div class="card">
-                    <div class="media">
-                        <div class="media-body">
-                            <h6>{{ result.no }} - {{ result.name }}</h6>
-                        </div>
-                        <img src="{{ result.image_url }}" class="align-self-center crop ml-3"  alt="sheep">
+                <div class="card-horizontal">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ result.name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ result.no }}</h6>
+                        <p class="card-text">Category: {{ result.category }}</p>
                     </div>
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-sm btn-primary">Add to collection</button>
-                    </div>
+                        <img src="{{ result.image_url }}" class="img-thumbnail crop" alt="sheep">
                 </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-sm btn-primary">Add to collection</button>
+                </div>
+            </div>
             </form>
+
+
 
         {% elif search_filter=="parts" %}
 
             <form action="/add_part/{{ result.no }}" method="GET">
                 <div class="card">
-                    <div class="media">
-                        <div class="media-body">
-                            <h6>{{ result.no }} - {{ result.name }}</h6>
-                        </div>
-                        <img src="{{ result.thumbnail_url }}" class="align-self-center crop ml-3"  alt="sheep">
+                <div class="card-horizontal">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ result.name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ result.no }}</h6>
                     </div>
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-sm btn-primary">Add to collection</button>
-                    </div>
+                        <img src="{{ result.thumbnail_url }}" class="img-thumbnail crop" alt="sheep">
                 </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-sm btn-primary">Add to collection</button>
+                </div>
+            </div>
             </form>
 
         {% else %}
