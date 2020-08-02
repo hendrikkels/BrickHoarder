@@ -51,6 +51,10 @@ p {
     max-width: 8rem;
 }
 
+.table-responsive {
+    overflow-y: hidden;
+}
+
 .table td {
     vertical-align: middle;
 }

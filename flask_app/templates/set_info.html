@@ -27,7 +27,7 @@
         </div>
     </div>
 
-    <div class="rounded border">
+    <div class="border rounded-lg">
         <nav class="navbar navbar-light bg-light rounded-top">
             <div class="form-group input-group-sm d-flex mb-0">
                 <input class="form-control" type="search" id="table_search" name="table_search" onkeyup="searchTable()" placeholder="Search">
@@ -41,6 +41,7 @@
                     <th scope="col">Image</th>
                     <th scope="col">Name</th>
                     <th scope="col">Color</th>
+                    <th scope="col">Type</th>
                     <th scope="col">Qty.</th>
                     <th scope="col">Complete</th>
                     <th scope="col">Extra</th>
@@ -61,6 +62,7 @@
                             </td>
                             <td>{{ part.name }}</td>
                             <td>{{ part.color_name }}</td>
+                            <td>{{ part.color_type }}</td>
                             <td>{{ part.owned_quantity }}</td>
                             <td>{{ part.quantity }}</td>
                             <td>{{ part.extra_quantity }}</td>

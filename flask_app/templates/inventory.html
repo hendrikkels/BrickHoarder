@@ -7,7 +7,6 @@
         Personal LEGO collection
     </div>
 
-
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <div class="alert alert-info" role="alert">
@@ -18,7 +17,7 @@
         {% endif %}
     {% endwith %}
 
-    <div class="card">
+         <div class="border rounded-lg">
         <nav class="navbar navbar-light bg-light rounded-top">
             <div class="form-group input-group-sm d-flex mb-0">
                 <input class="form-control" type="search" id="table_search" name="table_search" onkeyup="searchTable()" placeholder="Search">
@@ -55,5 +54,7 @@
             </table>
         </div>
     </div>
+
+
 
 {% endblock %}
