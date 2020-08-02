@@ -7,14 +7,16 @@
 {% block styles %}
     {{super()}}
 
-{#<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/darkly/bootstrap.min.css" integrity="sha384-Bo21yfmmZuXwcN/9vKrA5jPUMhr7znVBBeLxT9MA4r2BchhusfJ6+n8TLGUcRAtL" crossorigin="anonymous">#}
-    <link rel="stylesheet" href="/static/css/mystyle.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;900&display=swap" rel="stylesheet">
+
+{#    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;900&display=swap" rel="stylesheet">#}
     <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon"/>
+
+    <link rel="stylesheet" href="/static/css/mystyle.css">
 
 {% endblock %}
 
 {% block scripts %}
+
     <script src="/static/js/myscripts.js"></script>
     {{super()}}
 {% endblock %}
@@ -23,7 +25,7 @@
     <header>
         {% include "navbar.html" %}
     </header>
-    <main role="main" class="container-lg">
+    <main role="main" class="container-lg user-select-auto">
             {% block main %}{% endblock %}
     </main>
     <footer>

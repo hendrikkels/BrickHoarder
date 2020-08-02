@@ -19,11 +19,11 @@
     {% endwith %}
 
     {% if complete_guides|length > 0 %}
-    <div class="card">
-        <div class="card-header">
-            Most valuable complete sets in inventory
-        </div>
-        <div class="table-responsive">
+
+        <div class="rounded border">
+            <nav class="navbar navbar-light bg-light rounded-top">
+                    Most valuable complete sets in inventory
+            </nav>
             <table class="table table-condensed table-hover mb-0" id="searchable_table">
                 <thead>
                 <tr>
@@ -37,7 +37,7 @@
                 {% for set in complete_guides %}
                     <tr onclick="window.location.href = '/set/{{ set.item.no }}';">
                         <td>{{ set.item.no }}</td>
-                        <td class="p-0 fit">
+                        <td class="fit">
                             <img src="{{ set.item.thumbnail_url }}" class="img-fluid img-thumbnail crop-table" alt="sheep">
                         </td>
                         <td>{{ set.item.name }}</td>
@@ -47,15 +47,14 @@
                 </tbody>
             </table>
         </div>
-    </div>
     {% endif %}
 
     {% if incomplete_guides|length > 0 %}
-    <div class="card">
-        <div class="card-header">
-            Most valuable incomplete sets in inventory
-        </div>
-        <div class="table-responsive">
+
+        <div class="rounded border">
+            <nav class="navbar navbar-light bg-light rounded-top">
+                Most valuable incomplete sets in inventory
+            </nav>
             <table class="table table-condensed table-hover mb-0" id="searchable_table">
                 <thead>
                 <tr>
@@ -69,7 +68,7 @@
                 {% for set in incomplete_guides %}
                     <tr onclick="window.location.href = '/set/{{ set.item.no }}';">
                         <td>{{ set.item.no }}</td>
-                        <td class="p-0 fit">
+                        <td class="fit">
                             <img src="{{ set.item.thumbnail_url }}" class="img-fluid img-thumbnail crop-table" alt="sheep">
                         </td>
                         <td>{{ set.item.name }}</td>
@@ -79,15 +78,15 @@
                 </tbody>
             </table>
         </div>
-    </div>
+
     {% endif %}
 
     {% if loose_parts_guides|length > 0 %}
-    <div class="card">
-        <div class="card-header">
-            Most valuable loose parts in 'LEGO Crate'
-        </div>
-        <div class="table-responsive">
+
+        <div class="rounded border">
+            <nav class="navbar navbar-light bg-light rounded-top">
+                Most valuable loose parts in 'LEGO Crate'
+            </nav>
             <table class="table table-condensed table-hover mb-0" id="searchable_table">
                 <thead>
                 <tr>
@@ -101,7 +100,7 @@
                 {% for part in loose_parts_guides %}
                     <tr onclick="window.location.href = '/set/{{ part.item.set_no }}';">
                         <td>{{ part.item.no }}</td>
-                        <td class="p-0 fit">
+                        <td class="fit">
                             <img src="{{ part.item.thumbnail_url }}" class="img-fluid img-thumbnail crop-table" alt="sheep">
                         </td>
                         <td>{{ part.item.name }}</td>
@@ -111,7 +110,7 @@
                 </tbody>
             </table>
         </div>
-    </div>
+
     {% endif %}
 
 {% endblock main %}

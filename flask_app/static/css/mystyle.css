@@ -3,8 +3,8 @@ html {
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
-    padding-top: 6rem   ;
+    /*font-family: 'Poppins', sans-serif;*/
+    padding-top: 5.5rem   ;
 }
 
 p {
@@ -16,13 +16,9 @@ p {
   flex: 1 1 auto;
 }
 
-.jumbotron {
-    padding: 2rem;
-}
-
-.navbar {
-    min-height: 4rem;
-}
+/*.jumbotron {*/
+/*    padding: 2rem;*/
+/*}*/
 
 .navbar-form .form-group input {
   width: calc(100% - 50px);
@@ -63,13 +59,14 @@ p {
 .table th.fit {
     white-space: nowrap;
     width: 1%;
+    padding: 0.25rem;
 }
 
 .crop-table{
     margin: 0;
     object-fit: scale-down; /* Do not scale the image */
     object-position: center; /* Center the image within the element */
-    height: 4rem;
+    height: inherit;
 }
 
 .crop-thumbnail{

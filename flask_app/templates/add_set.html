@@ -22,8 +22,8 @@
 
     <!--<div class="container">-->
     <form action="/add_set/{{ set_no }}" method='POST'>
-        <div class="card">
 
+        <div class="card">
             <div class="table-responsive">
                 <table class="table table-sm table-striped table-bordered mb-0">
                     <thead>
@@ -38,13 +38,11 @@
                     </thead>
                     <tbody>
                     {% for part in parts_list %}
-
                         <tr>
                             <td>
                                 <div class="form-group mb-0">
                                     <input type="number" class="form-control form-control-sm form-spinner" name="owned_quantity" value="{{ part.quantity }}" min="0" max="{{ part.quantity + part.extra_quantity }}" step="1" required/>
                                 </div>
-
                             </td>
                             <td scope="row">{{ part.no }}</td>
                             <td class="fit" >
@@ -54,14 +52,15 @@
                             <td>{{ part.quantity }}</td>
                             <td>{{ part.extra_quantity }}</td>
                         </tr>
-
                     {% endfor %}
                     </tbody>
                 </table>
             </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-sm btn-primary float-right">Add selection to inventory</button>
         </div>
+    </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 
 {% endblock %}
