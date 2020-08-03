@@ -1,5 +1,4 @@
 Flask
-flask_bs4
 Flask_SQLAlchemy
 Requests
 requests_oauthlib

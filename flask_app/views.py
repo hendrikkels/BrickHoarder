@@ -73,29 +73,27 @@ def search():
         no = request.form.get('no')
         if len(no) >= 2 and no is not None:
             if search_filter == "sets":
-                return redirect('/search/set=' + no)
+                return redirect('/results/query=' + no)
             elif search_filter == "parts":
-                return redirect('/search/part=' + no)
+                return redirect('/results/query=' + no)
         else:
             flash('No results found', 'error')
             return render_template('search.html', search_str=no, search_filter=search_filter)
     return render_template('search.html', search_str="", search_filter=search_filter)
 
 
-# Display a result from a set search
-@app.route('/search/set=<no>', methods=['POST', 'GET'])
-def search_set(no):
-    # Get set details
-    set_data = functions.get_set(no)
-    print(set_data)
-    if set_data is not None:
-        # Set variables to be displayed as result
-        results = []
-        results.append(set_data)
-        return render_template('search.html', search_str=no, search_filter=search_filter, results=results)
-    else:
-        flash('No results found', 'error')
-        return render_template('search.html', search_str=no, search_filter=search_filter)
+@app.route('/results/query=<no>')
+def results(no):
+    results = []
+    # Get results for  set number
+    set = functions.get_set(no)
+    if set is not None:
+        results.append(set)
+    # Get results for part number
+    part = functions.get_part(no)
+    if part is not None:
+        results.append(part)
+    return render_template('search.html', search_str=no, results=results)
 
 
 @app.route('/add_set/<no>', methods=['POST', 'GET'])
@@ -118,20 +116,6 @@ def add_set(no):
         return redirect(url_for('inventory'))
     else:
         return render_template('add_set.html', set_no=no, parts_list=parts_list)
-
-
-# Display a resultg from a part search
-@app.route('/search/part=<no>', methods=['POST', 'GET'])
-def search_part(no):
-    part = functions.get_part(no)
-    print(part)
-    if part is not None:
-        results = []
-        results.append(part)
-        return render_template('search.html', search_str=no, search_filter=search_filter, results=results)
-    else:
-        flash('No results found', 'error')
-        return render_template('search.html', search_str=no, search_filter=search_filter)
 
 
 @app.route('/add_part/<no>', methods=['POST', 'GET'])
