@@ -95,8 +95,8 @@ def get_loose_parts_price_guide():
 
 
 def get_part_price_guide(part: Part):
-    response = bricklink_api.catalog_item.get_price_guide("Part", no=part.no, guide_type='sold', new_or_used="N", country_code='US',currency_code='ZAR')
-    if response['meta']['code'] == 400:
+    response = bricklink_api.catalog_item.get_price_guide("Part", no=part.no, guide_type='sold', new_or_used="new", currency_code='ZAR')
+    if response['meta']['code'] != 400:
         response_data = response['data']
         return response_data
     return None
