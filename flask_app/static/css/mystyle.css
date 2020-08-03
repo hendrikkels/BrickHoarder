@@ -16,9 +16,15 @@ p {
   flex: 1 1 auto;
 }
 
-/*.jumbotron {*/
-/*    padding: 2rem;*/
-/*}*/
+.jumbotron {
+    padding: 2rem;
+}
+
+
+.border {
+    margin-bottom: 2rem;
+}
+
 
 .navbar-form .form-group input {
   width: calc(100% - 50px);
