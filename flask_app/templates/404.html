@@ -3,9 +3,9 @@
 {% block title %}Page Not Found{% endblock %}
 
 {% block main %}
-    <div class="jumbotron">
-        <h3 class="mb-0">Error 404</h3>
+    <div class="jumbotron shadow">
+        <h1 class="mb-0">Error 404</h1>
+        This page does not exist, why don't you just <a href="{{ url_for('home') }}">go back home</a>?
     </div>
-<p>That page doesn't even exist.</p>
-<p>Why don't you just <a href="{{ url_for('home') }}">go back home</a>?</p>
+
 {% endblock %}

@@ -1,17 +1,15 @@
 from flask import render_template, request, redirect, url_for, flash
 from flask_app import app, functions
 
-search_filter = "sets"
-
 
 @app.route('/')
 @app.route('/home')
 def home():
-    complete_guides = functions.get_complete_sets_price_guide()
-    incomplete_guides = functions.get_incomplete_sets_price_guide()
+    set_price_guides = functions.get_sets_price_guide()
+    print(set_price_guides)
     loose_parts_guides = functions.get_loose_parts_price_guide()
     print(loose_parts_guides)
-    return render_template("dashboard.html", complete_guides=complete_guides, incomplete_guides=incomplete_guides, loose_parts_guides=loose_parts_guides)
+    return render_template("dashboard.html", set_price_guides=set_price_guides, loose_parts_guides=loose_parts_guides)
 
 
 @app.route('/inventory')
@@ -33,6 +31,7 @@ def show_set(set_no):
         print(part)
         part.owned_quantity = new_quantity
         functions.insert_inventory_part(part)
+        flash("Parts updated", 'success')
     if set_data.type == 'GROUP':
         return redirect("/group/" + set_data.no)
     parts_list = functions.get_inventory_set_parts(set_no=set_no)
@@ -59,6 +58,7 @@ def remove_part(no):
     set_no = str(request.form.get('set_no'))
     color_id = str(request.form.get('color_id'))
     functions.delete_inventory_part(set_no=set_no, part_no=no, color_id=color_id)
+    flash("Parts removed", 'danger')
     return redirect("/set/" + set_no)
 
 
@@ -66,21 +66,10 @@ def remove_part(no):
 def search():
     if request.method == 'POST':
         # Use search form to add extra params for search
-        global search_filter
-        search_filter = request.form.get('search_filter')
-        if search_filter is None:
-            search_filter = "sets"
-        print(search_filter)
         no = request.form.get('no')
-        if len(no) >= 2 and no is not None:
-            if search_filter == "sets":
-                return redirect('/results/query=' + no)
-            elif search_filter == "parts":
-                return redirect('/results/query=' + no)
-        else:
-            flash('No results found', 'error')
-            return render_template('search.html', search_str=no, search_filter=search_filter)
-    return render_template('search.html', search_str="", search_filter=search_filter)
+        if no is not None:
+            return redirect('/results/query=' + no)
+    return redirect(url_for('inventory'))
 
 
 @app.route('/results/query=<no>')
@@ -167,3 +156,28 @@ def add_part(no):
         set_list = functions.get_inventory_set_list()
         return render_template('add_part.html', part_no=no, part_color_images=part_colors, set_list=set_list)
 
+###
+# The functions below should be applicable to all Flask apps.
+###
+@app.route('/<file_name>.txt')
+def send_text_file(file_name):
+    """Send your static text file."""
+    file_dot_text = file_name + '.txt'
+    return app.send_static_file(file_dot_text)
+
+
+@app.after_request
+def add_header(response):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
+    response.headers['Cache-Control'] = 'public, max-age=600'
+    return response
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    """Custom 404 page."""
+    return render_template('404.html'), 404

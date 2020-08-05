@@ -2,7 +2,7 @@
 
 {% block main %}
 
-    <div class="jumbotron">
+    <div class="jumbotron shadow">
         <h3>Adding part "{{ part_no }}" to inventory</h3>
         Please review criteria below for part specification
     </div>
@@ -22,38 +22,38 @@
     <!--<div class="container">-->
     <form action="/add_part/{{ part_no }}" method='POST'>
 
-        <div class="card">
+        <div class="card border-0 shadow">
             <div class="card-header">
                 Select part criteria
             </div>
             <div class="card-horizontal">
                 <div class="card-body">
-                        {% if part_color_images|length > 0 %}
+                    {% if part_color_images|length > 0 %}
 
-                                <div class="form-group">
-                                    <label for="color_select">Color:</label>
-                                    <div class="dropdown">
-                                        <select class="btn btn-sm btn-light dropdown-toggle" onchange="colorChange()" id="color_select" name="color_select">
-                                            <div class="dropdown-menu">
-                                                {% for part_color_image in part_color_images %}
-                                                    <option value="{{ part_color_image }}"
-                                                            {% if loop.index == 1 %}
-                                                            selected="selected"
-                                                            {% endif %}
-                                                    >{{ part_color_image.name }}</option>
-                                                {% endfor %}
-                                            </div>
-                                        </select>
+                        <div class="form-group">
+                            <label for="color_select">Color:</label>
+                            <div class="dropdown">
+                                <select class="btn btn-sm btn-light dropdown-toggle" onchange="colorChange()" id="color_select" name="color_select">
+                                    <div class="dropdown-menu">
+                                        {% for part_color_image in part_color_images %}
+                                            <option value="{{ part_color_image }}"
+                                                    {% if loop.index == 1 %}
+                                                    selected="selected"
+                                                    {% endif %}
+                                            >{{ part_color_image.name }}</option>
+                                        {% endfor %}
                                     </div>
-                                </div>
-
-                        {% endif %}
-
-
-                            <div class="form-group">
-                                <label for="quantity">Quantity:</label>
-                                <input class="form-control form-control-sm form-spinner" type="number" id="quantity" name="quantity" value="1" min="1" step="1" required/>
+                                </select>
                             </div>
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="form-group">
+                        <label for="quantity">Quantity:</label>
+                        <input class="form-control form-control-sm form-spinner" type="number" id="quantity" name="quantity" value="1" min="1" step="1" required/>
+                    </div>
 
 
                 </div>
@@ -64,11 +64,11 @@
 
         </div>
 
-        <div class="card">
+        <div class="card border-0 shadow">
             <div class="card-header">
                 Select which set to add to
             </div>
-            <table id="radio-table" class="table table-image table-responsive-sm table-condensed table-hover table-bordered">
+            <table id="radio-table" class="table table-image table-responsive-sm table-condensed table-hover table-bordered mb-0">
                 <thead>
                 <tr>
                     <th scope="col" style="width: 25px">Image</th>
@@ -95,8 +95,11 @@
                 {% endfor %}
                 </tbody>
             </table>
+            <div class="card-footer">
+            <button class="btn btn-primary float-right" type="submit" id="submit_button" disabled>Add part "{{ part_no }}" to selected set</button>
+            </div>
         </div>
-        <button class="btn btn-primary" type="submit" id="submit_button" disabled>Add to set</button>
+
     </form>
 
 {% endblock %}

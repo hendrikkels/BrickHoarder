@@ -2,7 +2,7 @@
 
 {% block main %}
 
-    <div class="jumbotron">
+    <div class="jumbotron shadow">
         <h3 class="page-header">Showing results for: "{{ search_str }}"</h3>
     </div>
 
@@ -16,10 +16,13 @@
         {% endif %}
     {% endwith %}
 
+    {% if results|length == 0 %}
+
+    {% else %}
     {% for result in results %}
         {% if result.type == 'SET' %}
             <form action="/add_set/{{ result.no }}" method="GET">
-                <div class="card">
+                <div class="card border-0 shadow">
                     <div class="card-horizontal">
                         <div class="card-body">
                             <h5 class="card-title">{{ result.name }}</h5>
@@ -36,7 +39,7 @@
 
         {% elif result.type == 'PART' %}
             <form action="/add_part/{{ result.no }}" method="GET">
-                <div class="card">
+                <div class="card border-0 shadow">
                     <div class="card-horizontal">
                         <div class="card-body">
                             <h5 class="card-title">{{ result.name }}</h5>
@@ -56,5 +59,6 @@
 
         {% endif %}
     {% endfor %}
+    {% endif %}
 
 {% endblock %}

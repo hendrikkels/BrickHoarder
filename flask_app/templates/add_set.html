@@ -2,7 +2,7 @@
 
 {% block main %}
 
-    <div class="jumbotron">
+    <div class="jumbotron shadow">
         <h3>Adding set "{{ set_no }}" to inventory</h3>
         Please review all parts to be included in set below
     </div>
@@ -23,7 +23,10 @@
     <!--<div class="container">-->
     <form action="/add_set/{{ set_no }}" method='POST'>
 
-        <div class="card">
+        <div class="card border-0 shadow my-5">
+        <div class="card-header">
+            Parts included in original set (extras parts omitted)
+        </div>
             <div class="table-responsive">
                 <table class="table table-sm table-striped table-bordered mb-0">
                     <thead>

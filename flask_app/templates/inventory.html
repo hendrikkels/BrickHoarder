@@ -2,22 +2,32 @@
 
 {% block main %}
 
-    <div class="jumbotron">
+    <div class="jumbotron shadow">
         <h1>Inventory</h1>
         Personal LEGO collection
     </div>
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="alert alert-info" role="alert">
-                {% for message in messages %}
-                    {{ message }}
+        <div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {% if category == 'message' %}
+                        <div class="alert alert-warning" role="alert">
+                    {% else %}
+                        <div class="alert alert-{{ category }}" role="alert">
+                    {% endif %}
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
                 {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
+            {% endif %}
+        {% endwith %}
+        </div>
 
-    <div class="border rounded-lg">
+    <div class="card border-0 shadow">
+{#    <div class="border rounded">#}
         <nav class="navbar navbar-light bg-light rounded-top">
             <div class="form-group input-group-sm d-flex mb-0">
                 <input class="form-control" type="search" id="table_search" name="table_search" onkeyup="searchTable()" placeholder="Search">
@@ -53,7 +63,9 @@
                 </tbody>
             </table>
         </div>
+{#    </div>#}
     </div>
+
 
 
 

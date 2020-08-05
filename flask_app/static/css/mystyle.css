@@ -2,9 +2,23 @@ html {
     font-size: 14px;
 }
 
+@media only screen
+  and (min-device-width: 320px)
+  and (max-device-width: 480px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+    html {
+        font-size: 9px;
+    }
+}
+
 body {
     font-family: 'Poppins', sans-serif;
-    padding-top: 5.5rem   ;
+    padding-top: 6rem;
+    background: url('../images/background.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
 }
 
 p {
@@ -18,11 +32,7 @@ p {
 
 .jumbotron {
     padding: 2rem;
-}
-
-
-.border {
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
 }
 
 
@@ -46,7 +56,7 @@ p {
 }
 
 .card {
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
 }
 
 .card-body {
@@ -102,5 +112,4 @@ p {
         object-position: center; /* Center the image within the element */
         max-height: 6rem;
     }
-
 }
