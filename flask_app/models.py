@@ -91,8 +91,8 @@ db.create_all()
 
 
 lego_box = Set('GRP0', 'Lego Crate', 'GROUP', 'Misc.', 'Misc.',
-               'static/images/lego_pile.png',
-               'static/images/lego_pile.png',
+               'https://cdn.stylepark.com/articles/2008/toy-of-the-century/v283170_958_992_800-1.jpg?mtime=20160926224251&focal=none',
+               'https://cdn.stylepark.com/articles/2008/toy-of-the-century/v283170_958_992_800-1.jpg?mtime=20160926224251&focal=none',
                0, 0, 0, 0, '1932', False, False, False)
 db.session.merge(lego_box)
 db.session.commit()

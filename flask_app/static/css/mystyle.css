@@ -59,6 +59,10 @@ p {
     margin-bottom: 3rem;
 }
 
+.card-deck {
+    margin-bottom: 3rem;
+}
+
 .card-body {
     padding: 1rem;
 }
@@ -80,6 +84,12 @@ p {
     white-space: nowrap;
     width: 1%;
     padding: 0.25rem;
+}
+
+.crop-card {
+    object-fit: cover; /* Do not scale the image */
+    object-position: center; /* Center the image within the element */
+    height: 100%;
 }
 
 .crop-table{
