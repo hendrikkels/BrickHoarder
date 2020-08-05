@@ -28,7 +28,7 @@
     </div>
 
 
-        <div>
+    <div>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -48,90 +48,95 @@
         </div>
 
 
-    <div class="card border-0 shadow">
-        <nav class="navbar navbar-light bg-light rounded-top">
-            <div class="form-group input-group-sm d-flex mb-0">
-                <input class="form-control" type="search" id="table_search" name="table_search" onkeyup="searchTable()" placeholder="Search">
-            </div>
-        </nav>
-        <div class="table-responsive">
-            <table class="table table-sm table-striped table-hover mb-0" id="searchable_table">
-                <thead class="thead-light">
-                <tr>
-                    <th scope="col">No</th>
-                    <th scope="col">Image</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Color</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">Qty.</th>
-                    <th scope="col">Complete</th>
-                    <th scope="col">Extra</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for part in parts_list %}
-                    {% if part.owned_quantity < part.quantity %}
-                        <tr data-toggle="modal" data-target="#modal{{ part.no }}_{{ part.color_id }}" class="table-danger">
-                    {% elif part.owned_quantity < part.quantity + part.extra_quantity %}
-                        <tr data-toggle="modal" data-target="#modal{{ part.no }}_{{ part.color_id }}" class="table-warning">
-                    {% else %}
-                        <tr data-toggle="modal" data-target="#modal{{ part.no }}_{{ part.color_id }}">
-                    {% endif %}
-                            <td scope="row">{{ part.no }}</td>
-                            <td class="fit">
-                                <img src="{{part.thumbnail_url}}" class="img-fluid img-thumbnail crop-table" alt="sheep">
-                            </td>
-                            <td>{{ part.name }}</td>
-                            <td>{{ part.color_name }}</td>
-                            <td>{{ part.color_type }}</td>
-                            <td>{{ part.owned_quantity }}</td>
-                            <td>{{ part.quantity }}</td>
-                            <td>{{ part.extra_quantity }}</td>
-                        </tr>
-
-                    <div class="modal fade" id="modal{{ part.no }}_{{ part.color_id }}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="modalLabel">{{ part.no }} - {{ part.name }}</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
+        {% for part in parts_list %}
+            <div class="modal fade" id="modal{{ part.no }}_{{ part.color_id }}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalLabel">{{ part.no }} - {{ part.name }}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form  id="part_form" action="/set/{{ set_data.no }}" method='POST'>
+                            <div class="media">
+                                <input hidden name="part_no" id="part_no" value="{{ part.no }}">
+                                <input hidden name="set_no" id="set_no" value="{{ set_data.no }}">
+                                <input hidden name="color_id" id="color_id" value="{{ part.color_id }}">
+                                <div class="media-body">
+                                    Alternate: {{ part.is_alternate }}<br>
+                                    Counterpart: {{ part.is_counterpart }}<br>
+                                    <div class="form-group">
+                                        <label for="quantity">Quantity:</label>
+                                        <input class="form-control form-control-sm form-spinner" type="number" id="quantity" name="quantity" value="{{ part.owned_quantity }}" min="0" step="1" required/>
+                                    </div>
                                 </div>
-                                <div class="media">
-                                    <form action="/set/{{ set_data.no }}" method='POST'>
-                                        <input hidden name="part_no" id="part_no" value="{{ part.no }}">
-                                        <input hidden name="set_no" id="set_no" value="{{ set_data.no }}">
-                                        <input hidden name="color_id" id="color_id" value="{{ part.color_id }}">
-                                        <div class="media-body">
-                                            Alternate: {{ part.is_alternate }}<br>
-                                            Counterpart: {{ part.is_counterpart }}<br>
-                                            <div class="form-group">
-                                                <label for="quantity">Quantity:</label>
-                                                <input class="form-control form-control-sm form-spinner" type="number" id="quantity" name="quantity" value="{{ part.owned_quantity }}" min="0" step="1" required/>
-                                            </div>
-                                        </div>
-                                        <img src="{{ part.thumbnail_url }}" class="img-fluid img-thumbnail align-self-center mx-2"  alt="sheep">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-sm btn-primary">Save changes</button>
-                                    </form>
-                                    {% if part.quantity == 0 %}
-                                    <form action="/remove_part/{{ part.no }}" method='POST'>
-                                        <input hidden name="part_no" id="part_no" value="{{ part.no }}">
-                                        <input hidden name="set_no" id="set_no" value="{{ set_data.no }}">
-                                        <input hidden name="color_id" id="color_id" value="{{ part.color_id }}">
-                                        <button type="submit" class="btn btn-sm btn-danger">Remove</button>
-                                    </form>
-                                    {% endif %}
-                                </div>
+                                <img src="{{ part.thumbnail_url }}" class="img-fluid img-thumbnail align-self-center float-right mx-2"  alt="sheep">
                             </div>
+                        </form>
+                        <div class="modal-footer">
+                            <button type="submit" form="part_form" class="btn btn-sm btn-primary">Save changes</button>
+                            {% if part.quantity == 0 %}
+                                <form action="/remove_part/{{ part.no }}" method='POST'>
+                                    <input hidden name="part_no" id="part_no" value="{{ part.no }}">
+                                    <input hidden name="set_no" id="set_no" value="{{ set_data.no }}">
+                                    <input hidden name="color_id" id="color_id" value="{{ part.color_id }}">
+                                    <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                                </form>
+                            {% endif %}
                         </div>
                     </div>
-                {% endfor %}
-                </tbody>
-            </table>
+                </div>
+            </div>
+        {% endfor %}
+
+
+        <div class="card border-0 shadow">
+            <nav class="navbar navbar-light bg-light rounded-top">
+                <div class="form-group input-group-sm d-flex mb-0">
+                    <input class="form-control" type="search" id="table_search" name="table_search" onkeyup="searchTable()" placeholder="Search">
+                </div>
+            </nav>
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-hover mb-0" id="searchable_table">
+                    <thead class="thead-light">
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Color</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Qty.</th>
+                        <th scope="col">Complete</th>
+                        <th scope="col">Extra</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for part in parts_list %}
+                        {% if part.owned_quantity < part.quantity %}
+                            <tr data-toggle="modal" data-target="#modal{{ part.no }}_{{ part.color_id }}" class="table-danger">
+                                {% elif part.owned_quantity < part.quantity + part.extra_quantity %}
+                            <tr data-toggle="modal" data-target="#modal{{ part.no }}_{{ part.color_id }}" class="table-warning">
+                                {% else %}
+                            <tr data-toggle="modal" data-target="#modal{{ part.no }}_{{ part.color_id }}">
+                        {% endif %}
+                    <td scope="row">{{ part.no }}</td>
+                    <td class="fit">
+                        <img src="{{part.thumbnail_url}}" class="img-fluid img-thumbnail crop-table" alt="sheep">
+                    </td>
+                    <td>{{ part.name }}</td>
+                    <td>{{ part.color_name }}</td>
+                    <td>{{ part.color_type }}</td>
+                    <td>{{ part.owned_quantity }}</td>
+                    <td>{{ part.quantity }}</td>
+                    <td>{{ part.extra_quantity }}</td>
+                    </tr>
+
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
+
 
 {% endblock %}

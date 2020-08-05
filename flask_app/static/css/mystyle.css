@@ -56,7 +56,15 @@ p {
 }
 
 .card {
+    opacity: 85%;
+    backdrop-filter: blur(14px);
     margin-bottom: 3rem;
+}
+
+.modal-background {
+    display: none;
+    /*opacity: 85%;*/
+    /*backdrop-filter: blur(14px);*/
 }
 
 .card-deck {

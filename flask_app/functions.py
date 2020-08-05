@@ -64,7 +64,7 @@ def get_sets_price_guide():
                 price_guide['avg_price_used'] = round(float(used_price_guide['avg_price']), 2)
             if price_guide['avg_price'] != 0:
                 price_guides.append(price_guide)
-    price_guides = sorted(price_guides, key=lambda i: i['avg_price'], reverse=True)[:10]
+    price_guides = sorted(price_guides, key=lambda i: i['avg_price'], reverse=True)[:5]
     return price_guides
 
 
@@ -98,7 +98,7 @@ def get_loose_parts_price_guide():
             price_guide['price_detail'] = 0
             if price_guide['avg_price'] != 0:
                 price_guides.append(price_guide)
-    price_guides = sorted(price_guides, key=lambda i: i['avg_price'], reverse=True)[:10]
+    price_guides = sorted(price_guides, key=lambda i: i['avg_price'], reverse=True)[:5]
     return price_guides
 
 
