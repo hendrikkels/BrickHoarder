@@ -61,11 +61,6 @@ p {
     margin-bottom: 3rem;
 }
 
-.modal-background {
-    display: none;
-    /*opacity: 85%;*/
-    /*backdrop-filter: blur(14px);*/
-}
 
 .card-deck {
     margin-bottom: 3rem;
