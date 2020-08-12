@@ -38,26 +38,26 @@
                 <thead class="thead-light">
                 <tr>
                     <th scope="col">No.</th>
+                    <th scope="col">Image</th>
                     <th scope="col">Name</th>
                     <th scope="col">Category</th>
                     <th scope="col">Year</th>
                     <th scope="col">Complete</th>
                     <th scope="col">Extras</th>
-                    <th scope="col">Image</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for set in set_list %}
                     <tr onclick="window.location.href = '/set/{{ set.no }}';">
                         <td>{{ set.no }}</td>
+                        <td class="p-1 fit">
+                            <img src="{{set.thumbnail_url}}" class="img-fluid img-thumbnail crop-table" alt="sheep">
+                        </td>
                         <td>{{ set.name }}</td>
                         <td>{{set.category}}</td>
                         <td>{{set.year_released}}</td>
                         <td>{{set.complete}}</td>
                         <td>{{set.extras}}</td>
-                        <td class="p-1 fit">
-                            <img src="{{set.thumbnail_url}}" class="img-fluid img-thumbnail crop-table" alt="sheep">
-                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -65,8 +65,5 @@
         </div>
 {#    </div>#}
     </div>
-
-
-
 
 {% endblock %}

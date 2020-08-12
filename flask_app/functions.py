@@ -1,10 +1,99 @@
 from flask_app import bricklink_api, db
 from flask_app.models import Set, Part
+from apscheduler.schedulers.background import BackgroundScheduler
+import datetime
+import atexit
 
-color_list = bricklink_api.color.get_color_list()['data']
+color_list = None
 
 cached_parts_set_no = None
 cached_parts_list = None
+
+set_price_guides = None
+loose_parts_guides = None
+
+
+def get_sets_price_guide():
+    global set_price_guides
+    return set_price_guides
+
+
+def update_color_list():
+    print('update color triggered')
+    global color_list
+    color_list = bricklink_api.color.get_color_list()['data']
+
+
+def update_sets_price_guide():
+    print('update sets price triggered')
+    global set_price_guides
+    set_list = get_inventory_set_list()
+    price_guides = []
+    for set in set_list:
+        price_guide = get_new_set_price_guide(set)
+        if price_guide is not None:
+            used_price_guide = get_used_set_price_guide(set)
+            price_guide['item'] = set
+            price_guide['min_price'] = round(float(price_guide['min_price']), 2)
+            price_guide['max_price'] = round(float(price_guide['max_price']), 2)
+            price_guide['avg_price'] = round(float(price_guide['avg_price']), 2)
+            price_guide['qty_avg_price'] = round(float(price_guide['qty_avg_price']), 2)
+            price_guide.pop('price_detail', None)
+            if used_price_guide is not None:
+                price_guide['avg_price_used'] = round(float(used_price_guide['avg_price']), 2)
+            if price_guide['avg_price'] != 0:
+                price_guides.append(price_guide)
+    price_guides = sorted(price_guides, key=lambda i: i['avg_price'], reverse=True)[:5]
+    set_price_guides = price_guides
+
+
+def get_new_set_price_guide(set: Set):
+    response = bricklink_api.catalog_item.get_price_guide("Set", no=set.no, guide_type='sold', new_or_used="N", country_code='US', currency_code='ZAR')
+    if response['meta']['code'] != 400:
+        response_data = response['data']
+        return response_data
+    return None
+
+
+def get_used_set_price_guide(set: Set):
+    response = bricklink_api.catalog_item.get_price_guide("Set", no=set.no, guide_type='sold', new_or_used="U", country_code='US', currency_code='ZAR')
+    if response['meta']['code'] != 400:
+        response_data = response['data']
+        return response_data
+    return None
+
+
+def get_loose_parts_price_guide():
+    global loose_parts_guides
+    return loose_parts_guides
+
+
+def update_loose_parts_price_guide():
+    print('update loose parts triggered')
+    global loose_parts_guides
+    parts_list = get_inventory_loose_parts()
+    price_guides = []
+    for part in parts_list:
+        price_guide = get_part_price_guide(part)
+        if price_guide is not None:
+            price_guide['item'] = part
+            price_guide['min_price'] = round(float(price_guide['min_price']), 2)
+            price_guide['max_price'] = round(float(price_guide['max_price']), 2)
+            price_guide['avg_price'] = round(float(price_guide['avg_price']), 2)
+            price_guide['qty_avg_price'] = round(float(price_guide['qty_avg_price']), 2)
+            price_guide['price_detail'] = 0
+            if price_guide['avg_price'] != 0:
+                price_guides.append(price_guide)
+    price_guides = sorted(price_guides, key=lambda i: i['avg_price'], reverse=True)[:5]
+    loose_parts_guides = price_guides
+
+
+def get_part_price_guide(part: Part):
+    response = bricklink_api.catalog_item.get_price_guide("Part", no=part.no, color_id=part.color_id, guide_type='sold', currency_code='ZAR')
+    if response['meta']['code'] != 400:
+        response_data = response['data']
+        return response_data
+    return None
 
 
 def check_set_completeness(set_no):
@@ -44,73 +133,6 @@ def get_color_data(color_id):
     if color is None:
         return {'color_id': 0, 'color_name': 'Misc.', 'color_code': 0, 'color_type': 'Misc'}
     return color
-
-
-def get_sets_price_guide():
-    set_list = get_inventory_set_list()
-    price_guides = []
-    for set in set_list:
-        price_guide = get_new_set_price_guide(set)
-        print(price_guide)
-        if price_guide is not None:
-            used_price_guide = get_used_set_price_guide(set)
-            price_guide['item'] = set
-            price_guide['min_price'] = round(float(price_guide['min_price']), 2)
-            price_guide['max_price'] = round(float(price_guide['max_price']), 2)
-            price_guide['avg_price'] = round(float(price_guide['avg_price']), 2)
-            price_guide['qty_avg_price'] = round(float(price_guide['qty_avg_price']), 2)
-            price_guide.pop('price_detail', None)
-            if used_price_guide is not None:
-                price_guide['avg_price_used'] = round(float(used_price_guide['avg_price']), 2)
-            if price_guide['avg_price'] != 0:
-                price_guides.append(price_guide)
-    price_guides = sorted(price_guides, key=lambda i: i['avg_price'], reverse=True)[:5]
-    return price_guides
-
-
-def get_new_set_price_guide(set: Set):
-    response = bricklink_api.catalog_item.get_price_guide("Set", no=set.no, guide_type='sold', new_or_used="N", country_code='US', currency_code='ZAR')
-    if response['meta']['code'] != 400:
-        response_data = response['data']
-        return response_data
-    return None
-
-
-def get_used_set_price_guide(set: Set):
-    response = bricklink_api.catalog_item.get_price_guide("Set", no=set.no, guide_type='sold', new_or_used="U", country_code='US', currency_code='ZAR')
-    if response['meta']['code'] != 400:
-        response_data = response['data']
-        return response_data
-    return None
-
-
-def get_loose_parts_price_guide():
-    parts_list = get_inventory_loose_parts()
-    price_guides = []
-    for part in parts_list:
-        price_guide = get_part_price_guide(part)
-        if price_guide is not None:
-            price_guide['item'] = part
-            price_guide['min_price'] = round(float(price_guide['min_price']), 2)
-            price_guide['max_price'] = round(float(price_guide['max_price']), 2)
-            price_guide['avg_price'] = round(float(price_guide['avg_price']), 2)
-            price_guide['qty_avg_price'] = round(float(price_guide['qty_avg_price']), 2)
-            price_guide['price_detail'] = 0
-            if price_guide['avg_price'] != 0:
-                price_guides.append(price_guide)
-    price_guides = sorted(price_guides, key=lambda i: i['avg_price'], reverse=True)[:5]
-    return price_guides
-
-
-def get_part_price_guide(part: Part):
-    response = bricklink_api.catalog_item.get_price_guide("Part", no=part.no, color_id=part.color_id, guide_type='sold', currency_code='ZAR')
-    if response['meta']['code'] != 400:
-        response_data = response['data']
-        return response_data
-    return None
-
-
-
 
 
 def get_set(no):
@@ -298,3 +320,18 @@ def delete_inventory_part(set_no, part_no, color_id):
     return db.session.commit()
 
 
+# KICK OFF BACKGROUND PROCESSES
+scheduler = BackgroundScheduler(daemon=True)
+
+scheduler.add_job(func=update_color_list, trigger="interval", hours=1, max_instances=1)
+scheduler.add_job(func=update_sets_price_guide, trigger="interval", hours=1, max_instances=1)
+scheduler.add_job(func=update_loose_parts_price_guide, trigger="interval", hours=1, max_instances=1)
+
+print(scheduler.get_jobs())
+for job in scheduler.get_jobs():
+    job.modify(next_run_time=datetime.datetime.now())
+
+scheduler.start()
+
+# Shut down the scheduler when exiting the app
+atexit.register(lambda: scheduler.shutdown())

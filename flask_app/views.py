@@ -6,9 +6,9 @@ from flask_app import app, functions
 @app.route('/home')
 def home():
     set_price_guides = functions.get_sets_price_guide()
-    print(set_price_guides)
+    # print(set_price_guides)
     loose_parts_guides = functions.get_loose_parts_price_guide()
-    print(loose_parts_guides)
+    # print(loose_parts_guides)
     return render_template("dashboard.html", set_price_guides=set_price_guides, loose_parts_guides=loose_parts_guides)
 
 
@@ -25,6 +25,7 @@ def show_set(set_no):
     set_data = functions.get_inventory_set(set_no=set_no)
     if request.method == 'POST':
         new_quantity = request.form.get('quantity')
+        print(new_quantity)
         part_no = str(request.form.get('part_no'))
         color_id = str(request.form.get('color_id'))
         part = functions.get_inventory_part(set_no=set_no, part_no=part_no, color_id=color_id)

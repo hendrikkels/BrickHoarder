@@ -11,3 +11,4 @@ db = SQLAlchemy(app)
 db.create_all()
 
 import flask_app.views
+
