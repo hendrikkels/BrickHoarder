@@ -6,7 +6,7 @@ from flask_app import app, functions
 @app.route('/home')
 def home():
     set_price_guides = functions.get_sets_price_guide()
-    # print(set_price_guides)
+        # print(set_price_guides)
     loose_parts_guides = functions.get_loose_parts_price_guide()
     # print(loose_parts_guides)
     return render_template("dashboard.html", set_price_guides=set_price_guides, loose_parts_guides=loose_parts_guides)
