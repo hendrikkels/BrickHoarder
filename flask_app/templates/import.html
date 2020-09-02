@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+    <div class="jumbotron shadow">
+        <h1>Import</h1>
+        Import a pre-compiled list of set numbers and add them to the inventory
+    </div>
+
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-danger" role="alert">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="card border-0 shadow">
+        <nav class="navbar navbar-light bg-light rounded-top">
+            Select a csv file to upload, format: Set numbers, separated by commas
+        </nav>
+
+
+        <div class="card-body">
+            <form action="/import" method="post" enctype="multipart/form-data" id="js-upload-form">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <input type="file" class="form-control-file" id="exampleFormControlFile1"  name="file_name" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create set list</button>
+                </div>
+            </form>
+        </div>
+
+
+
+        <div class="table-responsive" hidden>
+            <table class="table table-condensed table-hover mb-0" id="searchable_table">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr {# onclick="window.location.href = '/set/8080';" #}>
+                    <td>no</td>
+                    <td>name</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock main %}

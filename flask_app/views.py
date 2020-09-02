@@ -1,6 +1,7 @@
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, make_response
 from flask_app import app, functions
-
+import io
+import csv
 
 @app.route('/')
 @app.route('/home')
@@ -61,6 +62,40 @@ def remove_part(no):
     functions.delete_inventory_part(set_no=set_no, part_no=no, color_id=color_id)
     flash("Parts removed", 'danger')
     return redirect("/set/" + set_no)
+
+
+@app.route('/import', methods=['POST', 'GET'])
+def report():
+    if request.method == 'POST':
+        print('post oen')
+        print('pls')
+        f = request.files["file_name"]
+        if not f:
+            return "No file"
+
+        stream = io.StringIO(f.stream.read().decode("UTF8"), newline=None)
+        csv_input = csv.reader(stream)
+        # print("file contents: ", file_contents)
+        # print(type(file_contents))
+        print(csv_input)
+        sets = []
+        for row in csv_input:
+            sets.append(row[0])
+        return redirect("/import/" + sets)
+    print("oen")
+    return render_template('import.html')
+
+
+@app.route('/import/<sets>', methods=['POST', 'GET'])
+def import_sets(sets_nos):
+    sets = []
+    for no in sets_nos:
+        sets.append(functions.get_set(no))
+    if request.method == 'POST':
+        # ADD DIE SETS NA DIE DATABASIS
+        print("poes")
+        return "TODO"
+    return render_template('import_set_list.html', set_list=sets)
 
 
 @app.route('/search', methods=['POST', 'GET'])
