@@ -8,61 +8,63 @@
     </div>
 
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="alert alert-danger" role="alert">
-                {% for message in messages %}
-                    {{ message }}
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
-
-    <div class="card border-0 shadow">
-        <nav class="navbar navbar-light bg-light rounded-top">
-            Select a csv file to upload, format: Set numbers, separated by commas
-        </nav>
-
-
-        <div class="card border-0 shadow">
-            {#    <div class="border rounded">#}
-            <nav class="navbar navbar-light bg-light rounded-top">
-                <div class="form-group input-group-sm d-flex mb-0">
-                    <input class="form-control" type="search" id="table_search" name="table_search" onkeyup="searchTable()" placeholder="Search">
+        <div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {% if category == 'message' %}
+                        <div class="alert alert-warning" role="alert">
+                    {% else %}
+                        <div class="alert alert-{{ category }}" role="alert">
+                    {% endif %}
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
                 </div>
-            </nav>
-            <div class="table-responsive">
-                <table class="table table-condensed table-hover mb-0" id="searchable_table">
-                    <thead class="thead-light">
-                    <tr>
-                        <th scope="col">No.</th>
-                        <th scope="col">Image</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Year</th>
-                        <th scope="col">Complete</th>
-                        <th scope="col">Extras</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for set in set_list %}
-                        <tr onclick="window.location.href = '/set/{{ set.no }}';">
-                            <td>{{ set.no }}</td>
-                            <td class="p-1 fit">
-                                <img src="{{set.thumbnail_url}}" class="img-fluid img-thumbnail crop-table" alt="sheep">
-                            </td>
-                            <td>{{ set.name }}</td>
-                            <td>{{set.category}}</td>
-                            <td>{{set.year_released}}</td>
-                            <td>{{set.complete}}</td>
-                            <td>{{set.extras}}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            {#    </div>#}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         </div>
 
+        <form action="/import/sets" method="post">
+    <div class="card border-0 shadow">
+        <nav class="navbar navbar-light bg-light rounded-top">
+            Sets imported from file
+        </nav>
+        <div class="table-responsive">
+            <table class="table table-condensed mb-0" id="searchable_table">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Year</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <input hidden id="setlist" name="setlist" value="{{ set_list }}">
+                {% for set in set_list %}
+                    <tr>
+                        <td>{{ set.no }}</td>
+                        <td class="p-1 fit">
+                            <img src="{{ set.thumbnail_url }}" class="img-fluid img-thumbnail crop-table" alt="sheep">
+                        </td>
+                        <td>{{ set.name }}</td>
+                        <td>{{set.category}}</td>
+                        <td>{{set.year_released}}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="card-footer">
+                <button class="btn btn-primary" type="submit">Add to inventory</button>
+            </div>
+        </div>
+
+    </div>
+</form>
 
 {% endblock main %}

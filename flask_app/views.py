@@ -2,6 +2,9 @@ from flask import render_template, request, redirect, url_for, flash, make_respo
 from flask_app import app, functions
 import io
 import csv
+import json
+
+import_sets = []
 
 @app.route('/')
 @app.route('/home')
@@ -81,20 +84,31 @@ def report():
         sets = []
         for row in csv_input:
             sets.append(row[0])
-        return redirect("/import/" + sets)
+        global import_sets
+        import_sets = sets
+        return redirect("/import/sets")
     print("oen")
     return render_template('import.html')
 
 
-@app.route('/import/<sets>', methods=['POST', 'GET'])
-def import_sets(sets_nos):
-    sets = []
-    for no in sets_nos:
-        sets.append(functions.get_set(no))
+@app.route('/import/sets', methods=['POST', 'GET'])
+def import_sets():
+    global import_sets
     if request.method == 'POST':
         # ADD DIE SETS NA DIE DATABASIS
-        print("poes")
-        return "TODO"
+        for set in import_sets:
+            functions.insert_inventory_set(set)
+            parts_list = functions.get_set_parts(set.no)
+            print(set.no)
+            print(parts_list)
+            for part in parts_list:
+                functions.insert_inventory_part(part)
+        return redirect('/inventory')
+    sets = []
+    for no in import_sets:
+        print(no)
+        sets.append(functions.get_set(no))
+        import_sets = sets
     return render_template('import_set_list.html', set_list=sets)
 
 

@@ -56,11 +56,11 @@ p {
 }
 
 .card {
-    opacity: 85%;
-    backdrop-filter: blur(14px);
+    opacity: 80%;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     margin-bottom: 3rem;
 }
-
 
 .card-deck {
     margin-bottom: 3rem;

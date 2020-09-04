@@ -143,7 +143,7 @@ def get_set(no):
     if response_data == {}:
         return None
 
-    print(response)
+
     set = Set(no,
               response_data['name'],
               response_data['type'],
@@ -167,7 +167,7 @@ def get_part(no):
     response_data = response['data']
     if response_data == {}:
         return None
-    print(response_data)
+
     part = Part(response_data['no'],
                 None,
                 response_data['name'],
@@ -220,7 +220,6 @@ def get_set_parts(no):
                     part_data['is_alternate'],
                     part_data['is_counterpart'],
                     gen_thumbnail_url(part_data['item']['type'], part_data['item']['no'], part_data['color_id']))
-        print(part)
         parts_list.append(part)
     cached_parts_set_no = no
     cached_parts_list = parts_list
@@ -230,7 +229,6 @@ def get_set_parts(no):
 def get_known_part_colors(part_no):
     response = bricklink_api.catalog_item.get_known_colors("Part", no=part_no)
     known_colors = response['data']
-    print(known_colors)
     part_colors = []
     keys = ['id', 'name', 'image']
     if known_colors:
