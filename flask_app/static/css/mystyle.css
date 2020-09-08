@@ -100,6 +100,15 @@ p {
     object-fit: scale-down; /* Do not scale the image */
     object-position: center; /* Center the image within the element */
     height: inherit;
+    max-width: 4rem;
+}
+
+.crop-table-lg{
+    margin: 0;
+    object-fit: scale-down; /* Do not scale the image */
+    object-position: center; /* Center the image within the element */
+    height: inherit;
+    max-width: 6rem;
 }
 
 .crop-thumbnail{
