@@ -35,6 +35,9 @@ p {
     margin-bottom: 3rem;
 }
 
+footer {
+    margin-top: 3rem;
+}
 
 .navbar-form .form-group input {
   width: calc(100% - 50px);

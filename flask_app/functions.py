@@ -1,8 +1,12 @@
+import atexit
+import datetime
+
+from apscheduler.schedulers.background import BackgroundScheduler
+
 from flask_app import bricklink_api, db
 from flask_app.models import Set, Part
-from apscheduler.schedulers.background import BackgroundScheduler
-import datetime
-import atexit
+
+import html
 
 color_list = None
 
@@ -145,7 +149,7 @@ def get_set(no):
 
 
     set = Set(no,
-              response_data['name'],
+              html.unescape(response_data['name']),
               response_data['type'],
               response_data['category_id'],
               bricklink_api.category.get_category(response_data['category_id'])['data']['category_name'],
@@ -170,7 +174,7 @@ def get_part(no):
 
     part = Part(response_data['no'],
                 None,
-                response_data['name'],
+                html.unescape(response_data['name']),
                 response_data['type'],
                 response_data['category_id'],
                 0,
@@ -207,7 +211,7 @@ def get_set_parts(no):
         part_color_data = get_color_data(part_data['color_id'])
         part = Part(part_data['item']['no'],
                     no,
-                    part_data['item']['name'],
+                    html.unescape(part_data['item']['name']),
                     part_data['item']['type'],
                     part_data['item']['category_id'],
                     part_data['color_id'],

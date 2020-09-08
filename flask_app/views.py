@@ -107,7 +107,9 @@ def import_sets():
     sets = []
     for no in import_sets:
         print(no)
-        sets.append(functions.get_set(no))
+        cur_set = functions.get_set(no)
+        if cur_set is not None:
+            sets.append(cur_set)
         import_sets = sets
     return render_template('import_set_list.html', set_list=sets)
 
