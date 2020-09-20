@@ -1,5 +1,6 @@
 *.db
 .idea
+.vs
 
 
 # Byte-compiled / optimized / DLL files
