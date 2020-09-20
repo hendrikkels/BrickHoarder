@@ -100,6 +100,14 @@ def get_part_price_guide(part: Part):
     return None
 
 
+def get_part_listings(part: Part):
+    response = bricklink_api.catalog_item.get_price_guide("Part", no=part.no, color_id=part.color_id, guide_type='stock', currency_code='ZAR')
+    if response['meta']['code'] != 400:
+        response_data = response['data']['price_detail']
+        return response_data
+    return None
+
+
 def check_set_completeness(set_no):
     set_data = get_inventory_set(set_no)
     if set_data.type == "GROUP":
@@ -259,6 +267,17 @@ def get_inventory_set(set_no):
 
 def get_inventory_set_parts(set_no):
     return Part.query.filter_by(set_no=set_no).all()
+
+
+def get_inventory_set_missing_parts(set_no):
+    parts_list = get_inventory_set_parts(set_no)
+    missing_parts = []
+    for part in parts_list:
+        if part.owned_quantity < part.quantity + part.extra_quantity:
+            print(part)
+            missing_parts.append(part)
+    # print(missing_parts)
+    return missing_parts
 
 
 def get_inventory_loose_parts():

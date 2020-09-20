@@ -21,9 +21,20 @@
             <img src="{{set_data.image_url}}" class="align-self-center crop ml-3"  alt="sheep">
         </div>
         <div class="card-footer">
-            <form action="/remove_set/{{ set_data.no }}" method='POST'>
-                <button type="submit" class="btn btn-sm btn-danger">Remove from collection</button>
-            </form>
+            <div class="form-row no-gutters">
+                <div class="col">
+                {% if not set_data.complete %}
+                <form action="/set/{{ set_data.no }}/guide" method='POST'>
+                    <button type="submit" class="btn btn-sm btn-primary">Get guide for missing parts</button>
+                </form>
+                {% endif %}
+                </div>
+                <div class="col">
+                <form action="/remove_set/{{ set_data.no }}" method='POST'>
+                    <button type="submit" class="btn btn-sm btn-danger float-right">Remove from collection</button>
+                </form>
+                </div>
+            </div>
         </div>
     </div>
 

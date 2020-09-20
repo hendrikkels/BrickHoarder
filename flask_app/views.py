@@ -4,6 +4,8 @@ import io
 import csv
 import json
 
+import requests
+
 import_sets = []
 
 @app.route('/')
@@ -42,6 +44,20 @@ def show_set(set_no):
     parts_list = functions.get_inventory_set_parts(set_no=set_no)
     return render_template('set_info.html', set_data=set_data, parts_list=parts_list)
 
+@app.route('/set/<set_no>/guide', methods=['GET', 'POST'])
+def set_guide(set_no):
+    missing_parts = functions.get_inventory_set_missing_parts(set_no)
+    for part in missing_parts:
+        print(functions.get_part_listings(part))
+    url = 'http://www.bricklink.com/search.asp'
+    params = {
+        'pg': 1,
+        'itemType': 'P',
+        'sz': 10,
+        'searchSort': 'P'
+    }
+    html = requests.get(url, params=params).text
+    return html
 
 @app.route('/group/<group_no>', methods=['GET', 'POST'])
 def group(group_no):
