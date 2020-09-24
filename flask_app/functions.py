@@ -120,9 +120,9 @@ def get_part_listings(part: Part, quantity):
         'searchSort': 'P'
     }
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-    print(requests.get(url, params=params).url)
-    html = requests.get(url, params=params, headers=headers).text
-    results = soup(html, 'html.parser').findAll('td', {'valign' : 'TOP'})
+    # print(requests.get(url, params=params).url)
+    html_data = requests.get(url, params=params, headers=headers).text
+    results = soup(html_data, 'html.parser').findAll('td', {'valign' : 'TOP'})
     if len(results) == 0:
         # listings.append(Listing(part.no, part.color_id, quantity, 0, '', ''))
         print('search world')
@@ -138,9 +138,9 @@ def get_part_listings(part: Part, quantity):
             'searchSort': 'P'
         }
         headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-        print(requests.get(url, params=params).url)
-        html = requests.get(url, params=params, headers=headers).text
-        results = soup(html, 'html.parser').findAll('td', {'valign' : 'TOP'})
+        # print(requests.get(url, params=params).url)
+        html_data = requests.get(url, params=params, headers=headers).text
+        results = soup(html_data, 'html.parser').findAll('td', {'valign' : 'TOP'})
     for r in results:
         link = r.find('a')
         price = r.findAll('b')[1].text
@@ -159,7 +159,7 @@ def get_optimized_purchase(set_no):
     missing_parts = get_inventory_set_missing_parts(set_no)
     for part in missing_parts:
         # print(functions.get_part_listings(part))
-        print(part)
+        # print(part)
         quantity = (part.quantity + part.extra_quantity - part.owned_quantity)
         listings = get_part_listings(part, quantity)
         if len(listings) > 0:
@@ -176,7 +176,7 @@ def get_optimized_purchase(set_no):
                 purchase.append(dict(zip(keys, values)))
                 pieces.remove(piece)
     for item in purchase:
-        print(item['part'])
+        # print(item['part'])
         item['part'] = get_inventory_part(set_no, item['part'], item['color'])
     return purchase
 
@@ -347,7 +347,7 @@ def get_inventory_set_missing_parts(set_no):
     missing_parts = []
     for part in parts_list:
         if part.owned_quantity < part.quantity + part.extra_quantity:
-            print(part)
+            # print(part)
             missing_parts.append(part)
     # print(missing_parts)
     return missing_parts

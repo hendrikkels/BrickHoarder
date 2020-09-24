@@ -1,6 +1,5 @@
 from flask import render_template, request, redirect, url_for, flash, make_response
 from flask_app import app, functions
-from flask_caching import Cache
 import io
 import csv
 import json
@@ -15,7 +14,7 @@ purchase = []
 @app.route('/home')
 def home():
     set_price_guides = functions.get_sets_price_guide()
-        # print(set_price_guides)
+    # print(set_price_guides)
     loose_parts_guides = functions.get_loose_parts_price_guide()
     # print(loose_parts_guides)
     return render_template("dashboard.html", set_price_guides=set_price_guides, loose_parts_guides=loose_parts_guides)
@@ -34,11 +33,11 @@ def show_set(set_no):
     set_data = functions.get_inventory_set(set_no=set_no)
     if request.method == 'POST':
         new_quantity = request.form.get('quantity')
-        print(new_quantity)
+        # print(new_quantity)
         part_no = str(request.form.get('part_no'))
         color_id = str(request.form.get('color_id'))
         part = functions.get_inventory_part(set_no=set_no, part_no=part_no, color_id=color_id)
-        print(part)
+        # print(part)
         part.owned_quantity = new_quantity
         functions.insert_inventory_part(part)
         flash("Parts updated", 'success')
@@ -51,13 +50,13 @@ def show_set(set_no):
 @app.route('/set/<set_no>/guide', methods=['GET', 'POST'])
 def set_guide(set_no):
     global purchase 
-    if purchase == []:
-            purchase = functions.get_optimized_purchase(set_no)
+    if not purchase:
+        purchase = functions.get_optimized_purchase(set_no)
     if request.method == 'POST':
         for item in purchase:
             part = item['part']
             part.owned_quantity = part.owned_quantity + int(item['quantity'])
-            print(part.owned_quantity)
+            # print(part.owned_quantity)
             functions.insert_inventory_part(part)
         flash("Set updated, set is now complete", 'success')
         purchase = []
@@ -69,7 +68,7 @@ def set_guide(set_no):
 def group(group_no):
     set_data = functions.get_inventory_set(set_no=group_no)
     parts_list = functions.get_inventory_set_parts(set_no=group_no)
-    print(set_data)
+    # print(set_data)
     return render_template("group_info.html", set_data=set_data, parts_list=parts_list)
 
 
@@ -92,8 +91,8 @@ def remove_part(no):
 @app.route('/import', methods=['POST', 'GET'])
 def import_file():
     if request.method == 'POST':
-        print('post oen')
-        print('pls')
+        # print('post oen')
+        # print('pls')
         f = request.files["file_name"]
         if not f:
             return "No file"
@@ -102,14 +101,14 @@ def import_file():
         csv_input = csv.reader(stream)
         # print("file contents: ", file_contents)
         # print(type(file_contents))
-        print(csv_input)
+        # print(csv_input)
         sets = []
         for row in csv_input:
             sets.append(row[0])
         global import_sets
         import_sets = sets
         return redirect("/import/sets")
-    print("oen")
+    # print("oen")
     return render_template('import.html')
 
 
@@ -121,14 +120,14 @@ def import_file_sets():
         for set in import_sets:
             functions.insert_inventory_set(set)
             parts_list = functions.get_set_parts(set.no)
-            print(set.no)
-            print(parts_list)
+            # print(set.no)
+            # print(parts_list)
             for part in parts_list:
                 functions.insert_inventory_part(part)
         return redirect('/inventory')
     sets = []
     for no in import_sets:
-        print(no)
+        # print(no)
         cur_set = functions.get_set(no)
         if cur_set is not None:
             sets.append(cur_set)
@@ -187,7 +186,7 @@ def add_part(no):
     part = functions.get_part(no)
     if request.method == 'POST':
         # Submit pressed
-        print('submitted')
+        # print('submitted')
         if request.form.get('color_select') is not None:
             color = eval(request.form.get('color_select'))
             color_data = functions.get_color_data(color['id'])
@@ -196,16 +195,16 @@ def add_part(no):
             # CHECK IF THIS WORKS
             color_data = functions.get_color_data(0)
             color_image = "helpe"
-        print(color_data)
+        # print(color_data)
         spinner_quantity = int(request.form.get('quantity'))
-        print(spinner_quantity)
+        # print(spinner_quantity)
         set_no = request.form.get('set_option')
-        print(set_no)
+        # print(set_no)
 
         parts_list = functions.get_inventory_set_parts(set_no)
         for part in parts_list:
             if part.no == no and part.color_id == str(color_data['color_id']):
-                print('contains code')
+                # print('contains code')
                 part.set_no = set_no
                 # Increase quantity
                 part.owned_quantity = part.owned_quantity + spinner_quantity
@@ -226,7 +225,7 @@ def add_part(no):
         return redirect(url_for('inventory'))
     else:
         part_colors = functions.get_known_part_colors(no)
-        print(part_colors)
+        # print(part_colors)
         set_list = functions.get_inventory_set_list()
         return render_template('add_part.html', part_no=no, part_color_images=part_colors, set_list=set_list)
 
