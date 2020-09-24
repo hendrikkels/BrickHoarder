@@ -48,15 +48,23 @@ def show_set(set_no):
 def set_guide(set_no):
     missing_parts = functions.get_inventory_set_missing_parts(set_no)
     for part in missing_parts:
-        print(functions.get_part_listings(part))
-    url = 'http://www.bricklink.com/search.asp'
-    params = {
-        'pg': 1,
-        'itemType': 'P',
-        'sz': 10,
-        'searchSort': 'P'
-    }
-    html = requests.get(url, params=params).text
+        # print(functions.get_part_listings(part))
+        print(part)
+        url = 'http://www.bricklink.com/search.asp'
+        params = {
+            'q': str(part.no),
+            'sellerCountryID': 'ZA',
+            'qMin': 12,
+            'pg': 1,
+            'itemType': 'P',
+            'sellerLoc': 'C',
+            'viewFrom': 'sf',
+            'sz': 10,
+            'searchSort': 'P'
+        }
+        headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+        print(requests.get(url, params=params).url)
+        html = requests.get(url, params=params, headers=headers).text
     return html
 
 @app.route('/group/<group_no>', methods=['GET', 'POST'])
@@ -84,7 +92,7 @@ def remove_part(no):
 
 
 @app.route('/import', methods=['POST', 'GET'])
-def report():
+def import_file():
     if request.method == 'POST':
         print('post oen')
         print('pls')
@@ -108,7 +116,7 @@ def report():
 
 
 @app.route('/import/sets', methods=['POST', 'GET'])
-def import_sets():
+def import_file_sets():
     global import_sets
     if request.method == 'POST':
         # ADD DIE SETS NA DIE DATABASIS
