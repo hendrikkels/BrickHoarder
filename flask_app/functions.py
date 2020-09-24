@@ -2,11 +2,15 @@ import atexit
 import datetime
 
 from apscheduler.schedulers.background import BackgroundScheduler
+from bs4 import BeautifulSoup as soup
+from collections import Counter
+from copy import copy
 
 from flask_app import bricklink_api, db
-from flask_app.models import Set, Part
+from flask_app.models import Set, Part, Listing
 
 import html
+import requests
 
 color_list = None
 
@@ -100,12 +104,81 @@ def get_part_price_guide(part: Part):
     return None
 
 
-def get_part_listings(part: Part):
-    response = bricklink_api.catalog_item.get_price_guide("Part", no=part.no, color_id=part.color_id, guide_type='stock', currency_code='ZAR')
-    if response['meta']['code'] != 400:
-        response_data = response['data']['price_detail']
-        return response_data
-    return None
+def get_part_listings(part: Part, quantity):
+    listings = []
+    url = 'http://www.bricklink.com/search.asp'
+    params = {
+        'q': str(part.no),
+        'sellerCountryID': 'ZA',
+        'qMin': quantity,
+        'pg': 1,
+        'itemType': 'P',
+        'colorID': part.color_id,
+        'sellerLoc': 'C',
+        'viewFrom': 'sf',
+        'sz': 10,
+        'searchSort': 'P'
+    }
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+    print(requests.get(url, params=params).url)
+    html = requests.get(url, params=params, headers=headers).text
+    results = soup(html, 'html.parser').findAll('td', {'valign' : 'TOP'})
+    if len(results) == 0:
+        # listings.append(Listing(part.no, part.color_id, quantity, 0, '', ''))
+        print('search world')
+        params = {
+            'q': str(part.no),
+            'qMin': quantity,
+            'pg': 1,
+            'itemType': 'P',
+            'colorID': part.color_id,
+            'sellerLoc': 'C',
+            'viewFrom': 'sf',
+            'sz': 10,
+            'searchSort': 'P'
+        }
+        headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+        print(requests.get(url, params=params).url)
+        html = requests.get(url, params=params, headers=headers).text
+        results = soup(html, 'html.parser').findAll('td', {'valign' : 'TOP'})
+    for r in results:
+        link = r.find('a')
+        price = r.findAll('b')[1].text
+        price = float(price.replace('ZAR', ''))
+        listing = Listing(part.no, part.color_id, quantity, price,
+                        link.text, link['href'])
+        listings.append(listing)
+        # print(listings)
+    return listings
+    # return html
+
+def get_optimized_purchase(set_no):
+    stores = []
+    pieces = []
+    purchase = []
+    missing_parts = get_inventory_set_missing_parts(set_no)
+    for part in missing_parts:
+        # print(functions.get_part_listings(part))
+        print(part)
+        quantity = (part.quantity + part.extra_quantity - part.owned_quantity)
+        listings = get_part_listings(part, quantity)
+        if len(listings) > 0:
+            stores = stores + [o.name for o in listings]
+            pieces.append(listings)
+    best_stores = Counter(stores)
+    for store, val in best_stores.most_common():
+        temp_pieces = copy(pieces)
+        for piece in temp_pieces:
+            listing = [x for x in piece if x.name == store]
+            if len(listing) > 0:
+                keys = ['part', 'color', 'quantity', 'price', 'store_name', 'url']
+                values = str(listing[0]).split(",")
+                purchase.append(dict(zip(keys, values)))
+                pieces.remove(piece)
+    for item in purchase:
+        print(item['part'])
+        item['part'] = get_inventory_part(set_no, item['part'], item['color'])
+    return purchase
 
 
 def check_set_completeness(set_no):
@@ -160,7 +233,7 @@ def get_set(no):
               html.unescape(response_data['name']),
               response_data['type'],
               response_data['category_id'],
-              bricklink_api.category.get_category(response_data['category_id'])['data']['category_name'],
+              html.unescape(bricklink_api.category.get_category(response_data['category_id'])['data']['category_name']),
               response_data['image_url'].replace("//img.", "http://www."),
               response_data['thumbnail_url'].replace("//img.", "http://www."),
               response_data['weight'],

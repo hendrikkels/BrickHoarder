@@ -90,6 +90,21 @@ class Set(db.Model):
 db.create_all()
 
 
+class Listing(object):
+
+    def __init__(self, part_no, color_id, qty, price, name, link):
+        self.part_no = part_no
+        self.color_id = color_id
+        self.qty = qty
+        self.price = price
+        self.name = name
+        self.link = 'http://bricklink.com' + link
+
+    def __str__(self):
+        output = '{part_no},{color_id},{qty},{price},"{name}",{link}'
+        return output.format(**self.__dict__)
+
+
 lego_box = Set('GRP0', 'Lego Crate', 'GROUP', 'Misc.', 'Misc.',
                'https://cdn.stylepark.com/articles/2008/toy-of-the-century/v283170_958_992_800-1.jpg?mtime=20160926224251&focal=none',
                'https://cdn.stylepark.com/articles/2008/toy-of-the-century/v283170_958_992_800-1.jpg?mtime=20160926224251&focal=none',

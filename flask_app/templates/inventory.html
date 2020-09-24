@@ -44,7 +44,7 @@
                 </thead>
                 <tbody>
                 {% for set in set_list %}
-                    <tr onclick="window.location.href = '/set/{{ set.no }}';">
+                    <tr onclick="window.location.assign('/set/{{ set.no }}'); ">
                         <td>{{ set.no }}</td>
                         <td class="p-1 fit">
                             <img src="{{set.thumbnail_url}}" class="img-fluid img-thumbnail crop-table-lg" alt="sheep">

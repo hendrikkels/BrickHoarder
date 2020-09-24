@@ -1,12 +1,15 @@
 from flask import render_template, request, redirect, url_for, flash, make_response
 from flask_app import app, functions
+from flask_caching import Cache
 import io
 import csv
 import json
 
 import requests
 
+# Global Variables
 import_sets = []
+purchase = []
 
 @app.route('/')
 @app.route('/home')
@@ -44,28 +47,23 @@ def show_set(set_no):
     parts_list = functions.get_inventory_set_parts(set_no=set_no)
     return render_template('set_info.html', set_data=set_data, parts_list=parts_list)
 
+
 @app.route('/set/<set_no>/guide', methods=['GET', 'POST'])
 def set_guide(set_no):
-    missing_parts = functions.get_inventory_set_missing_parts(set_no)
-    for part in missing_parts:
-        # print(functions.get_part_listings(part))
-        print(part)
-        url = 'http://www.bricklink.com/search.asp'
-        params = {
-            'q': str(part.no),
-            'sellerCountryID': 'ZA',
-            'qMin': 12,
-            'pg': 1,
-            'itemType': 'P',
-            'sellerLoc': 'C',
-            'viewFrom': 'sf',
-            'sz': 10,
-            'searchSort': 'P'
-        }
-        headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-        print(requests.get(url, params=params).url)
-        html = requests.get(url, params=params, headers=headers).text
-    return html
+    global purchase 
+    if purchase == []:
+            purchase = functions.get_optimized_purchase(set_no)
+    if request.method == 'POST':
+        for item in purchase:
+            part = item['part']
+            part.owned_quantity = part.owned_quantity + int(item['quantity'])
+            print(part.owned_quantity)
+            functions.insert_inventory_part(part)
+        flash("Set updated, set is now complete", 'success')
+        purchase = []
+        return redirect('/inventory')
+    return render_template('set_guide.html', set_no=set_no, purchase=purchase)
+
 
 @app.route('/group/<group_no>', methods=['GET', 'POST'])
 def group(group_no):

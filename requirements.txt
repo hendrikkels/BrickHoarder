@@ -4,3 +4,4 @@ Requests
 requests_oauthlib
 yarl
 APScheduler
+bs4

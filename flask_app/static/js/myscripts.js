@@ -1,3 +1,5 @@
+// window.location.reload(false); 
+
 
 // disable text selection
 document.onselectstart = function() {

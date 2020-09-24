@@ -53,7 +53,7 @@
                             </thead>
                             <tbody>
                             {% for set in set_price_guides %}
-                                <tr onclick="window.location.href = '/set/{{ set.item.no }}';">
+                                <tr onclick="window.location.assign('/set/{{ set.item.no }}');">
                                     <td>{{ set.item.no }}</td>
                                     <td class="fit">
                                         <img src="{{ set.item.thumbnail_url }}" class="img-fluid img-thumbnail crop-table" alt="sheep">
@@ -98,7 +98,7 @@
                             </thead>
                             <tbody>
                             {% for part in loose_parts_guides %}
-                                <tr onclick="window.location.href = '/set/{{ part.item.set_no }}';">
+                                <tr onclick="window.location.assign('/set/{{ part.item.set_no }})');">
                                     <td>{{ part.item.no }}</td>
                                     <td class="fit">
                                         <img src="{{ part.item.thumbnail_url }}" class="img-fluid img-thumbnail crop-table" alt="sheep">
