@@ -20,6 +20,9 @@ cached_parts_list = None
 set_price_guides = None
 loose_parts_guides = None
 
+# Batch process global scheduler variable
+scheduler = BackgroundScheduler(daemon=True)
+
 
 def get_sets_price_guide():
     global set_price_guides
@@ -51,7 +54,7 @@ def update_sets_price_guide():
                 price_guide['avg_price_used'] = round(float(used_price_guide['avg_price']), 2)
             if price_guide['avg_price'] != 0:
                 price_guides.append(price_guide)
-    price_guides = sorted(price_guides, key=lambda i: i['avg_price'], reverse=True)[:5]
+    price_guides = sorted(price_guides, key=lambda i: i['avg_price'], reverse=True)
     set_price_guides = price_guides
 
 
@@ -92,7 +95,7 @@ def update_loose_parts_price_guide():
             price_guide['price_detail'] = 0
             if price_guide['avg_price'] != 0:
                 price_guides.append(price_guide)
-    price_guides = sorted(price_guides, key=lambda i: i['avg_price'], reverse=True)[:5]
+    price_guides = sorted(price_guides, key=lambda i: i['avg_price'], reverse=True)
     loose_parts_guides = price_guides
 
 
@@ -151,6 +154,7 @@ def get_part_listings(part: Part, quantity):
         # print(listings)
     return listings
     # return html
+
 
 def get_optimized_purchase(set_no):
     stores = []
@@ -224,11 +228,12 @@ def get_set(no):
     if '-' not in str(no):
         no = "%s-1" % no
     response = bricklink_api.catalog_item.get_item("Set", no)
+    print(response)
+    if response['meta']['code'] == 400:
+        return None
     response_data = response['data']
     if response_data == {}:
         return None
-
-
     set = Set(no,
               html.unescape(response_data['name']),
               response_data['type'],
@@ -252,7 +257,6 @@ def get_part(no):
     response_data = response['data']
     if response_data == {}:
         return None
-
     part = Part(response_data['no'],
                 None,
                 html.unescape(response_data['name']),
@@ -274,18 +278,17 @@ def get_part(no):
 def get_set_parts(no):
     if '-' not in str(no):
         no = "%s-1" % no
-
     global cached_parts_set_no
     global cached_parts_list
     if no == cached_parts_set_no:
         return cached_parts_list
 
     response = bricklink_api.catalog_item.get_subsets("Set", no, break_minifigs=True)
+    print(response)
     response_data = response['data']
     if response_data == {}:
         return None
     response_data = filter(lambda x: x['entries'][0]['item']['type'] != 'MINIFIG', response_data)
-
     parts_list = []
     for line in response_data:
         part_data = line['entries'][0]
@@ -414,16 +417,25 @@ def delete_inventory_part(set_no, part_no, color_id):
     return db.session.commit()
 
 
+# Batch processes
+def start_jobs_now():
+    global scheduler
+    for job in scheduler.get_jobs():
+        job.modify(next_run_time=datetime.datetime.now())
+
+
+def update_dashboard():
+    global scheduler
+    scheduler.get_job(job_id="update_sets").modify(next_run_time=datetime.datetime.now())
+    scheduler.get_job(job_id="update_parts").modify(next_run_time=datetime.datetime.now())
+
+
 # KICK OFF BACKGROUND PROCESSES
-scheduler = BackgroundScheduler(daemon=True)
+scheduler.add_job(func=update_color_list, trigger="interval", id="update_colors", hours=3, max_instances=1)
+scheduler.add_job(func=update_sets_price_guide, trigger="interval", id="update_sets", hours=1, max_instances=1)
+scheduler.add_job(func=update_loose_parts_price_guide, trigger="interval", id="update_parts", hours=1, max_instances=1)
 
-scheduler.add_job(func=update_color_list, trigger="interval", hours=1, max_instances=1)
-scheduler.add_job(func=update_sets_price_guide, trigger="interval", hours=1, max_instances=1)
-scheduler.add_job(func=update_loose_parts_price_guide, trigger="interval", hours=1, max_instances=1)
-
-print(scheduler.get_jobs())
-for job in scheduler.get_jobs():
-    job.modify(next_run_time=datetime.datetime.now())
+start_jobs_now()
 
 scheduler.start()
 

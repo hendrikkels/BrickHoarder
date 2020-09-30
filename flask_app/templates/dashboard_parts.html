@@ -22,7 +22,7 @@
         {% endwith %}
     </div>
 
-    {% if set_price_guides is none and loose_parts_guides is none %}
+    {% if loose_parts_guides is none %}
 
         <div class="d-flex justify-content-center mb-5">
             <div class="spinner-border" role="status">
@@ -30,57 +30,7 @@
             </div>
         </div>
 
-
     {% else %}
-
-        {% if set_price_guides is not none %}
-            {% if set_price_guides|length > 0 %}
-
-                <div class="card border-0 shadow">
-                    <div class="card-header bg-light rounded-top">
-                        Most valuable complete sets in inventory
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-condensed table-hover mb-0" id="searchable_table">
-                            <thead class="thead-light">
-                            <tr>
-                                <th scope="col">No</th>
-                                <th scope="col">Image</th>
-                                <th scope="col">Name</th>
-                                <th class="text-right" scope="col">Average Price (New)</th>
-                                <th class="text-right" scope="col">Average Price (Old)</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for set in set_price_guides %}
-                                <tr onclick="window.location.assign('/set/{{ set.item.no }}');">
-                                    <td>{{ set.item.no }}</td>
-                                    <td class="fit">
-                                        <img src="{{ set.item.thumbnail_url }}" class="img-fluid img-thumbnail crop-table" alt="sheep">
-                                    </td>
-                                    <td>{{ set.item.name }}</td>
-                                    <td class="text-right">{{ set.currency_code }} {{ "%.2f"|format(set.avg_price) }}</td>
-                                    <td class="text-right">{{ set.currency_code }} {{ "%.2f"|format(set.avg_price_used) }}</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="card-footer">
-                        <form action="/home/sets/" method="POST">
-                            <button type="submit" class="btn btn-sm btn-primary">View prices for all sets</button>
-                        </form>
-                    </div>
-                </div>
-            {% endif %}
-
-        {% else %}
-            <div class="d-flex justify-content-center mb-5">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
-        {% endif %}
 
         {% if loose_parts_guides is not none %}
             {% if loose_parts_guides|length > 0 %}
@@ -118,8 +68,8 @@
                         </table>
                     </div>
                     <div class="card-footer">
-                        <form action="/home/parts/" method="POST">
-                            <button type="submit" class="btn btn-sm btn-primary">View prices for all parts</button>
+                        <form action="/home/parts/" method="GET">
+                            <button type="submit" class="btn btn-sm btn-primary">Refresh prices</button>
                         </form>
                     </div>
                 </div>

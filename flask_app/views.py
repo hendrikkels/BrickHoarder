@@ -2,22 +2,46 @@ from flask import render_template, request, redirect, url_for, flash, make_respo
 from flask_app import app, functions
 import io
 import csv
-import json
-
-import requests
 
 # Global Variables
 import_sets = []
 purchase = []
 
+
 @app.route('/')
 @app.route('/home')
 def home():
     set_price_guides = functions.get_sets_price_guide()
-    # print(set_price_guides)
+    if set_price_guides is not None:
+        set_price_guides = set_price_guides[:5]
+    print(set_price_guides)
     loose_parts_guides = functions.get_loose_parts_price_guide()
-    # print(loose_parts_guides)
+    if loose_parts_guides is not None:
+        loose_parts_guides = loose_parts_guides[:5]
+    print(loose_parts_guides)
+
+    # return "hi"
     return render_template("dashboard.html", set_price_guides=set_price_guides, loose_parts_guides=loose_parts_guides)
+
+
+@app.route('/home/sets/', methods=['GET', 'POST'])
+def home_sets():
+    if request.method == "GET":
+        functions.update_dashboard()
+    set_price_guides = functions.get_sets_price_guide()
+    # print(set_price_guides)
+    # print(loose_parts_guides)
+    return render_template("dashboard_sets.html", set_price_guides=set_price_guides)
+
+
+@app.route('/home/parts/', methods=['GET', 'POST'])
+def home_parts():
+    if request.method == "GET":
+        functions.update_dashboard()
+    loose_parts_guides = functions.get_loose_parts_price_guide()
+    # print(set_price_guides)
+    # print(loose_parts_guides)
+    return render_template("dashboard.html", loose_parts_guides=loose_parts_guides)
 
 
 @app.route('/inventory')
