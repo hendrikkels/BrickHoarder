@@ -59,8 +59,16 @@
                                         <img src="{{ set.item.thumbnail_url }}" class="img-fluid img-thumbnail crop-table" alt="sheep">
                                     </td>
                                     <td>{{ set.item.name }}</td>
-                                    <td class="text-right">{{ set.currency_code }} {{ "%.2f"|format(set.avg_price) }}</td>
-                                    <td class="text-right">{{ set.currency_code }} {{ "%.2f"|format(set.avg_price_used) }}</td>
+                                    {% if set.avg_price > 0 %}
+                                        <td class="text-right">{{ set.currency_code }} {{ "%.2f"|format(set.avg_price) }}</td>
+                                    {% else %}
+                                        <td class="text-right">N/A</td>
+                                    {% endif %}
+                                    {% if set.avg_price_used > 0 %}
+                                        <td class="text-right">{{ set.currency_code }} {{ "%.2f"|format(set.avg_price_used) }}</td>
+                                    {% else %}
+                                        <td class="text-right">N/A</td>
+                                    {% endif %}
                                 </tr>
                             {% endfor %}
                             </tbody>
