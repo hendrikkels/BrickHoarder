@@ -19,15 +19,20 @@ def home():
     if loose_parts_guides is not None:
         loose_parts_guides = loose_parts_guides[:5]
     print(loose_parts_guides)
-
     # return "hi"
     return render_template("dashboard.html", set_price_guides=set_price_guides, loose_parts_guides=loose_parts_guides)
 
 
+@app.route('/home/refresh/', methods=["GET", "POST"])
+def home_refresh():
+    if request.method == "POST":
+        print('updating now')
+        functions.update_dashboard()
+    return redirect('/home')
+
+
 @app.route('/home/sets/', methods=['GET', 'POST'])
 def home_sets():
-    if request.method == "GET":
-        functions.update_dashboard()
     set_price_guides = functions.get_sets_price_guide()
     # print(set_price_guides)
     # print(loose_parts_guides)
@@ -36,12 +41,10 @@ def home_sets():
 
 @app.route('/home/parts/', methods=['GET', 'POST'])
 def home_parts():
-    if request.method == "GET":
-        functions.update_dashboard()
     loose_parts_guides = functions.get_loose_parts_price_guide()
     # print(set_price_guides)
     # print(loose_parts_guides)
-    return render_template("dashboard.html", loose_parts_guides=loose_parts_guides)
+    return render_template("dashboard_parts.html", loose_parts_guides=loose_parts_guides)
 
 
 @app.route('/inventory')

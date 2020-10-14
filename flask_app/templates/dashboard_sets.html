@@ -4,7 +4,17 @@
 
     <div class="jumbotron shadow">
         <h1>Dashboard</h1>
-        Overview and insight information
+        <div class="row no-gutters">
+            <div class="col-6">
+
+                Overview and insight information
+            </div>
+            <div class="col-6">
+                <form class="float-right " action="/home/refresh/" method="post">
+                    <button class="btn btn-sm btn-primary" type="submit">Update prices</button>
+                </form>
+            </div>
+        </div>
     </div>
 
     <div>
@@ -73,11 +83,6 @@
                             {% endfor %}
                             </tbody>
                         </table>
-                    </div>
-                    <div class="card-footer">
-                        <form action="/home/sets/" method="GET">
-                            <button type="submit" class="btn btn-sm btn-primary">Refresh prices</button>
-                        </form>
                     </div>
                 </div>
             {% endif %}

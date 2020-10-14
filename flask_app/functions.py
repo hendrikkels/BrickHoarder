@@ -425,7 +425,10 @@ def start_jobs_now():
 
 
 def update_dashboard():
-    global scheduler
+    global scheduler, set_price_guides, loose_parts_guides
+    print('updating dashboard, cache cleared')
+    set_price_guides = None
+    loose_parts_guides = None
     scheduler.get_job(job_id="update_sets").modify(next_run_time=datetime.datetime.now())
     scheduler.get_job(job_id="update_parts").modify(next_run_time=datetime.datetime.now())
 
