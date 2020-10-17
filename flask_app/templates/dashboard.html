@@ -6,7 +6,6 @@
         <h1>Dashboard</h1>
         <div class="row no-gutters">
             <div class="col-6">
-
                 Overview and insight information
             </div>
             <div class="col-6">
@@ -34,15 +33,11 @@
 
     {% if set_price_guides is none and loose_parts_guides is none %}
 
-{#        <div class="d-flex justify-content-center mb-5">#}
-{#            <div class="spinner-border" role="status">#}
-{#                <strong>Loading...</strong>#}
-{#                <span class="sr-only">Loading...</span>#}
-{#            </div>#}
-{#        </div>#}
-        <div class="d-flex align-items-center">
-            <strong>Loading...</strong>
-            <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
+        <div class="alert alert-info" role="alert">
+            <div class="d-flex align-items-center">
+                <div class="spinner-grow spinner-grow-sm mr-4" role="status" aria-hidden="true"></div>
+                <strong>Fetching updated price data, please be patient...</strong>
+            </div>
         </div>
 
     {% else %}
@@ -98,12 +93,14 @@
             {% endif %}
 
         {% else %}
-            <div class="d-flex justify-content-center mb-5">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading...</span>
+
+            <div class="alert alert-info" role="alert">
+                <div class="d-flex align-items-center">
+                    <div class="spinner-grow spinner-grow-sm mr-4" role="status" aria-hidden="true"></div>
+                    <strong>Fetching set price data, please be patient...</strong>
                 </div>
-                <strong class="loading-text">Collecting set data, please be patient.</strong>
             </div>
+
         {% endif %}
 
         {% if loose_parts_guides is not none %}
@@ -127,7 +124,7 @@
                             </thead>
                             <tbody>
                             {% for part in loose_parts_guides %}
-                                <tr onclick="window.location.assign('/set/{{ part.item.set_no }})');">
+                                <tr onclick="window.location.assign('/set/{{ part.item.set_no }}');">
                                     <td>{{ part.item.no }}</td>
                                     <td class="fit">
                                         <img src="{{ part.item.thumbnail_url }}" class="img-fluid img-thumbnail crop-table" alt="sheep">
@@ -153,11 +150,14 @@
                 </div>
             {% endif %}
         {% else %}
-            <div class="d-flex justify-content-center mb-5">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading...</span>
+
+            <div class="alert alert-info" role="alert">
+                <div class="d-flex align-items-center">
+                    <div class="spinner-grow spinner-grow-sm mr-4" role="status" aria-hidden="true"></div>
+                    <strong>Fetching parts price data, please be patient...</strong>
                 </div>
             </div>
+
         {% endif %}
 
     {% endif %}
