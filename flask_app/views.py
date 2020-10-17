@@ -131,7 +131,8 @@ def import_file():
         # print(csv_input)
         sets = []
         for row in csv_input:
-            sets.append(row[0])
+            if row is not None:
+                sets.append(row[0].replace('"', '').replace('\'', ''))
         global import_sets
         import_sets = sets
         return redirect("/import/sets")

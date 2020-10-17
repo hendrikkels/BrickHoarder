@@ -35,6 +35,10 @@ p {
     margin-bottom: 3rem;
 }
 
+.loading-text {
+    align-self: center;
+}
+
 footer {
     margin-top: 3rem;
 }
