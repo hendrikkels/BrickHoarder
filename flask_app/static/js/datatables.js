@@ -1354,7 +1354,7 @@
 	var _re_date = /^\d{2,4}[\.\/\-]\d{1,2}[\.\/\-]\d{1,2}([T ]{1}\d{1,2}[:\.]\d{2}([\.:]\d{2})?)?$/;
 	
 	// Escape regular expression special characters
-	var _re_escape_regex = new RegExp( '(\\' + [ '/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\', '$', '^', '-' ].join('|\\') + ')', 'g' );
+	var _re_escape_regex = new RegExp( '(\\' + [ '/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\', '$', '^', '-', 'R', 'N/A' ].join('|\\') + ')', 'g' );
 	
 	// http://en.wikipedia.org/wiki/Foreign_exchange_market
 	// - \u20BD - Russian ruble.

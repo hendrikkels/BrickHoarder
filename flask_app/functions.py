@@ -45,6 +45,8 @@ def update_sets_price_guide():
         if price_guide is not None:
             used_price_guide = get_used_set_price_guide(set)
             price_guide['item'] = set
+            if price_guide['currency_code'] == 'ZAR':
+                price_guide['currency_code'] = 'R'
             price_guide['min_price'] = round(float(price_guide['min_price']), 2)
             price_guide['max_price'] = round(float(price_guide['max_price']), 2)
             price_guide['avg_price'] = round(float(price_guide['avg_price']), 2)
@@ -88,6 +90,8 @@ def update_loose_parts_price_guide():
         price_guide = get_part_price_guide(part)
         if price_guide is not None:
             price_guide['item'] = part
+            if price_guide['currency_code'] == 'ZAR':
+                price_guide['currency_code'] = 'R'
             price_guide['min_price'] = round(float(price_guide['min_price']), 2)
             price_guide['max_price'] = round(float(price_guide['max_price']), 2)
             price_guide['avg_price'] = round(float(price_guide['avg_price']), 2)

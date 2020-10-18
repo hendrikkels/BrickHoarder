@@ -43,8 +43,8 @@
                             <th scope="col">No</th>
                             <th scope="col">Image</th>
                             <th scope="col">Name</th>
-                            <th class="text-right" scope="col">Average Price (New)</th>
-                            <th class="text-right" scope="col">Average Price (Old)</th>
+                            <th class="text-right" scope="col">Average Price New</th>
+                            <th class="text-right" scope="col">Average Price Used</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -56,12 +56,12 @@
                                 </td>
                                 <td>{{ set.item.name }}</td>
                                 {% if set.avg_price > 0 %}
-                                    <td class="text-right">{{ set.currency_code }} {{ "%.2f"|format(set.avg_price) }}</td>
+                                    <td class="text-right">{{ set.currency_code }}{{ "%.2f"|format(set.avg_price) }}</td>
                                 {% else %}
                                     <td class="text-right">N/A</td>
                                 {% endif %}
                                 {% if set.avg_price_used > 0 %}
-                                    <td class="text-right">{{ set.currency_code }} {{ "%.2f"|format(set.avg_price_used) }}</td>
+                                    <td class="text-right">{{ set.currency_code }}{{ "%.2f"|format(set.avg_price_used) }}</td>
                                 {% else %}
                                     <td class="text-right">N/A</td>
                                 {% endif %}

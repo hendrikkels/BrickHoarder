@@ -59,7 +59,7 @@
                                 <td>{{ part.item.color_name }}</td>
                                 <td>{{ part.item.color_type }}</td>
                                 {% if part.avg_price > 0 %}
-                                    <td class="text-right">{{ part.currency_code }} {{ "%.2f"|format(part.avg_price) }}</td>
+                                    <td class="text-right">{{ part.currency_code }}{{ "%.2f"|format(part.avg_price) }}</td>
                                 {% else %}
                                     <td class="text-right">N/A</td>
                                 {% endif %}
