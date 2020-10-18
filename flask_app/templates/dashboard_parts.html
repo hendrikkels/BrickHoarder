@@ -61,7 +61,7 @@
                                 {% if part.avg_price > 0 %}
                                     <td class="text-right">{{ part.currency_code }}{{ "%.2f"|format(part.avg_price) }}</td>
                                 {% else %}
-                                    <td class="text-right">N/A</td>
+                                    <td class="text-right"></td>
                                 {% endif %}
                             </tr>
                         {% endfor %}

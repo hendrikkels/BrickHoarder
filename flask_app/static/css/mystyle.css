@@ -7,7 +7,7 @@ html {
   and (max-device-width: 480px)
   and (-webkit-min-device-pixel-ratio: 2) {
     html {
-        font-size: 9px;
+        font-size: 12px;
     }
 }
 
