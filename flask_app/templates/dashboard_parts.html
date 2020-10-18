@@ -4,17 +4,7 @@
 
     <div class="jumbotron shadow">
         <h1>Dashboard</h1>
-        <div class="row no-gutters">
-            <div class="col-6">
-
-                Overview and insight information
-            </div>
-            <div class="col-6">
-                <form class="float-right " action="/home/refresh/" method="post">
-                    <button class="btn btn-sm btn-primary" type="submit">Update prices</button>
-                </form>
-            </div>
-        </div>
+        Average resale value of loose parts in inventory
     </div>
 
     <div>
@@ -34,9 +24,10 @@
 
     {% if loose_parts_guides is none %}
 
-        <div class="d-flex justify-content-center mb-5">
-            <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
+        <div class="alert alert-info" role="alert">
+            <div class="d-flex align-items-center">
+                <div class="spinner-grow spinner-grow-sm mr-4" role="status" aria-hidden="true"></div>
+                <strong>Fetching updated price data, please be patient...</strong>
             </div>
         </div>
 
@@ -46,47 +37,43 @@
             {% if loose_parts_guides|length > 0 %}
 
                 <div class="card border-0 shadow">
-                    <div class="card-header bg-light rounded-top">
-                        Most valuable loose parts in 'LEGO Crate'
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-condensed table-hover mb-0" id="searchable_table">
-                            <thead class="thead-light">
-                            <tr>
-                                <th scope="col">No</th>
-                                <th scope="col">Image</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Color</th>
-                                <th scope="col">Type</th>
-                                <th scope="col" class="text-right">Average Sell Price</th>
+                    <table class="table table-condensed table-hover mb-0 mydatatable">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">No</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Color</th>
+                            <th scope="col">Type</th>
+                            <th scope="col" class="text-right">Average Sell Price</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for part in loose_parts_guides %}
+                            <tr onclick="window.location.assign('/set/{{ part.item.set_no }})');">
+                                <td>{{ part.item.no }}</td>
+                                <td class="fit">
+                                    <img src="{{ part.item.thumbnail_url }}" class="img-fluid img-thumbnail crop-table" alt="sheep">
+                                </td>
+                                <td>{{ part.item.name }}</td>
+                                <td>{{ part.item.color_name }}</td>
+                                <td>{{ part.item.color_type }}</td>
+                                {% if part.avg_price > 0 %}
+                                    <td class="text-right">{{ part.currency_code }} {{ "%.2f"|format(part.avg_price) }}</td>
+                                {% else %}
+                                    <td class="text-right">N/A</td>
+                                {% endif %}
                             </tr>
-                            </thead>
-                            <tbody>
-                            {% for part in loose_parts_guides %}
-                                <tr onclick="window.location.assign('/set/{{ part.item.set_no }})');">
-                                    <td>{{ part.item.no }}</td>
-                                    <td class="fit">
-                                        <img src="{{ part.item.thumbnail_url }}" class="img-fluid img-thumbnail crop-table" alt="sheep">
-                                    </td>
-                                    <td>{{ part.item.name }}</td>
-                                    <td>{{ part.item.color_name }}</td>
-                                    <td>{{ part.item.color_type }}</td>
-                                    {% if part.avg_price > 0 %}
-                                        <td class="text-right">{{ part.currency_code }} {{ "%.2f"|format(part.avg_price) }}</td>
-                                    {% else %}
-                                        <td class="text-right">N/A</td>
-                                    {% endif %}
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             {% endif %}
         {% else %}
-            <div class="d-flex justify-content-center mb-5">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading...</span>
+            <div class="alert alert-info" role="alert">
+                <div class="d-flex align-items-center">
+                    <div class="spinner-grow spinner-grow-sm mr-4" role="status" aria-hidden="true"></div>
+                    <strong>Fetching updated price data, please be patient...</strong>
                 </div>
             </div>
         {% endif %}

@@ -4,16 +4,7 @@
 
     <div class="jumbotron shadow">
         <h1>Dashboard</h1>
-        <div class="row no-gutters">
-            <div class="col-6">
-                Overview and insight information
-            </div>
-            <div class="col-6">
-                <form class="float-right " action="/home/refresh/" method="post">
-                    <button class="btn btn-sm btn-primary" type="submit">Update prices</button>
-                </form>
-            </div>
-        </div>
+        Overview and insight information
     </div>
 
     <div>
@@ -42,123 +33,135 @@
 
     {% else %}
 
-        {% if set_price_guides is not none %}
-
-            {% if set_price_guides|length > 0 %}
-
-                <div class="card border-0 shadow">
-                    <div class="card-header bg-light rounded-top">
-                        Most valuable complete sets in inventory
+        <div class="card border-0 shadow">
+            <div class="card-header bg-light rounded-top">
+                <div class="row no-gutters">
+                    <div class="col-6">
+                        <ul class="nav nav-tabs card-header-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active border-bottom text-secondary" data-toggle="tab" href="#sets">Sets</a>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link border-bottom text-secondary" data-toggle="tab" href="#parts">Parts</a>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table table-condensed table-hover mb-0" id="searchable_table">
-                            <thead class="thead-light">
-                            <tr>
-                                <th scope="col">No</th>
-                                <th scope="col">Image</th>
-                                <th scope="col">Name</th>
-                                <th class="text-right" scope="col">Average Price (New)</th>
-                                <th class="text-right" scope="col">Average Price (Old)</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for set in set_price_guides %}
-                                <tr onclick="window.location.assign('/set/{{ set.item.no }}');">
-                                    <td>{{ set.item.no }}</td>
-                                    <td class="fit">
-                                        <img src="{{ set.item.thumbnail_url }}" class="img-fluid img-thumbnail crop-table" alt="sheep">
-                                    </td>
-                                    <td>{{ set.item.name }}</td>
-                                    {% if set.avg_price > 0 %}
-                                        <td class="text-right">{{ set.currency_code }} {{ "%.2f"|format(set.avg_price) }}</td>
-                                    {% else %}
-                                        <td class="text-right">N/A</td>
-                                    {% endif %}
-                                    {% if set.avg_price_used > 0 %}
-                                        <td class="text-right">{{ set.currency_code }} {{ "%.2f"|format(set.avg_price_used) }}</td>
-                                    {% else %}
-                                        <td class="text-right">N/A</td>
-                                    {% endif %}
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="card-footer">
-                        <form action="/home/sets/" method="GET">
-                            <button type="submit" class="btn btn-sm btn-primary">View prices for all sets</button>
+                    <div class="col-6">
+                        <form class="float-right " action="/home/refresh/" method="post">
+                            <button class="btn btn-sm btn-primary" type="submit">Update prices</button>
                         </form>
                     </div>
                 </div>
-            {% endif %}
 
-        {% else %}
 
-            <div class="alert alert-info" role="alert">
-                <div class="d-flex align-items-center">
-                    <div class="spinner-grow spinner-grow-sm mr-4" role="status" aria-hidden="true"></div>
-                    <strong>Fetching set price data, please be patient...</strong>
+                {#Most valuable loose parts in 'LEGO Crate'#}
+            </div>
+            <div class="tab-content">
+                <div id="sets" class="tab-pane active">
+                    {% if set_price_guides is not none %}
+                        {% if set_price_guides|length > 0 %}
+                            <div class="table-responsive">
+                                <table class="table table-condensed table-hover mb-0" id="searchable_table">
+                                    <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Name</th>
+                                        <th class="text-right" scope="col">Average Price (New)</th>
+                                        <th class="text-right" scope="col">Average Price (Old)</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for set in set_price_guides %}
+                                        <tr onclick="window.location.assign('/set/{{ set.item.no }}');">
+                                            <td>{{ set.item.no }}</td>
+                                            <td class="fit">
+                                                <img src="{{ set.item.thumbnail_url }}" class="img-fluid img-thumbnail crop-table" alt="sheep">
+                                            </td>
+                                            <td>{{ set.item.name }}</td>
+                                            {% if set.avg_price > 0 %}
+                                                <td class="text-right">{{ set.currency_code }} {{ "%.2f"|format(set.avg_price) }}</td>
+                                            {% else %}
+                                                <td class="text-right">N/A</td>
+                                            {% endif %}
+                                            {% if set.avg_price_used > 0 %}
+                                                <td class="text-right">{{ set.currency_code }} {{ "%.2f"|format(set.avg_price_used) }}</td>
+                                            {% else %}
+                                                <td class="text-right">N/A</td>
+                                            {% endif %}
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-footer">
+                                <form action="/home/sets/" method="GET">
+                                    <button type="submit" class="btn btn-sm btn-primary">View prices for all sets</button>
+                                </form>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="p-4" role="alert">
+                            <div class="d-flex align-items-center">
+                                <div class="spinner-grow spinner-grow-sm mr-4" role="status" aria-hidden="true"></div>
+                                <strong>Fetching sets price data, please be patient...</strong>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <div id="parts" class="tab-pane">
+                    {% if loose_parts_guides is not none %}
+                        {% if loose_parts_guides|length > 0 %}
+                            <div class="table-responsive">
+                                <table class="table table-condensed table-hover mb-0" id="searchable_table">
+                                    <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Color</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col" class="text-right">Average Sell Price</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for part in loose_parts_guides %}
+                                        <tr onclick="window.location.assign('/set/{{ part.item.set_no }}');">
+                                            <td>{{ part.item.no }}</td>
+                                            <td class="fit">
+                                                <img src="{{ part.item.thumbnail_url }}" class="img-fluid img-thumbnail crop-table" alt="sheep">
+                                            </td>
+                                            <td>{{ part.item.name }}</td>
+                                            <td>{{ part.item.color_name }}</td>
+                                            <td>{{ part.item.color_type }}</td>
+                                            {% if part.avg_price > 0 %}
+                                                <td class="text-right">{{ part.currency_code }} {{ "%.2f"|format(part.avg_price) }}</td>
+                                            {% else %}
+                                                <td class="text-right">N/A</td>
+                                            {% endif %}
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-footer">
+                                <form action="/home/parts/" method="GET">
+                                    <button type="submit" class="btn btn-sm btn-primary">View prices for all parts</button>
+                                </form>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="p-4" role="alert">
+                            <div class="d-flex align-items-center">
+                                <div class="spinner-grow spinner-grow-sm mr-4" role="status" aria-hidden="true"></div>
+                                <strong>Fetching parts price data, please be patient...</strong>
+                            </div>
+                        </div>
+                    {% endif %}
+
                 </div>
             </div>
-
-        {% endif %}
-
-        {% if loose_parts_guides is not none %}
-            {% if loose_parts_guides|length > 0 %}
-
-                <div class="card border-0 shadow">
-                    <div class="card-header bg-light rounded-top">
-                        Most valuable loose parts in 'LEGO Crate'
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-condensed table-hover mb-0" id="searchable_table">
-                            <thead class="thead-light">
-                            <tr>
-                                <th scope="col">No</th>
-                                <th scope="col">Image</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Color</th>
-                                <th scope="col">Type</th>
-                                <th scope="col" class="text-right">Average Sell Price</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for part in loose_parts_guides %}
-                                <tr onclick="window.location.assign('/set/{{ part.item.set_no }}');">
-                                    <td>{{ part.item.no }}</td>
-                                    <td class="fit">
-                                        <img src="{{ part.item.thumbnail_url }}" class="img-fluid img-thumbnail crop-table" alt="sheep">
-                                    </td>
-                                    <td>{{ part.item.name }}</td>
-                                    <td>{{ part.item.color_name }}</td>
-                                    <td>{{ part.item.color_type }}</td>
-                                    {% if part.avg_price > 0 %}
-                                        <td class="text-right">{{ part.currency_code }} {{ "%.2f"|format(part.avg_price) }}</td>
-                                    {% else %}
-                                        <td class="text-right">N/A</td>
-                                    {% endif %}
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="card-footer">
-                        <form action="/home/parts/" method="GET">
-                            <button type="submit" class="btn btn-sm btn-primary">View prices for all parts</button>
-                        </form>
-                    </div>
-                </div>
-            {% endif %}
-        {% else %}
-
-            <div class="alert alert-info" role="alert">
-                <div class="d-flex align-items-center">
-                    <div class="spinner-grow spinner-grow-sm mr-4" role="status" aria-hidden="true"></div>
-                    <strong>Fetching parts price data, please be patient...</strong>
-                </div>
-            </div>
-
-        {% endif %}
+        </div>
 
     {% endif %}
 
