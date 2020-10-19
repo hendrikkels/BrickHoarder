@@ -23,7 +23,7 @@
         {% endwith %}
     </div>
 
-    <form action="/set/{{ set_no }}/guide" method="POST">
+    <form action="/guide/{{ set_no }}/add" method="POST">
     <div class="card border-0 shadow">
         <nav class="navbar navbar-light bg-light rounded-top">
             Parts required to complete set
@@ -62,7 +62,7 @@
                 </tbody>
             </table>
             <div class="card-footer">
-                <button class="btn btn-primary" type="submit">Add to inventory</button>
+                <button class="btn btn-primary" type="submit">Make set complete</button>
             </div>
         </div>
 

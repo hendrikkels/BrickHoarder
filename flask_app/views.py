@@ -1,11 +1,11 @@
-from flask import render_template, request, redirect, url_for, flash, make_response
+from flask import render_template, request, redirect, url_for, flash, make_response, session
 from flask_app import app, functions
 import io
 import csv
 
 # Global Variables
 import_sets = []
-purchase = []
+# purchase = []
 
 
 @app.route('/')
@@ -74,21 +74,37 @@ def show_set(set_no):
     return render_template('set_info.html', set_data=set_data, parts_list=parts_list)
 
 
-@app.route('/set/<set_no>/guide', methods=['GET', 'POST'])
+@app.route('/guide/<set_no>', methods=['GET', 'POST'])
 def set_guide(set_no):
-    global purchase 
-    if not purchase:
-        purchase = functions.get_optimized_purchase(set_no)
     if request.method == 'POST':
+        purchase = functions.get_optimized_purchase(set_no)
+        session['purchase'] = purchase
+
+        listings = []
         for item in purchase:
-            part = item['part']
-            part.owned_quantity = part.owned_quantity + int(item['quantity'])
-            # print(part.owned_quantity)
+            listing = item.copy()
+            part = functions.get_inventory_part(set_no, item['part'], item['color'])
+            print(part)
+            listing['part'] = part
+            listings.append(listing)
+        print(listings)
+        return render_template('set_guide.html', set_no=set_no, purchase=listings)
+
+    return redirect('/inventory')
+
+
+@app.route('/guide/<set_no>/add', methods=['GET', 'POST'])
+def add_guide(set_no):
+    if request.method == "POST":
+        if 'purchase' in session:
+            purchase = session['purchase']
+            for item in purchase:
+                part = functions.get_inventory_part(set_no, item['part'], item['color'])
+                part.owned_quantity = part.owned_quantity + int(item['quantity'])
             functions.insert_inventory_part(part)
         flash("Set updated, set is now complete", 'success')
-        purchase = []
-        return redirect('/inventory')
-    return render_template('set_guide.html', set_no=set_no, purchase=purchase)
+        session.pop('purchase', None)
+    return redirect('/set/' + set_no)
 
 
 @app.route('/group/<group_no>', methods=['GET', 'POST'])

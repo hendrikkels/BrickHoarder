@@ -1,5 +1,6 @@
 from flask_app import db
-
+import json
+from json import JSONEncoder
 
 class Part(db.Model):
     __tablename__ = 'parts'
@@ -41,6 +42,11 @@ class Part(db.Model):
 
     def __repr__(self):
         return '<Part %r>' % self.no
+
+    # subclass JSONEncoder
+    class PartEncoder(JSONEncoder):
+        def default(self, o):
+            return o.__dict__
 
 
 class Set(db.Model):
@@ -85,6 +91,11 @@ class Set(db.Model):
     def __repr__(self):
         return self.no + ", " + \
                self.name + ", "
+
+    # subclass JSONEncoder
+    class SetEncoder(JSONEncoder):
+        def default(self, o):
+            return o.__dict__
 
 
 db.create_all()

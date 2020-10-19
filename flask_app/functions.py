@@ -183,9 +183,9 @@ def get_optimized_purchase(set_no):
                 values = str(listing[0]).split(",")
                 purchase.append(dict(zip(keys, values)))
                 pieces.remove(piece)
-    for item in purchase:
+    # for item in purchase:
         # print(item['part'])
-        item['part'] = get_inventory_part(set_no, item['part'], item['color'])
+        # item['part'] = get_inventory_part(set_no, item['part'], item['color'])
     return purchase
 
 
