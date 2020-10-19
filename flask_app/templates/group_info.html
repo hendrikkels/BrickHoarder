@@ -64,13 +64,13 @@
                             </div>
                         </form>
                         <div class="modal-footer">
-                            <button type="submit" form="form{{ part.no }}_{{ part.color_id }}" class="btn btn-sm btn-primary">Save changes</button>
+                            <button type="submit" form="form{{ part.no }}_{{ part.color_id }}" class="btn btn-sm btn-primary shadow">Save changes</button>
                             {% if part.quantity == 0 %}
                                 <form action="/remove_part/{{ part.no }}" method='POST'>
                                     <input hidden name="part_no" id="part_no" value="{{ part.no }}">
                                     <input hidden name="set_no" id="set_no" value="{{ set_data.no }}">
                                     <input hidden name="color_id" id="color_id" value="{{ part.color_id }}">
-                                    <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                                    <button type="submit" class="btn btn-sm btn-danger shadow">Remove</button>
                                 </form>
                             {% endif %}
                         </div>

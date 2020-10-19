@@ -2,6 +2,7 @@ html {
     font-size: 14px;
 }
 
+
 @media only screen
   and (min-device-width: 320px)
   and (max-device-width: 480px)
@@ -51,7 +52,16 @@ p {
 
 .jumbotron {
     padding: 2rem;
+    opacity: 90%;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     margin-bottom: 1rem;
+}
+
+.alert {
+    opacity: 90%;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
 }
 
 .loading-text {
@@ -98,6 +108,24 @@ p {
 .card-body {
     padding: 1rem;
 }
+
+
+.card-thumbnail {
+    max-width: 100%;
+}
+
+@media (min-width: 576px){
+    .card-thumbnail {
+        max-width: 25%;
+    }
+}
+
+@media (min-width: 992px){
+    .card-thumbnail {
+        max-width: 20%;
+    }
+}
+
 
 .form-spinner {
     max-width: 8rem;

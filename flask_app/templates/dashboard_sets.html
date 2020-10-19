@@ -58,7 +58,8 @@
                                 {% if set.avg_price > 0 %}
                                     <td class="text-right">{{ set.currency_code }}{{ "%.2f"|format(set.avg_price) }}</td>
                                 {% else %}
-                                    <td class="text-right"></td>
+                                    <td class="text-right">
+                                    </td>
                                 {% endif %}
                                 {% if set.avg_price_used > 0 %}
                                     <td class="text-right">{{ set.currency_code }}{{ "%.2f"|format(set.avg_price_used) }}</td>

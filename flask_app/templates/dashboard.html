@@ -34,21 +34,21 @@
     {% else %}
 
         <div class="card border-0 shadow">
-            <div class="card-header bg-light rounded-top">
+            <div class="card-header rounded-top">
                 <div class="row no-gutters">
                     <div class="col-6">
                         <ul class="nav nav-tabs card-header-tabs">
                             <li class="nav-item">
-                                <a class="nav-link active border-bottom text-secondary" data-toggle="tab" href="#sets">Sets</a>
+                                <a class="nav-link active text-secondary" data-toggle="tab" href="#sets">Sets</a>
                             </li>
                             <li class="nav-item ">
-                                <a class="nav-link border-bottom text-secondary" data-toggle="tab" href="#parts">Parts</a>
+                                <a class="nav-link text-secondary" data-toggle="tab" href="#parts">Parts</a>
                             </li>
                         </ul>
                     </div>
                     <div class="col-6">
                         <form class="float-right " action="/home/refresh/" method="post">
-                            <button class="btn btn-sm btn-primary" type="submit">Update prices</button>
+                            <button class="btn btn-sm btn-primary shadow" type="submit">Update prices</button>
                         </form>
                     </div>
                 </div>
@@ -96,12 +96,16 @@
                             </div>
                             <div class="card-footer">
                                 <form action="/home/sets/" method="GET">
-                                    <button type="submit" class="btn btn-sm btn-primary">View prices for all sets</button>
+                                    <button type="submit" class="btn btn-sm btn-primary shadow">View prices for all sets</button>
                                 </form>
+                            </div>
+                        {% else %}
+                            <div class="card-body">
+                                When sets are added to the inventory, their price data will appear here
                             </div>
                         {% endif %}
                     {% else %}
-                        <div class="p-4" role="alert">
+                        <div class="card-body" role="alert">
                             <div class="d-flex align-items-center">
                                 <div class="spinner-grow spinner-grow-sm mr-4" role="status" aria-hidden="true"></div>
                                 <strong>Fetching sets price data, please be patient...</strong>
@@ -146,12 +150,16 @@
                             </div>
                             <div class="card-footer">
                                 <form action="/home/parts/" method="GET">
-                                    <button type="submit" class="btn btn-sm btn-primary">View prices for all parts</button>
+                                    <button type="submit" class="btn btn-sm btn-primary shadow">View prices for all parts</button>
                                 </form>
+                            </div>
+                        {% else %}
+                            <div class="card-body">
+                                When parts are added to the inventory, their price data will appear here
                             </div>
                         {% endif %}
                     {% else %}
-                        <div class="p-4" role="alert">
+                        <div class="card-body" role="alert">
                             <div class="d-flex align-items-center">
                                 <div class="spinner-grow spinner-grow-sm mr-4" role="status" aria-hidden="true"></div>
                                 <strong>Fetching parts price data, please be patient...</strong>
