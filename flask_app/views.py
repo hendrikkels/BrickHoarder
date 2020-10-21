@@ -11,6 +11,9 @@ import_sets = []
 @app.route('/')
 @app.route('/home')
 def home():
+    if request.method == 'GET':
+        print('poes')
+    print('dwelm')
     set_price_guides = functions.get_sets_price_guide()
     if set_price_guides is not None:
         set_price_guides = set_price_guides[:5]
@@ -39,7 +42,7 @@ def home_sets():
     return render_template("dashboard_sets.html", set_price_guides=set_price_guides)
 
 
-@app.route('/home/parts/', methods=['GET', 'POST'])
+@app.route('/home/parts/', methods=['GET','POST'])
 def home_parts():
     loose_parts_guides = functions.get_loose_parts_price_guide()
     # print(set_price_guides)
