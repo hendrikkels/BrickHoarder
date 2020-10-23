@@ -12,8 +12,7 @@ import_sets = []
 @app.route('/home')
 def home():
     if request.method == 'GET':
-        print('poes')
-    print('dwelm')
+        print('GET')
     set_price_guides = functions.get_sets_price_guide()
     if set_price_guides is not None:
         set_price_guides = set_price_guides[:5]

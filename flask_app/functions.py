@@ -61,7 +61,7 @@ def update_sets_price_guide():
 
 
 def get_new_set_price_guide(set: Set):
-    response = bricklink_api.catalog_item.get_price_guide("Set", no=set.no, guide_type='sold', new_or_used="N", country_code='US', currency_code='ZAR')
+    response = bricklink_api.catalog_item.get_price_guide("SET", no=set.no, guide_type="sold", new_or_used="N", currency_code="ZAR")
     if response['meta']['code'] != 400:
         response_data = response['data']
         return response_data
@@ -69,7 +69,7 @@ def get_new_set_price_guide(set: Set):
 
 
 def get_used_set_price_guide(set: Set):
-    response = bricklink_api.catalog_item.get_price_guide("Set", no=set.no, guide_type='sold', new_or_used="U", country_code='US', currency_code='ZAR')
+    response = bricklink_api.catalog_item.get_price_guide("Set", no=set.no, guide_type="sold", new_or_used="U", currency_code="ZAR")
     if response['meta']['code'] != 400:
         response_data = response['data']
         return response_data
@@ -104,7 +104,7 @@ def update_loose_parts_price_guide():
 
 
 def get_part_price_guide(part: Part):
-    response = bricklink_api.catalog_item.get_price_guide("Part", no=part.no, color_id=part.color_id, guide_type='sold', currency_code='ZAR')
+    response = bricklink_api.catalog_item.get_price_guide("PART", no=part.no, color_id=part.color_id, guide_type="sold", currency_code="ZAR")
     if response['meta']['code'] != 400:
         response_data = response['data']
         return response_data
