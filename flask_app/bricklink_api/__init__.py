@@ -11,4 +11,5 @@ from . import coupon
 from . import setting
 from . import member
 from . import item_mapping
+from . import auth
 

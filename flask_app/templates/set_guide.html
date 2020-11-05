@@ -23,12 +23,13 @@
         {% endwith %}
     </div>
 
-    <form action="/guide/{{ set_no }}/add" method="POST">
+
     <div class="card border-0 shadow">
-        <nav class="navbar navbar-light bg-light rounded-top">
+        <div class="card-header rounded-top">
             Parts required to complete set
-        </nav>
+        </div>
         <div class="table-responsive">
+
             <table class="table table-condensed mb-0" id="searchable_table">
                 <thead class="thead-light">
                 <tr>
@@ -44,7 +45,6 @@
                 </thead>
                 <tbody>
 
-                <input hidden id="setlist" name="setlist" value="{{ set_list }}">
                 {% for item in purchase %}
                     <tr>
                         <td>{{ item.part.no }}</td>
@@ -62,11 +62,18 @@
                 </tbody>
             </table>
             <div class="card-footer">
-                <button class="btn btn-primary shadow" type="submit">Make set complete</button>
+                <div class="form-inline">
+                <form class="mr-4" action="/guide/{{ set_no }}/add" method="POST">
+                    <button class="btn btn-primary shadow" type="submit">Make set complete</button>
+                </form>
+                <form action="/guide/{{ set_no }}/export" method="POST">
+                    <button class="btn btn-secondary shadow " type="submit">Export guide</button>
+                </form>
+                </div>
             </div>
         </div>
 
     </div>
-</form>
+
 
 {% endblock main %}

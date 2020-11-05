@@ -1,5 +1,6 @@
 import atexit
 import datetime
+import re
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from bs4 import BeautifulSoup as soup
@@ -30,13 +31,13 @@ def get_sets_price_guide():
 
 
 def update_color_list():
-    print('update color triggered')
+    # print('update color triggered')
     global color_list
     color_list = bricklink_api.color.get_color_list()['data']
 
 
 def update_sets_price_guide():
-    print('update sets price triggered')
+    # print('update sets price triggered')
     global set_price_guides
     set_list = get_inventory_set_list()
     price_guides = []
@@ -82,7 +83,7 @@ def get_loose_parts_price_guide():
 
 
 def update_loose_parts_price_guide():
-    print('update loose parts triggered')
+    # print('update loose parts triggered')
     global loose_parts_guides
     parts_list = get_inventory_loose_parts()
     price_guides = []
@@ -132,7 +133,7 @@ def get_part_listings(part: Part, quantity):
     results = soup(html_data, 'html.parser').findAll('td', {'valign' : 'TOP'})
     if len(results) == 0:
         # listings.append(Listing(part.no, part.color_id, quantity, 0, '', ''))
-        print('search world')
+        # print('search world')
         params = {
             'q': str(part.no),
             'qMin': quantity,
@@ -151,9 +152,8 @@ def get_part_listings(part: Part, quantity):
     for r in results:
         link = r.find('a')
         price = r.findAll('b')[1].text
-        price = float(price.replace('ZAR', ''))
-        listing = Listing(part.no, part.color_id, quantity, price,
-                        link.text, link['href'])
+        # price = float()
+        listing = Listing(part.no, part.color_id, quantity, price, link.text, link['href'])
         listings.append(listing)
         # print(listings)
     return listings
@@ -181,6 +181,8 @@ def get_optimized_purchase(set_no):
             if len(listing) > 0:
                 keys = ['part', 'color', 'quantity', 'price', 'store_name', 'url']
                 values = str(listing[0]).split(",")
+                temp_dict = dict(zip(keys, values))
+                # temp_dict['price'].replace()
                 purchase.append(dict(zip(keys, values)))
                 pieces.remove(piece)
     # for item in purchase:
@@ -232,7 +234,7 @@ def get_set(no):
     if '-' not in str(no):
         no = "%s-1" % no
     response = bricklink_api.catalog_item.get_item("Set", no)
-    print(response)
+    # print(response)
     if response['meta']['code'] == 400:
         return None
     response_data = response['data']
@@ -288,7 +290,7 @@ def get_set_parts(no):
         return cached_parts_list
 
     response = bricklink_api.catalog_item.get_subsets("Set", no, break_minifigs=True)
-    print(response)
+    # print(response)
     response_data = response['data']
     if response_data == {}:
         return None
@@ -430,7 +432,7 @@ def start_jobs_now():
 
 def update_dashboard():
     global scheduler, set_price_guides, loose_parts_guides
-    print('updating dashboard, cache cleared')
+    # print('updating dashboard, cache cleared')
     set_price_guides = None
     loose_parts_guides = None
     scheduler.get_job(job_id="update_sets").modify(next_run_time=datetime.datetime.now())

@@ -62,6 +62,7 @@ p {
     opacity: 90%;
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
+    border: 0;
 }
 
 .loading-text {
@@ -103,6 +104,14 @@ p {
 
 .card-deck {
     margin-bottom: 3rem;
+}
+
+.card-header {
+    border-bottom: 0;
+}
+
+.card-footer {
+    border-top: 0;
 }
 
 .card-body {

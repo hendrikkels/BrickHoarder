@@ -1,7 +1,10 @@
-from flask import render_template, request, redirect, url_for, flash, make_response, session
+from io import StringIO
+
+from flask import render_template, request, redirect, url_for, flash, make_response, session, send_from_directory
 from flask_app import app, functions
 import io
 import csv
+import os
 
 # Global Variables
 import_sets = []
@@ -11,16 +14,16 @@ import_sets = []
 @app.route('/')
 @app.route('/home')
 def home():
-    if request.method == 'GET':
-        print('GET')
+    # if request.method == 'GET':
+    #     # print('GET')
     set_price_guides = functions.get_sets_price_guide()
     if set_price_guides is not None:
         set_price_guides = set_price_guides[:5]
-    print(set_price_guides)
+    # print(set_price_guides)
     loose_parts_guides = functions.get_loose_parts_price_guide()
     if loose_parts_guides is not None:
         loose_parts_guides = loose_parts_guides[:5]
-    print(loose_parts_guides)
+    # print(loose_parts_guides)
     # return "hi"
     return render_template("dashboard.html", set_price_guides=set_price_guides, loose_parts_guides=loose_parts_guides)
 
@@ -28,7 +31,7 @@ def home():
 @app.route('/home/refresh/', methods=["GET", "POST"])
 def home_refresh():
     if request.method == "POST":
-        print('updating now')
+        # print('updating now')
         functions.update_dashboard()
     return redirect('/home')
 
@@ -78,21 +81,33 @@ def show_set(set_no):
 
 @app.route('/guide/<set_no>', methods=['GET', 'POST'])
 def set_guide(set_no):
+    if request.method == 'GET':
+        purchase = session.get('purchase')
     if request.method == 'POST':
         purchase = functions.get_optimized_purchase(set_no)
         session['purchase'] = purchase
+    listings = []
+    for item in purchase:
+        listing = item.copy()
+        part = functions.get_inventory_part(set_no, item['part'], item['color'])
+        # print(part)
+        listing['part'] = part
+        listings.append(listing)
+    # print(listings)
+    return render_template('set_guide.html', set_no=set_no, purchase=listings)
+    # return redirect('/inventory')
 
-        listings = []
-        for item in purchase:
-            listing = item.copy()
-            part = functions.get_inventory_part(set_no, item['part'], item['color'])
-            print(part)
-            listing['part'] = part
-            listings.append(listing)
-        print(listings)
-        return render_template('set_guide.html', set_no=set_no, purchase=listings)
 
-    return redirect('/inventory')
+@app.route('/guide/<set_no>/export', methods=['GET', 'POST'])
+def set_guide_export(set_no):
+    purchase = session.get('purchase')
+    keys = purchase[0].keys()
+    with open('guide.csv', 'w', newline='') as output_file:
+        dict_writer = csv.DictWriter(output_file, keys)
+        dict_writer.writeheader()
+        dict_writer.writerows(purchase)
+    return send_from_directory(directory="../", filename="guide.csv", mimetype="guide.txt", as_attachment=True)
+    # return redirect('/guide/' + set_no)
 
 
 @app.route('/guide/<set_no>/add', methods=['GET', 'POST'])

@@ -24,22 +24,23 @@
     </div>
 
     <div class="card border-0 shadow">
-        <nav class="navbar navbar-light bg-light rounded-top">
+        <div class="card-header rounded-top">
             Select a csv file to upload, format: Set numbers, separated by commas
-        </nav>
-
-
-        <div class="card-body">
-            <form action="/import" method="post" enctype="multipart/form-data" id="js-upload-form">
-                <div class="form-inline">
-                    <div class="form-group">
-                        <input type="file" class="form-control-file" id="exampleFormControlFile1"  name="file_name" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary shadow">Create set list</button>
-                </div>
-            </form>
         </div>
 
+        <form action="/import" method="post" enctype="multipart/form-data" id="js-upload-form">
+            <div class="card-body">
+
+                <div class="form-inline">
+                    <input type="file" class="form-control-file" id="exampleFormControlFile1"  name="file_name" required>
+
+                </div>
+
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary shadow">Create set list</button>
+            </div>
+        </form>
 
 
         <div class="table-responsive" hidden>
