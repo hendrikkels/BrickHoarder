@@ -24,14 +24,14 @@
             <div class="form-row no-gutters">
                 <div class="col">
                 {% if not set_data.complete %}
-                    <form action="/guide/{{ set_data.no }}" method="POST">
-                        <button type="submit" class="btn btn-primary shadow">Get guide for missing parts</button>
+                    <form action="/guide/{{ set_data.no }}" onsubmit="formLoader()" method="POST">
+                        <button type="submit" id="loadBtn"  class="btn btn-primary shadow">Get guide for missing parts</button>
                     </form>
                 {% endif %}
                 </div>
                 <div class="col">
-                    <form action="/remove_set/{{ set_data.no }}" method='POST'>
-                        <button type="submit" class="btn btn-danger float-right shadow">Remove from collection</button>
+                    <form action="/remove_set/{{ set_data.no }}" onsubmit="formLoader()" method='POST'>
+                        <button type="submit" id="loadBtn" class="btn btn-danger float-right shadow">Remove from collection</button>
                     </form>
                 </div>
             </div>
@@ -67,9 +67,9 @@
                         </div>
                         <form  id="form{{ part.no }}_{{ part.color_id }}" action="/set/{{ set_data.no }}" method='POST'>
                             <div class="media">
-                                <input hidden name="part_no" id="part_no" value="{{ part.no }}">
-                                <input hidden name="set_no" id="set_no" value="{{ set_data.no }}">
-                                <input hidden name="color_id" id="color_id" value="{{ part.color_id }}">
+                                <input hidden name="part_no" value="{{ part.no }}">
+                                <input hidden name="set_no"  value="{{ set_data.no }}">
+                                <input hidden name="color_id"  value="{{ part.color_id }}">
                                 <div class="media-body">
                                     Alternate: {{ part.is_alternate }}<br>
                                     Counterpart: {{ part.is_counterpart }}<br>

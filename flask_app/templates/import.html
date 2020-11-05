@@ -28,17 +28,16 @@
             Select a csv file to upload, format: Set numbers, separated by commas
         </div>
 
-        <form action="/import" method="post" enctype="multipart/form-data" id="js-upload-form">
+        <form action="/import" method="post" onsubmit="formLoader()" enctype="multipart/form-data" id="js-upload-form">
             <div class="card-body">
 
                 <div class="form-inline">
                     <input type="file" class="form-control-file" id="exampleFormControlFile1"  name="file_name" required>
-
                 </div>
 
             </div>
             <div class="card-footer">
-                <button type="submit" class="btn btn-primary shadow">Create set list</button>
+                <button type="submit" id="loadBtn" class="btn btn-primary shadow">Create set list</button>
             </div>
         </form>
 

@@ -55,5 +55,24 @@ function searchTable() {
     }
 }
 
+function addLoader() {
+    var button = document.getElementById("loadBtn");
+    // var button2 = document.getElementsByClass("BUTTON")
+    var span = document.createElement("SPAN");
+    span.classList.add("spinner-border", "spinner-border-sm", "ml-2")
+    button.appendChild(span);
+    // button.disabled = true;
+}
+
+function formLoader() {
+    var button = document.getElementById("loadBtn");
+    // var button2 = document.getElementsByClass("BUTTON")
+    var span = document.createElement("SPAN");
+    span.classList.add("spinner-border", "spinner-border-sm", "ml-2")
+    button.appendChild(span);
+    button.disabled = true;
+    // button.disabled = true;
+}
+
 // Spinner
 

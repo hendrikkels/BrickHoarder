@@ -24,9 +24,9 @@
     </div>
 
     <!--<div class="container">-->
-    <form action="/add_set/{{ set_no }}" method='POST'>
+    <form action="/add_set/{{ set_no }}" onsubmit="formLoader()" method='POST'>
 
-        <div class="card border-0 shadow my-5">
+        <div class="card border-0 shadow">
         <div class="card-header">
             Parts included in original set (extras parts omitted)
         </div>
@@ -63,7 +63,7 @@
                 </table>
             </div>
         <div class="card-footer">
-            <button type="submit" class="btn btn-sm btn-primary shadow float-right">Add selection to inventory</button>
+            <button type="submit" class="btn btn-sm btn-primary shadow float-right" id="loadBtn">Add selection to inventory</button>
         </div>
     </div>
 
