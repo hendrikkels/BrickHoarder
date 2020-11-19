@@ -75,5 +75,15 @@ function formLoader() {
     // button.disabled = true;
 }
 
+function formLoader2() {
+    var button = document.getElementById("loadBtn2");
+    // var button2 = document.getElementsByClass("BUTTON")
+    var span = document.createElement("SPAN");
+    span.classList.add("spinner-border", "spinner-border-sm", "ml-2")
+    button.appendChild(span);
+    button.disabled = true;
+    // button.disabled = true;
+}
+
 // Spinner
 

@@ -43,7 +43,7 @@
             </form>
 
         {% elif result.type == 'PART' %}
-            <form action="/add_part/{{ result.no }}" onsubmit="formLoader()" method="GET">
+            <form action="/add_part/{{ result.no }}" onsubmit="formLoader2()" method="GET">
                 <div class="card border-0 shadow">
                     <div class="card-horizontal">
                         <div class="card-body">
@@ -53,16 +53,15 @@
                         <img src="{{ result.thumbnail_url }}" class="img-thumbnail crop" alt="sheep">
                     </div>
                     <div class="card-footer">
-                        <button type="submit"  id="loadBtn" class="btn btn-sm btn-primary shadow">Add to collection</button>
+                        <button type="submit"  id="loadBtn2" class="btn btn-sm btn-primary shadow">Add to collection</button>
                     </div>
                 </div>
             </form>
 
         {% else %}
-
             Unknown result_type
-
         {% endif %}
+
     {% endfor %}
     {% endif %}
 
